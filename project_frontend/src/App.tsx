@@ -5,27 +5,38 @@ import LoginPage from './pages/LoginPage';
 import MainLayout from './components/MainLayout';
 import DashboardPage from './pages/DashboardPage';
 import ProjectPage from './pages/ProjectPage';
+import { Toaster } from 'react-hot-toast'
+import { Loading } from './components/Loading';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   const { token, loading } = useAuthStore()
   console.log(token, loading)
-  
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <Loading />
 
   return (
-    <Routes>
-      {!token ? (
-        <Route path="*" element={<LoginPage />} />
-      ) : (
-        <Route path="/*" element={<MainLayout />}>
-          <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="projects" element={<ProjectPage />} />
-          <Route index element={<Navigate to="/dashboard" />} />
-        </Route>
-      )}
-    </Routes>
+    <>
+      <Toaster position="top-right" reverseOrder={false} />
+      <Routes>
+        {!token ? (
+          <>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="*" element={<Navigate to="/login" />} />
+          </>
+        ) : (
+          <Route path="/*" element={<MainLayout />}>
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="projects" element={<ProjectPage />} />
+            <Route index element={<Navigate to="/dashboard" />} />
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+          </Route>
+        )}
+      </Routes>
+    </>
   )
 }
+
 
 export default App

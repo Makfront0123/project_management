@@ -7,8 +7,10 @@ import dotenv from "dotenv";
 dotenv.config();
 const app = express();
 
-app.use(cors())
-
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}))
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
@@ -19,8 +21,8 @@ app.use(cookieParser());
 const fileRoutes = fs.readdirSync("./routes");
 fileRoutes.forEach((file) => {
   import(`./routes/${file}`).then((route) => {
-       
-      app.use("/api/v1/", route.default);
+
+    app.use("/api/v1/", route.default);
   }).catch((error) => {
     console.log(error);
   });

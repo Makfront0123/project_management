@@ -1,8 +1,7 @@
 import axios from 'axios'
 import type { AuthResponse } from '../types/auth'
 
-
-const baseUrl = 'http://localhost:3000/api/v1'
+const baseUrl = '/api/v1'
 
 export const loginUser = async (
     email: string,

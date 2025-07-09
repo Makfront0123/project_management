@@ -13,9 +13,17 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const user = await authService.login(req.body);
-        res.status(200).json(user);
+        return res.status(200).json({
+            message: "User logged in successfully",
+            user,
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        const msg = error.message || "Internal Server Error";
+
+
+        if (msg === "User does not exist") return res.status(404).json({ message: msg });
+        if (msg === "Invalid password") return res.status(401).json({ message: msg });
+        return res.status(500).json({ message: msg });
     }
 }
 
