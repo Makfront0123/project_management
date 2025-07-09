@@ -1,0 +1,28 @@
+# node modules
+node_modules/
+
+# Entornos
+.env
+
+# Producción
+dist/
+build/
+
+# Cache
+.cache/
+.tmp/
+temp/
+*.tmp
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+# Misc
+*.log
+debug.log
