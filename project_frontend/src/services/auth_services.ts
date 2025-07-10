@@ -1,5 +1,6 @@
 import axios from 'axios'
 import type { AuthResponse } from '../types/auth'
+import { useAuthStore } from '../stores/auth_store'
 
 const baseUrl = '/api/v1'
 
@@ -29,5 +30,15 @@ export const registerUser = async (
 
 export const logoutUser = async () => {
     const response = await axios.post(`${baseUrl}/logout`)
+    return response.data
+}
+
+export const getUserTeamStatus = async () => {
+    const token = useAuthStore.getState().token
+    const response = await axios.get(`${baseUrl}/users/teamStatus`,{
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     return response.data
 }

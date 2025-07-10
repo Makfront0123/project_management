@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { User } from '../types/auth'
-import { loginUser, registerUser } from '../services/auth_services'
-import { getErrorMessage } from '../utils/getErrorMessage' // ✅ asegúrate de importar
+import { loginUser, logoutUser, registerUser } from '../services/auth_services'
+import { getErrorMessage } from '../utils/getErrorMessage' 
 
 type AuthStore = {
     user: User | null
@@ -50,8 +50,17 @@ export const useAuthStore = create<AuthStore>()(
                 }
             },
 
-            logout: () => {
-                set({ user: null, token: null })
+            logout: async () => {
+                set({ loading: true })
+                try {
+                    const data = await logoutUser()
+                    set({ user: null, token: null, loading: false })
+                    return data.message
+                }
+                catch (error: unknown) {
+                    set({ user: null, token: null, loading: false })
+                    throw new Error(getErrorMessage(error))
+                }
             }
         }),
         {

@@ -1,5 +1,5 @@
 import User from "../models/user.js";
-
+import TeamMember from "../models/TeamMember.js";
 class UserRepository {
     async getProfile(id) {
         return await User.findById(id);
@@ -14,6 +14,10 @@ class UserRepository {
 
     async deleteUser(id) {
         return await User.findByIdAndDelete(id);
+    }
+
+    async getUserTeamStatus(id) {
+        return await TeamMember.find({ userId: id,status:"accepted" }).populate("teamId");
     }
 }
 

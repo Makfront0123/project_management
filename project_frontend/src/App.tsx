@@ -8,6 +8,7 @@ import ProjectPage from './pages/ProjectPage';
 import { Toaster } from 'react-hot-toast'
 import { Loading } from './components/Loading';
 import RegisterPage from './pages/RegisterPage';
+import CreateTeamPage from './pages/CreateTeamPage';
 
 function App() {
   const { token, loading } = useAuthStore()
@@ -29,6 +30,7 @@ function App() {
           <Route path="/*" element={<MainLayout />}>
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="projects" element={<ProjectPage />} />
+            <Route path="create-team" element={<CreateTeamPage />} />
             <Route index element={<Navigate to="/dashboard" />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />
           </Route>

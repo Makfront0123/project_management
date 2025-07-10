@@ -1,11 +1,13 @@
 import teamService from "../services/team_service.js";
 import teamMemberService from "../services/team_member_service.js";
+import generateUniqueCode from "../utils/generateUniqueCode.js";
 
 export const createTeam = async (req, res) => {
     try {
         const userId = req.user.id;
 
-        const { name, description, code } = req.body;
+        const { name, description } = req.body;
+        const code = await generateUniqueCode();
 
         const teamData = {
             name,
@@ -23,7 +25,10 @@ export const createTeam = async (req, res) => {
             status: "accepted",
         });
 
-        res.status(201).json(team);
+        res.status(201).json({
+            message: "Team created successfully",
+            team,
+        });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

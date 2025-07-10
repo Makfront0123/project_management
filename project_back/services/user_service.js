@@ -15,6 +15,10 @@ class UserService {
     async deleteUser(id) {
         return await userRepo.deleteUser(id);
     }
+
+    async getUserTeamStatus(id) {
+        return await userRepo.getUserTeamStatus(id);
+    }
 }
 
 export default new UserService();

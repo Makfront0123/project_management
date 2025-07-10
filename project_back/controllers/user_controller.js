@@ -38,3 +38,28 @@ export const deleteUser = async (req, res) => {
     }
 
 }
+
+export const getUserTeamStatus = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const teams = await userService.getUserTeamStatus(userId);
+
+        if (!teams || teams.length === 0) {
+            return res.status(200).json({
+                message: "You are not part of any team",
+                teams: []
+            });
+        }
+
+        res.status(200).json({
+
+            teams: teams.map((teamMember) => ({
+                teamId: teamMember.teamId._id,
+                teamName: teamMember.teamId.name,
+                role: teamMember.role
+            }))
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}

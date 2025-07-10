@@ -1,6 +1,17 @@
 export interface Team {
-    id: string;
+  _id: string;
+  name: string;
+  description: string;
+  code: string;
+  creator: {
+    _id: string;
     name: string;
-    description: string;
-    ownerId: string;
+    email: string;
+  };
+}
+
+
+export interface TeamResponse {
+    message: string;
+    team: Team;
 }
