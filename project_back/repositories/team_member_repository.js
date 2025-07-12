@@ -39,6 +39,9 @@ class TeamMemberRepository {
   async getPendingMembersOfTeam(teamId) {
     return await TeamMember.find({ teamId, status: 'pending' }).populate('userId', 'name email');
   }
+  async getPendingRequests(userId) {
+    return await TeamMember.find({ userId, status: 'pending' });
+  }
 
 
 }

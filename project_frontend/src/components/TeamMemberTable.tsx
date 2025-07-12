@@ -5,7 +5,7 @@ type Props = {
   members: TeamMember[];
   onDelete?: (memberId: string, teamId: string) => void;
   onAccept?: (memberId: string, teamId: string) => void;
-  onReject?: (memberId: string, teamId: string) => void;
+  onReject?: (userId: string, teamId: string) => void;
 };
 
 const TeamMemberTable = ({ members, onDelete, onAccept, onReject }: Props) => {

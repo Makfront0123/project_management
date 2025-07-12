@@ -56,3 +56,14 @@ export const getPendingMembersOfTeam = async (teamId: string) => {
 
     return response.data;
 };
+
+export const rejectRequest = async (userId: string, teamId: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.delete(`${baseUrl}/teams/${teamId}/join-requests/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    return response.data;
+};

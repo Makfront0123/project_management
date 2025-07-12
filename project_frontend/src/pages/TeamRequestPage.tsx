@@ -7,7 +7,7 @@ import { useTeamMemberStore } from "../stores/team_member_store";
 
 const TeamRequestPage = () => {
     const { teamId } = useParams<{ teamId: string }>();
-    const { teamMembers, getPendingMembersOfTeam } = useTeamMemberStore();
+    const { teamMembers, getPendingMembersOfTeam, rejectRequest } = useTeamMemberStore();
 
     useEffect(() => {
         if (teamId) getPendingMembersOfTeam(teamId);
@@ -20,7 +20,7 @@ const TeamRequestPage = () => {
             {teamMembers.length === 0 ? (
                 <p className="text-gray-500">No hay solicitudes pendientes.</p>
             ) : (
-                <TeamMemberTable members={teamMembers} />
+                <TeamMemberTable members={teamMembers ??[]} onReject={rejectRequest} />
             )}
         </div>
     );

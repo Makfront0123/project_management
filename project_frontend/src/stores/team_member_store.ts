@@ -1,6 +1,6 @@
-// stores/team_member_store.ts
+ 
 import { create } from 'zustand'
-import { deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamMembers, requestToJoinTeam } from '../services/team_member'
+import { deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamMembers, rejectRequest, requestToJoinTeam } from '../services/team_member'
 import type { TeamMember } from '../types/teamMember'
 import type { UserTeamStatus } from '../types/userTeamStatus'
 import { getUserTeamStatus } from '../services/auth_services'
@@ -11,7 +11,7 @@ type TeamStore = {
     teamMemberships: UserTeamStatus[]
     teamMembers: TeamMember[]
     isLoading: boolean
-    requestedTeams: string[] // <-- aquí
+    requestedTeams: string[]
     getUserTeamStatus: () => Promise<void>
 
     fetchTeamMembers: (teamId: string) => Promise<void>
@@ -19,6 +19,7 @@ type TeamStore = {
     requestToJoinTeam: (teamId: string) => Promise<void>
     getPendingRequests: () => Promise<void>
     getPendingMembersOfTeam: (teamId: string) => Promise<void>
+    rejectRequest: (userId: string, teamId: string) => Promise<void>
 }
 
 export const useTeamMemberStore = create<TeamStore>((set) => ({
@@ -70,7 +71,7 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
         try {
             const data = await requestToJoinTeam(teamId);
 
-            // Agregar el teamId a requestedTeams
+
             set((state) => ({
                 isLoading: false,
                 requestedTeams: [...state.requestedTeams, teamId]
@@ -99,10 +100,27 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
         try {
             const data = await getPendingMembersOfTeam(teamId)
             set({ teamMembers: data, isLoading: false })
-            console.log('data', data)
+            
         } catch (error) {
             console.error("Error fetching pending requests:", error)
             set({ isLoading: false })
         }
+    },
+    rejectRequest: async (userId: string, teamId: string) => {
+        set({ isLoading: true });
+        try {
+            const data=await rejectRequest(userId, teamId);
+            toast.success(data.message);
+
+
+            const updatedMembers = await getPendingMembersOfTeam(teamId);
+            set({ teamMembers: updatedMembers, isLoading: false });
+        } catch (error) {
+            const errorMsg = getErrorMessage(error);
+            toast.error(errorMsg);
+            console.error("Error rejecting request:", error);
+            set({ isLoading: false });
+        }
     }
+
 }))

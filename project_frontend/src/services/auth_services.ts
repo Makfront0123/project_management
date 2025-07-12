@@ -29,6 +29,7 @@ export const registerUser = async (
 }
 
 export const logoutUser = async () => {
+    console.log('logout')
     const response = await axios.post(`${baseUrl}/logout`)
     return response.data
 }

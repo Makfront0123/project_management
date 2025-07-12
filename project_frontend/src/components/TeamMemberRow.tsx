@@ -4,14 +4,13 @@ type Props = {
   member: TeamMember;
   onDelete?: (memberId: string, teamId: string) => void;
   onAccept?: (memberId: string, teamId: string) => void;
-  onReject?: (memberId: string, teamId: string) => void;
+  onReject?: (userId: string, teamId: string) => void;
 };
 
 const TeamMemberRow = ({ member, onDelete, onAccept, onReject }: Props) => {
   const isAdmin = member.role === "admin";
   const isPending = member.status === "pending";
-
-  console.log('member', member)
+ 
 
   return (
     <tr className="border-b border-gray-200">
@@ -29,7 +28,7 @@ const TeamMemberRow = ({ member, onDelete, onAccept, onReject }: Props) => {
               Aceptar
             </button>
             <button
-              onClick={() => onReject?.(member._id, member.teamId)}
+              onClick={() => onReject?.(member?.userId._id, member.teamId)}
               className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
             >
               Rechazar

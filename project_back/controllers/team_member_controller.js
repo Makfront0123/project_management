@@ -150,12 +150,11 @@ export const confirmJoinWithCode = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-// controller
+ 
 export const getPendingRequests = async (req, res) => {
   try {
     const userId = req.user.id;
-    const requests = await TeamMember.find({ userId, status: 'pending' });
+    const requests = await teamMemberService.getPendingRequests(userId);
     res.status(200).json(requests.map(r => r.teamId));
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -171,3 +170,6 @@ export const getPendingMembersOfTeam = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+ 

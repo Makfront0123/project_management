@@ -12,10 +12,15 @@ import CreateTeamPage from './pages/CreateTeamPage';
 import JoinTeamPage from './pages/JoinTeamPage';
 import TeamPage from './pages/TeamPage';
 import TeamRequestPage from './pages/TeamRequestPage';
+import { useEffect } from 'react';
 
 function App() {
-  const { token, loading } = useAuthStore()
+  const { token, loading, checkTokenExpiration } = useAuthStore()
   console.log(token, loading)
+
+  useEffect(() => {
+    checkTokenExpiration()
+  }, [checkTokenExpiration])
 
   if (loading) return <Loading />
 
