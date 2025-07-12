@@ -36,6 +36,9 @@ class TeamMemberRepository {
   async deleteMemberByTeamId(teamId) {
     return await TeamMember.deleteMany({ teamId });
   }
+  async getPendingMembersOfTeam(teamId) {
+    return await TeamMember.find({ teamId, status: 'pending' }).populate('userId', 'name email');
+  }
 
 
 }

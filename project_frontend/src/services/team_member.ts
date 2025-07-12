@@ -20,7 +20,7 @@ export const deleteMember = async (memberId: string, teamId: string) => {
             Authorization: `Bearer ${token}`
         }
     });
-  
+
     return response.data;
 };
 
@@ -31,7 +31,7 @@ export const requestToJoinTeam = async (teamId: string) => {
             Authorization: `Bearer ${token}`
         }
     });
- 
+
     return response.data;
 };
 
@@ -42,6 +42,17 @@ export const getPendingRequests = async () => {
             Authorization: `Bearer ${token}`
         }
     });
- 
+
+    return response.data;
+};
+
+export const getPendingMembersOfTeam = async (teamId: string) => {
+    const token = useAuthStore.getState().token
+    const response = await axios.get(`${baseUrl}/teams/${teamId}/pending-members`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
     return response.data;
 };

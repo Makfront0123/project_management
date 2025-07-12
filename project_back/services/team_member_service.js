@@ -28,6 +28,10 @@ class TeamMemberService {
     return await teamMemberRepo.updateMemberStatus(teamId, userId, data);
   }
 
+  async getPendingMembersOfTeam(teamId) {
+    return await teamMemberRepo.getPendingMembersOfTeam(teamId);
+  }
+
   
 }
 

@@ -161,3 +161,13 @@ export const getPendingRequests = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getPendingMembersOfTeam = async (req, res) => {
+  try {
+    const { teamId } = req.params;
+    const pendingMembers = await teamMemberService.getPendingMembersOfTeam(teamId);
+    res.status(200).json(pendingMembers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

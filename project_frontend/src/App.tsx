@@ -11,10 +11,11 @@ import RegisterPage from './pages/RegisterPage';
 import CreateTeamPage from './pages/CreateTeamPage';
 import JoinTeamPage from './pages/JoinTeamPage';
 import TeamPage from './pages/TeamPage';
+import TeamRequestPage from './pages/TeamRequestPage';
 
 function App() {
   const { token, loading } = useAuthStore()
-  //console.log(token, loading)
+  console.log(token, loading)
 
   if (loading) return <Loading />
 
@@ -35,6 +36,8 @@ function App() {
             <Route path="create-team" element={<CreateTeamPage />} />
             <Route path="join-team" element={<JoinTeamPage />} />
             <Route path="team/:teamId" element={<TeamPage />} />
+            <Route path="team/:teamId/requests" element={<TeamRequestPage />} />
+
 
             <Route index element={<Navigate to="/dashboard" />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />
