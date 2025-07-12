@@ -1,17 +1,20 @@
 import { useEffect } from 'react'
-import { useTeamStore } from '../stores/team_store'
-import { useNavigate } from 'react-router'
-
+import { useTeamMemberStore } from '../stores/team_member_store'
+import { Link, useNavigate } from 'react-router'
 const DashboardPage = () => {
-  const { teams, isLoading, fetchTeams } = useTeamStore()
-  const navigate=useNavigate()
+  const { teamMemberships, isLoading, getUserTeamStatus } = useTeamMemberStore()
+  const navigate = useNavigate()
 
   useEffect(() => {
-    fetchTeams()
-  }, [ fetchTeams ])
+    getUserTeamStatus()
+  }, [getUserTeamStatus])
 
   const handleTeam = () => {
     navigate('/create-team')
+  }
+
+  const handleJoinTeam = () => {
+    navigate('/join-team')
   }
 
   return (
@@ -22,14 +25,20 @@ const DashboardPage = () => {
 
       {isLoading ? (
         <p className="mt-36 text-gray-500 font-light text-2xl">Cargando equipos...</p>
-      ) : teams.length === 0 ? (
+      ) : teamMemberships.length === 0 ? (
         <>
           <h3 className="mt-36 text-gray-500 font-light text-3xl">Aún no perteneces a ningún equipo.</h3>
           <div className="flex items-center mt-20 gap-x-10">
-            <button onClick={handleTeam} className="px-4 py-3 border-2 border-gray-600 rounded-lg cursor-pointer duration-200 transition-all hover:scale-105">
+            <button
+              onClick={handleTeam}
+              className="px-4 py-3 border-2 border-gray-600 rounded-lg cursor-pointer duration-200 transition-all hover:scale-105"
+            >
               Crear equipo
             </button>
-            <button className="px-4 py-3 bg-blue-600 rounded-lg text-white cursor-pointer duration-200 transition-all hover:scale-105">
+            <button
+              onClick={handleJoinTeam}
+              className="px-4 py-3 bg-blue-600 rounded-lg text-white cursor-pointer duration-200 transition-all hover:scale-105"
+            >
               Unirse a un equipo
             </button>
           </div>
@@ -38,11 +47,15 @@ const DashboardPage = () => {
         <div className="mt-20 w-full max-w-xl">
           <h3 className="text-2xl mb-4 text-gray-700 font-semibold">Tus Equipos</h3>
           <ul className="space-y-4">
-            {teams.map((team) => (
-              <li key={team._id} className="p-4 border rounded shadow">
-                <p className="text-xl font-medium">{team.teamName}</p>
-                <p className="text-sm text-gray-500">Rol: {team.role}</p>
-              </li>
+            {teamMemberships.map((team) => (
+              <Link
+                to={`/team/${team.teamId}`}
+                key={team.teamId}
+                className="p-4 border rounded shadow flex flex-col items-start hover:bg-gray-50 transition"
+              >
+                <p className="text-xl font-medium">{team.name}</p>
+                <p className="text-gray-500 text-sm">Rol: {team.role}</p>
+              </Link>
             ))}
           </ul>
         </div>

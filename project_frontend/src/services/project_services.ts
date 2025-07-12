@@ -27,4 +27,9 @@ export const updateProject = async (id: string, data: Array<Project>, teamId: Te
 export const deleteProject = async (id: Project, teamId: Team) => {
     const response = await axios.delete(`${baseUrl}/teams/${teamId}/projects/${id}`);
     return response.data;
-}   
+}
+
+export const getProjectsByTeam = async (teamId: Team) => {
+    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects`);
+    return response.data;
+}

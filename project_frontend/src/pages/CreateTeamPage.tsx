@@ -52,8 +52,24 @@ const CreateTeamPage = () => {
                 <h2 className="text-2xl font-semibold mb-4 text-center">Crear nuevo equipo</h2>
                 <CreateTeamForm form={form} />
 
-                <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Código del equipo">
-                    <p className="text-gray-700 mb-4">Comparte este código con otros para que se unan a tu equipo:</p>
+                <Modal
+                    isOpen={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    title="Código del equipo"
+                    footer={
+                        <div className="text-right mt-4">
+                            <button
+                                onClick={() => setModalOpen(false)}
+                                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                            >
+                                Cerrar
+                            </button>
+                        </div>
+                    }
+                >
+                    <p className="text-gray-700 mb-4">
+                        Comparte este código con otros para que se unan a tu equipo:
+                    </p>
                     <div className="flex items-center justify-between bg-gray-100 p-3 rounded-lg">
                         <span className="text-lg font-mono">{createdCode}</span>
                         <button
@@ -64,6 +80,7 @@ const CreateTeamPage = () => {
                         </button>
                     </div>
                 </Modal>
+
             </div>
             <div className="relative w-full h-full">
                 <img src={images.login} alt="" className="w-full h-full object-cover" />

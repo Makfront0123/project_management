@@ -1,6 +1,6 @@
 import express from "express";
-import { addMemberToTeam, requestToJoinTeam, rejectRequestToJoinTeam, getAllMembersOfTeam, getMemberOfTeam,confirmJoinWithCode ,deleteMembersOfTeam, deleteMemberOfTeam } from "../controllers/team_member_controller.js";
-import {isTeamMember} from "../middlewares/isTeamMember_middleware.js";
+import { addMemberToTeam, requestToJoinTeam, rejectRequestToJoinTeam, getAllMembersOfTeam, getPendingRequests, getMemberOfTeam, confirmJoinWithCode, deleteMembersOfTeam, deleteMemberOfTeam } from "../controllers/team_member_controller.js";
+import { isTeamMember } from "../middlewares/isTeamMember_middleware.js";
 import authenticate from "../middlewares/auth_middleware.js";
 import { isTeamAdmin } from "../middlewares/admin_middleware.js";
 
@@ -15,5 +15,6 @@ router.get("/teams/:teamId/members", authenticate, getAllMembersOfTeam);
 router.get("/teams/:teamId/members/:userId", authenticate, getMemberOfTeam);
 router.delete("/teams/:teamId/members/:userId", authenticate, isTeamAdmin, deleteMemberOfTeam);
 router.delete("/teams/:teamId/members", authenticate, isTeamAdmin, deleteMembersOfTeam);
+router.get("/teams/pending", authenticate, getPendingRequests);
 
 export default router;

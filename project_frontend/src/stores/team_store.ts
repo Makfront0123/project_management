@@ -1,14 +1,16 @@
 import { create } from 'zustand'
 import { getUserTeamStatus } from '../services/auth_services'
-import { createTeam } from '../services/team_services'
+import { createTeam, getAllTeams as fetchAllTeams } from '../services/team_services'
 import { getErrorMessage } from '../utils/getErrorMessage'
 import type { Team } from '../types/team'
- 
+
+
 type TeamStore = {
   teams: Team[]
   isLoading: boolean
   fetchTeams: () => Promise<void>
   createTeam: (name: string, description: string) => Promise<string>
+  getAllTeams: () => Promise<void>
 }
 
 export const useTeamStore = create<TeamStore>((set) => ({
@@ -18,7 +20,7 @@ export const useTeamStore = create<TeamStore>((set) => ({
   fetchTeams: async () => {
     set({ isLoading: true })
     try {
-      const data = await getUserTeamStatus() 
+      const data = await getUserTeamStatus()
       set({ teams: data.teams, isLoading: false })
     } catch (error) {
       console.error("Error fetching teams:", error)
@@ -42,5 +44,17 @@ export const useTeamStore = create<TeamStore>((set) => ({
       set({ isLoading: false })
       throw new Error(getErrorMessage(error))
     }
+  },
+
+  getAllTeams: async () => {
+    set({ isLoading: true })
+    try {
+      const teams = await fetchAllTeams() // ✅ Ya no hay conflicto
+      set({ teams, isLoading: false })
+    } catch (error) {
+      console.error("Error fetching teams:", error)
+      set({ isLoading: false })
+    }
   }
+
 }))

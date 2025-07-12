@@ -9,10 +9,12 @@ import { Toaster } from 'react-hot-toast'
 import { Loading } from './components/Loading';
 import RegisterPage from './pages/RegisterPage';
 import CreateTeamPage from './pages/CreateTeamPage';
+import JoinTeamPage from './pages/JoinTeamPage';
+import TeamPage from './pages/TeamPage';
 
 function App() {
   const { token, loading } = useAuthStore()
-  console.log(token, loading)
+  //console.log(token, loading)
 
   if (loading) return <Loading />
 
@@ -31,6 +33,9 @@ function App() {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="projects" element={<ProjectPage />} />
             <Route path="create-team" element={<CreateTeamPage />} />
+            <Route path="join-team" element={<JoinTeamPage />} />
+            <Route path="team/:teamId" element={<TeamPage />} />
+
             <Route index element={<Navigate to="/dashboard" />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />
           </Route>

@@ -13,9 +13,11 @@ class TeamMemberRepository {
     return await TeamMember.findOneAndDelete({ teamId: data.teamId, userId: data.userId });
   }
 
+
   async getAllMembersOfTeam(teamId) {
-    return await TeamMember.find({ teamId });
+    return await TeamMember.find({ teamId }).populate('userId', 'name email');
   }
+
   async getMemberOfTeam(teamId, userId) {
     return await TeamMember.findOne({ teamId, userId });
   }
@@ -35,7 +37,7 @@ class TeamMemberRepository {
     return await TeamMember.deleteMany({ teamId });
   }
 
-  
+
 }
 
 export default new TeamMemberRepository();

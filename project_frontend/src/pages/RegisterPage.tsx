@@ -1,16 +1,15 @@
-import { Link, useNavigate } from "react-router"
+import { Link,useNavigate } from "react-router"
 import { useAuthStore } from "../stores/auth_store"
 import { useForm } from "../hooks/useForm"
 import { images } from "../core/images"
-
 import { getErrorMessage } from "../utils/getErrorMessage"
 import toast from "react-hot-toast"
 import { RegisterForm } from "../components/RegisterForm"
 
-const RegisterPage = () => {
-    const { login } = useAuthStore()
-    const navigate = useNavigate()
 
+const RegisterPage = () => {
+    const { register } = useAuthStore()
+    const navigate = useNavigate();
 
 
     const form = useForm({
@@ -30,8 +29,8 @@ const RegisterPage = () => {
         },
         onSubmit: async (values) => {
             try {
-                await login(values.email, values.password)
-                navigate("/dashboard")
+                await register(values.name, values.email, values.password)
+                navigate("/login")
             }
             catch (err: unknown) {
                 const msg = getErrorMessage(err)

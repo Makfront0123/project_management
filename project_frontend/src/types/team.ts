@@ -1,13 +1,16 @@
-export interface Team {
-  _id: string;
-  name: string;
-  description: string;
-  code: string;
+export type Team = {
+  _id: string
+  teamName: string
+  description: string
+  code: string
+  role: string
   creator: {
-    _id: string;
-    name: string;
-    email: string;
-  };
+    _id: string
+    name: string
+    email: string
+  }
+  createdAt: string
+  updatedAt: string
 }
 
 

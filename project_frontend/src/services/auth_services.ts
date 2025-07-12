@@ -40,5 +40,6 @@ export const getUserTeamStatus = async () => {
             Authorization: `Bearer ${token}`
         }
     })
+    console.log('status', response.data)
     return response.data
 }

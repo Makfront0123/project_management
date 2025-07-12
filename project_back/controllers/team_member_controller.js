@@ -1,5 +1,6 @@
 import teamMemberService from "../services/team_member_service.js";
 import teamService from "../services/team_service.js";
+import  TeamMember  from "../models/TeamMember.js";
 export const addMemberToTeam = async (req, res) => {
     try {
         const { teamId } = req.params;
@@ -148,4 +149,15 @@ export const confirmJoinWithCode = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+};
+
+// controller
+export const getPendingRequests = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const requests = await TeamMember.find({ userId, status: 'pending' });
+    res.status(200).json(requests.map(r => r.teamId));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

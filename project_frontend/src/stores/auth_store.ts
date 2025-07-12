@@ -2,7 +2,8 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { User } from '../types/auth'
 import { loginUser, logoutUser, registerUser } from '../services/auth_services'
-import { getErrorMessage } from '../utils/getErrorMessage' 
+import { getErrorMessage } from '../utils/getErrorMessage'
+import toast from 'react-hot-toast'
 
 type AuthStore = {
     user: User | null
@@ -43,7 +44,8 @@ export const useAuthStore = create<AuthStore>()(
                 set({ loading: true })
                 try {
                     const data = await registerUser(name, email, password)
-                    set({ user: data.user, token: data.user.token, loading: false })
+                    set({ user: data.user, loading: false })
+                    toast.success(data.message);
                 } catch (error: unknown) {
                     set({ user: null, token: null, loading: false })
                     throw new Error(getErrorMessage(error))

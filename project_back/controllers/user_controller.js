@@ -55,7 +55,7 @@ export const getUserTeamStatus = async (req, res) => {
 
             teams: teams.map((teamMember) => ({
                 teamId: teamMember.teamId._id,
-                teamName: teamMember.teamId.name,
+                name: teamMember.teamId.name,
                 role: teamMember.role
             }))
         });
