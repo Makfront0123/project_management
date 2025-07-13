@@ -152,7 +152,18 @@ export const deleteMemberOfTeam = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+ 
+export const getTeamCode = async (req, res) => {
+  try {
+    const { teamId } = req.params;
+    const verified = await teamService.getConfirmationCode(teamId);
+    if (!verified) return res.status(404).json({ message: "No code found" });
 
+    return res.status(200).json({ code: verified.code }); 
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 
 export const confirmJoinWithCode = async (req, res) => {

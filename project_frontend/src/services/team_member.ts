@@ -82,3 +82,26 @@ export const rejectRequest = async (userId: string, teamId: string) => {
     return response.data;
 };
  
+export const confirmJoinWithCode = async (teamId: string, code: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.post(`${baseUrl}/teams/${teamId}/members/confirm`, {
+        code,
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    return response.data;
+};
+
+export const getTeamCode = async (teamId: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.get(`${baseUrl}/teams/${teamId}/code`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    return response.data;
+};

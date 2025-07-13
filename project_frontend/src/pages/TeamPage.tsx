@@ -57,8 +57,8 @@ const TeamPage = () => {
         </div>
       </div>
 
-      <div className="w-full h-full bg-red-600">
-        {/* Aquí podrías mostrar proyectos o dashboard del equipo */}
+      <div className="w-full h-full bg-gray-400">
+         
       </div>
     </div>
   );

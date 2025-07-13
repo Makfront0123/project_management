@@ -25,10 +25,9 @@ class TeamRepository {
     }
 
     async getConfirmationCode(teamId) {
-        return await Team.findOne(
-            { _id: teamId },
-        );
+        return await Team.findById(teamId).select('code'); 
     }
+
 }
 
 const teamRepository = new TeamRepository();

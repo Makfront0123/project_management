@@ -1,6 +1,6 @@
 
 import { create } from 'zustand'
-import { addMember, deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamMembers, rejectRequest, requestToJoinTeam } from '../services/team_member'
+import { addMember, confirmJoinWithCode, deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, rejectRequest, requestToJoinTeam } from '../services/team_member'
 import type { TeamMember } from '../types/teamMember'
 import type { UserTeamStatus } from '../types/userTeamStatus'
 import { getUserTeamStatus } from '../services/auth_services'
@@ -21,6 +21,8 @@ type TeamStore = {
     getPendingMembersOfTeam: (teamId: string) => Promise<void>
     rejectRequest: (userId: string, teamId: string) => Promise<void>
     addMember: (userId: string, teamId: string) => Promise<void>
+    confirmJoinWithCode: (teamId: string, code: string) => Promise<void>
+    getTeamCode: (teamId: string) => Promise<string>
 }
 
 export const useTeamMemberStore = create<TeamStore>((set) => ({
@@ -128,7 +130,7 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
     addMember: async (userId: string, teamId: string) => {
         set({ isLoading: true });
         try {
-            const data = await addMember(userId, teamId);  
+            const data = await addMember(userId, teamId);
             toast.success(data.message);
 
             const updatedMembers = await getPendingMembersOfTeam(teamId);
@@ -140,6 +142,35 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
             set({ isLoading: false });
         }
     },
+
+    confirmJoinWithCode: async (teamId: string, code: string) => {
+        set({ isLoading: true });
+        try {
+            const data = await confirmJoinWithCode(teamId, code);  
+            toast.success(data.message);
+            const updatedMembers = await getTeamMembers(teamId);
+            set({ teamMembers: updatedMembers, isLoading: false });
+        } catch (error) {
+            set({ isLoading: false });
+            throw error;  
+        }
+    }
+    ,
+
+    getTeamCode: async (teamId: string) => {
+        set({ isLoading: true });
+        try {
+            const data = await getTeamCode(teamId); 
+            set({ isLoading: false });
+            return data.code;  
+        } catch (error) {
+            const errorMsg = getErrorMessage(error);
+            toast.error(errorMsg);
+            console.error("Error fetching team code:", error);
+            set({ isLoading: false });
+            throw error;
+        }
+    }
 
 
 
