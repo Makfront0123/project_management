@@ -3,7 +3,7 @@ import type { TeamMember } from "../types/teamMember";
 type Props = {
   member: TeamMember;
   onDelete?: (memberId: string, teamId: string) => void;
-  onAccept?: (memberId: string, teamId: string) => void;
+  onAccept?: ( userId: string, teamId: string) => void;
   onReject?: (userId: string, teamId: string) => void;
 };
 
@@ -22,7 +22,7 @@ const TeamMemberRow = ({ member, onDelete, onAccept, onReject }: Props) => {
         {isPending && (
           <>
             <button
-              onClick={() => onAccept?.(member._id, member.teamId)}
+              onClick={() => onAccept?.(member?.userId._id, member.teamId)}
               className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
             >
               Aceptar

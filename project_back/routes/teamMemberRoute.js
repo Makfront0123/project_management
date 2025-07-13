@@ -17,5 +17,6 @@ router.delete("/teams/:teamId/members/:userId", authenticate, isTeamAdmin, delet
 router.delete("/teams/:teamId/members", authenticate, isTeamAdmin, deleteMembersOfTeam);
 router.get("/teams/pending", authenticate, getPendingRequests);
 router.get("/teams/:teamId/pending-members", authenticate,isTeamAdmin ,getPendingMembersOfTeam);
+ 
 
 export default router;

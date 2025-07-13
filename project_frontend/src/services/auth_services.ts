@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { AuthResponse } from '../types/auth'
+import type { AuthResponse, RegisterResponse } from '../types/auth'
 import { useAuthStore } from '../stores/auth_store'
 
 const baseUrl = '/api/v1'
@@ -15,18 +15,14 @@ export const loginUser = async (
     return response.data
 }
 
-export const registerUser = async (
-    name: string,
-    email: string,
-    password: string
-): Promise<AuthResponse> => {
-    const response = await axios.post<AuthResponse>(`${baseUrl}/register`, {
-        name,
-        email,
-        password,
-    })
-    return response.data
-}
+export const registerUser = async (name: string, email: string, password: string): Promise<RegisterResponse> => {
+  const res = await axios.post(`${baseUrl}/register`, {
+    name,
+    email,
+    password
+  });
+  return res.data; 
+};
 
 export const logoutUser = async () => {
     console.log('logout')

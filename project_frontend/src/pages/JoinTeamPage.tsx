@@ -4,16 +4,17 @@ import { useTeamMemberStore } from "../stores/team_member_store"
 
 const JoinTeamPage = () => {
   const { getAllTeams, teams, isLoading } = useTeamStore()
-  const { requestToJoinTeam, requestedTeams, getPendingRequests } = useTeamMemberStore()
+  const { requestToJoinTeam, requestedTeams, getPendingRequests, teamMemberships, getUserTeamStatus } = useTeamMemberStore()
 
 
   useEffect(() => {
-    getAllTeams()
-    getPendingRequests()  
-  }, [getAllTeams, getPendingRequests])
+    getAllTeams();
+    getPendingRequests();
+    getUserTeamStatus();
+  }, [getAllTeams, getPendingRequests, getUserTeamStatus])
 
 
- 
+
 
   return (
     <div className="w-full min-h-screen p-6 mt-20">
@@ -26,7 +27,13 @@ const JoinTeamPage = () => {
       ) : (
         <ul className="space-y-4">
           {teams.map((team) => {
-            const alreadyRequested = requestedTeams.includes(team._id)
+            console.log('teamMemberships', teamMemberships);
+
+            const isMember = teamMemberships.some(m => m.teamId === team._id);
+
+
+            const alreadyRequested = requestedTeams.includes(team._id);
+
             return (
               <div
                 key={team._id}
@@ -41,14 +48,19 @@ const JoinTeamPage = () => {
 
                 <button
                   onClick={() => requestToJoinTeam(team._id)}
-                  disabled={alreadyRequested}
-                  className={`px-8 py-2 rounded-md transition ${alreadyRequested
+                  disabled={alreadyRequested || isMember}
+                  className={`px-8 py-2 rounded-md transition ${alreadyRequested || isMember
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-blue-600 hover:bg-blue-700 text-white"
                     }`}
                 >
-                  {alreadyRequested ? "Cancelar solicitud" : "Solicitar unirse"}
+                  {isMember
+                    ? "Ya eres miembro"
+                    : alreadyRequested
+                      ? "Solicitud enviada"
+                      : "Solicitar unirse"}
                 </button>
+
               </div>
             )
           })}

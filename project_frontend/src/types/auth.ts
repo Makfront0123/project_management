@@ -1,8 +1,8 @@
 export interface User {
-
-  email: string
-
+  _id: string;
+  email: string;
 }
+
 
 export interface AuthResponse {
   message: string
@@ -12,3 +12,14 @@ export interface AuthResponse {
     token: string
   }
 }
+
+export interface RegisterResponse {
+  message?: string;
+  _id: string;
+  email: string;
+}
+
+
+
+
+

@@ -4,7 +4,7 @@ import TeamMemberRow from "./TeamMemberRow";
 type Props = {
   members: TeamMember[];
   onDelete?: (memberId: string, teamId: string) => void;
-  onAccept?: (memberId: string, teamId: string) => void;
+  onAccept?: (userId: string, teamId: string) => void;
   onReject?: (userId: string, teamId: string) => void;
 };
 

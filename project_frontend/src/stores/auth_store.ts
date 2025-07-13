@@ -7,12 +7,18 @@ import { loginUser, logoutUser, registerUser } from '../services/auth_services'
 import { getErrorMessage } from '../utils/getErrorMessage'
 
 type User = {
+    id: string
     email: string
 }
 
+
 type JwtPayload = {
+    id: string
+    email: string
     exp: number
+    iat: number
 }
+
 
 type AuthStore = {
     user: User | null
@@ -35,9 +41,12 @@ export const useAuthStore = create<AuthStore>()(
                 set({ loading: true })
                 try {
                     const data = await loginUser(email, password)
+                    const decoded: JwtPayload = jwtDecode(data.user.token)
+
                     set({
                         user: {
-                            email: data.user.email
+                            id: decoded.id,
+                            email: decoded.email
                         },
                         token: data.user.token,
                         loading: false
@@ -47,19 +56,29 @@ export const useAuthStore = create<AuthStore>()(
                     set({ user: null, token: null, loading: false })
                     throw new Error(getErrorMessage(error))
                 }
-            },
+            }
+            ,
 
             register: async (name, email, password) => {
                 set({ loading: true })
                 try {
                     const data = await registerUser(name, email, password)
-                    set({ user: data.user, loading: false })
-                    toast.success(data.message)
+
+                    set({
+                        user: {
+                            id: data._id,      
+                            email: data.email
+                        },
+                        loading: false
+                    })
+
+                    toast.success("Usuario registrado correctamente")
                 } catch (error: unknown) {
                     set({ user: null, token: null, loading: false })
                     throw new Error(getErrorMessage(error))
                 }
-            },
+            }
+            ,
 
             logout: async () => {
                 set({ loading: true })
@@ -78,14 +97,14 @@ export const useAuthStore = create<AuthStore>()(
                 const token = get().token
                 if (token) {
                     try {
-                         const decoded: JwtPayload = jwtDecode(token)
+                        const decoded: JwtPayload = jwtDecode(token)
                         const now = Math.floor(Date.now() / 1000)
                         if (decoded.exp < now) {
                             get().logout()
                         }
                     } catch (e) {
                         get().logout()
-                        console.log(e)  
+                        console.log(e)
                     }
                 }
             }
@@ -95,4 +114,4 @@ export const useAuthStore = create<AuthStore>()(
         }
     )
 )
- 
+

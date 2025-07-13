@@ -2,10 +2,15 @@ import type { TeamMember } from "../types/teamMember";
 
 type Props = {
     member: TeamMember;
-    onDelete?: (memberId: string,teamId: string) => void; // <-- opcional
+    onDelete?: (memberId: string,teamId: string) => void;  
 };
+import { useAuthStore } from "../stores/auth_store";  
 
 const Table = ({ member, onDelete }: Props) => {
+    const currentUserId = useAuthStore(state => state.user?.id); 
+
+    const isSelfAdmin = member.role === 'admin' && member.userId._id === currentUserId;
+
     return (
         <table className="flex flex-col w-full border-collapse border p-10 border-gray-300 rounded-lg shadow-md mb-4">
             <thead className="border-b border-gray-300 p-4">
@@ -25,16 +30,18 @@ const Table = ({ member, onDelete }: Props) => {
                     <td className="w-1/5">{member.status}</td>
                     <td className="w-1/5">
                         {onDelete && (
-                            <button className={`${member.role == 'admin' ? 'bg-gray-400' : 'bg-red-600'}  text-white px-3 py-1 rounded`} onClick={() => onDelete(member._id,member.teamId)}>
+                            <button
+                                disabled={isSelfAdmin}
+                                className={`text-white px-3 py-1 rounded ${isSelfAdmin ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'}`}
+                                onClick={() => onDelete(member?.userId?._id, member.teamId)}
+                            >
                                 Eliminar
                             </button>
                         )}
-
                     </td>
                 </tr>
             </tbody>
         </table>
     );
 };
-
 export default Table;
