@@ -3,8 +3,6 @@ import { useAuthStore } from "../stores/auth_store";
 const baseUrl = '/api/v1'
 
 export const addMember = async (userId: string, teamId: string) => {
-    console.log('userId', userId);
-    console.log('teamId', teamId);
     const token = useAuthStore.getState().token;
     const response = await axios.post(`${baseUrl}/teams/${teamId}/members`, {
         userId,
@@ -23,7 +21,7 @@ export const getTeamMembers = async (teamId: string) => {
             Authorization: `Bearer ${token}`
         }
     });
-    console.log('teamMembers', response.data)
+
     return response.data;
 };
 
@@ -81,7 +79,7 @@ export const rejectRequest = async (userId: string, teamId: string) => {
 
     return response.data;
 };
- 
+
 export const confirmJoinWithCode = async (teamId: string, code: string) => {
     const token = useAuthStore.getState().token;
     const response = await axios.post(`${baseUrl}/teams/${teamId}/members/confirm`, {

@@ -1,5 +1,14 @@
 export interface Project {
-    id: string;
+    _id: string;
     name: string;
     description: string;
+    teamId: string;
+    ownerId: string;
+    createdAt: string;
+    updatedAt: string;
 }
+
+export type NewProject = {
+  name: string;
+  description: string;
+};

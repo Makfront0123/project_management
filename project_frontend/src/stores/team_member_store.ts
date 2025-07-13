@@ -146,13 +146,13 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
     confirmJoinWithCode: async (teamId: string, code: string) => {
         set({ isLoading: true });
         try {
-            const data = await confirmJoinWithCode(teamId, code);  
+            const data = await confirmJoinWithCode(teamId, code);
             toast.success(data.message);
             const updatedMembers = await getTeamMembers(teamId);
             set({ teamMembers: updatedMembers, isLoading: false });
         } catch (error) {
             set({ isLoading: false });
-            throw error;  
+            throw error;
         }
     }
     ,
@@ -160,9 +160,9 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
     getTeamCode: async (teamId: string) => {
         set({ isLoading: true });
         try {
-            const data = await getTeamCode(teamId); 
+            const data = await getTeamCode(teamId);
             set({ isLoading: false });
-            return data.code;  
+            return data.code;
         } catch (error) {
             const errorMsg = getErrorMessage(error);
             toast.error(errorMsg);

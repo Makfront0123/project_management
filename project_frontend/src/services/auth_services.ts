@@ -25,7 +25,7 @@ export const registerUser = async (name: string, email: string, password: string
 };
 
 export const logoutUser = async () => {
-    console.log('logout')
+ 
     const response = await axios.post(`${baseUrl}/logout`)
     return response.data
 }
@@ -37,6 +37,6 @@ export const getUserTeamStatus = async () => {
             Authorization: `Bearer ${token}`
         }
     })
-    console.log('status', response.data)
+    
     return response.data
 }

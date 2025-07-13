@@ -1,21 +1,52 @@
 import axios from "axios";
-import type { Project } from "../types/projects";
+import type { NewProject, Project } from "../types/projects";
 import type { Team } from "../types/team";
+import { useAuthStore } from "../stores/auth_store";
+const baseUrl = "/api/v1";
 
-const baseUrl = "http://localhost:3000";
+ 
+export const createProject = async (
+    teamId: string,
+    data: NewProject
+): Promise<{ message: string; project: Project }> => {
+    const token = useAuthStore.getState().token;
 
-export const createProject = async (teamId: Team, data: Array<Project>) => {
-    const response = await axios.post(`${baseUrl}/teams/${teamId}/projects`, data);
+    const response = await axios.post(`${baseUrl}/teams/${teamId}/projects`, {
+        name: data.name,
+        description: data.description,
+        teamId,
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    return {
+        message: response.data.message,
+        project: response.data.project,
+    };
+};
+
+
+export const getProjects = async (teamId: string) => {
+ 
+    const token = useAuthStore.getState().token;
+    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     return response.data;
 }
 
-export const getProjects = async (teamId: Team) => {
-    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects`);
-    return response.data;
-}
-
-export const getProject = async (id: Project, teamId: Team) => {
-    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects/${id}`);
+export const getProject = async (id: string, teamId: string) => {
+    console.log('id', id);
+    const token = useAuthStore.getState().token;
+    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     return response.data;
 }
 

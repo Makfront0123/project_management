@@ -1,10 +1,8 @@
 import projectService from "../services/project_service.js";
-
 export const createProject = async (req, res) => {
     try {
         const owner_id = req.user.id;
         const { name, description } = req.body;
-
         const { teamId } = req.params;
 
         if (!name || !teamId) {
@@ -14,11 +12,12 @@ export const createProject = async (req, res) => {
         const data = {
             name,
             description,
-            teamId: teamId,
+            teamId,
             ownerId: owner_id,
         };
 
-        const project = await projectService.createProject(data);
+        const project = await projectService.createProject(data);  
+
         res.status(201).json({
             message: "Project created successfully",
             project,
@@ -27,6 +26,7 @@ export const createProject = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 export const getAllProjects = async (req, res) => {
     try {

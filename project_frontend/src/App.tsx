@@ -11,8 +11,9 @@ import RegisterPage from './pages/RegisterPage';
 import CreateTeamPage from './pages/CreateTeamPage';
 import JoinTeamPage from './pages/JoinTeamPage';
 import TeamPage from './pages/TeamPage';
-import TeamRequestPage from './pages/TeamRequestPage';
+ 
 import { useEffect } from 'react';
+import ProjectDetails from './pages/ProjectDetails';
 
 function App() {
   const { token, loading, checkTokenExpiration } = useAuthStore()
@@ -38,10 +39,12 @@ function App() {
           <Route path="/*" element={<MainLayout />}>
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="projects" element={<ProjectPage />} />
+            <Route path="project/:projectId" element={<ProjectDetails />} />
             <Route path="create-team" element={<CreateTeamPage />} />
             <Route path="join-team" element={<JoinTeamPage />} />
             <Route path="team/:teamId" element={<TeamPage />} />
-            <Route path="team/:teamId/requests" element={<TeamRequestPage />} />
+            <Route path="team/:teamId/project/:projectId" element={<ProjectDetails />} />
+
 
 
             <Route index element={<Navigate to="/dashboard" />} />
