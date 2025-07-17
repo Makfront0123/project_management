@@ -1,6 +1,6 @@
 
 import { create } from 'zustand'
-import { addMember, confirmJoinWithCode, deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, rejectRequest, requestToJoinTeam } from '../services/team_member'
+import { addMember, confirmJoinWithCode, deleteMember, getAllMembersOfTeam, getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, rejectRequest, requestToJoinTeam } from '../services/team_member'
 import type { TeamMember } from '../types/teamMember'
 import type { UserTeamStatus } from '../types/userTeamStatus'
 import { getUserTeamStatus } from '../services/auth_services'
@@ -13,7 +13,7 @@ type TeamStore = {
     isLoading: boolean
     requestedTeams: string[]
     getUserTeamStatus: () => Promise<void>
-
+    getAllMembersOfTeam: (teamId: string) => Promise<void>
     fetchTeamMembers: (teamId: string) => Promise<void>
     deleteMember: (memberId: string, teamId: string) => Promise<void>
     requestToJoinTeam: (teamId: string) => Promise<void>
@@ -170,7 +170,19 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
             set({ isLoading: false });
             throw error;
         }
-    }
+    },
+
+    getAllMembersOfTeam: async (teamId: string) => {
+        set({ isLoading: true });
+        try {
+            const data = await getAllMembersOfTeam(teamId);
+
+            set({ teamMembers: data, isLoading: false });
+        } catch (error) {
+            console.error("Error fetching team members:", error);
+            set({ isLoading: false });
+        }
+    },
 
 
 

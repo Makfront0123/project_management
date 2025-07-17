@@ -32,7 +32,6 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     set({ isLoading: true });
     try {
       const data = await getProject(id, teamId);
-      console.log("data", data);
       set({ currentProject: data, isLoading: false });  
     } catch (error) {
       console.error("Error fetching project:", error);

@@ -5,13 +5,15 @@ import teamMemberRepo from "../repositories/team_member_repository.js";
 export const assignUserToTask = async (req, res) => {
     try {
         const { taskId } = req.params;
-        const { userId, assignedBy } = req.body;
+        const { userId } = req.body;
+        const assignedBy = req.user.id;
 
         if (!userId || !assignedBy) {
             return res.status(400).json({ message: "Missing required fields" });
         }
 
         const result = await taskService.findTaskWithTeam(taskId);
+        console.log("result:", result);
         if (!result) {
             return res.status(404).json({ message: "Task or Project not found" });
         }
@@ -69,7 +71,7 @@ export const removeUserFromTask = async (req, res) => {
 };
 
 
-export const getAllUsersAssignedToTask =async (req,res) => {
+export const getAllUsersAssignedToTask = async (req, res) => {
     try {
         const { taskId } = req.params;
         const users = await taskAssignmentService.getAllUsersAssignedToTask(taskId);
@@ -78,8 +80,8 @@ export const getAllUsersAssignedToTask =async (req,res) => {
         res.status(500).json({ message: error.message });
     }
 };
- 
-export const getUserAssignedToTask = async (req,res) => {
+
+export const getUserAssignedToTask = async (req, res) => {
     try {
         const { taskId, userId } = req.params;
         const user = await taskAssignmentService.getUserAssignedToTask(taskId, userId);
@@ -88,4 +90,13 @@ export const getUserAssignedToTask = async (req,res) => {
         res.status(500).json({ message: error.message });
     }
 };
-   
+
+export const getTasksAssignedToUser = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const tasks = await taskAssignmentService.getTasksAssignedToUser(userId);
+        res.status(200).json(tasks);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

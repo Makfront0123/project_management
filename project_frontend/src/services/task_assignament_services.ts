@@ -1,0 +1,28 @@
+import axios from "axios";
+import { useAuthStore } from "../stores/auth_store";
+
+const baseUrl = "/api/v1";
+
+export const assignTask = async (taskId: string, userId: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.post(`${baseUrl}/tasks/${taskId}/assignments`, {
+        userId,
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    console.log("response:", response.data);
+    return response.data;
+};
+
+export const getTasksToUserAssignments = async (taskId: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.get(`${baseUrl}/user/tasks/${taskId}/assignments`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return response.data;
+};
+

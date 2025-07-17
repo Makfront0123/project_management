@@ -26,7 +26,7 @@ class TaskRepository {
     }
 
     async findTaskById(taskId) {
-        return await Task.findById(new mongoose.Types.ObjectId(taskId));
+       return await Task.findById(taskId).lean(); 
     }
 }
 

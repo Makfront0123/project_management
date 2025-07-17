@@ -103,3 +103,15 @@ export const getTeamCode = async (teamId: string) => {
 
     return response.data;
 };
+
+export const getAllMembersOfTeam = async (teamId: string) => {
+    const token = useAuthStore.getState().token
+    const response = await axios.get(`${baseUrl}/teams/${teamId}/members`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+    
+
+    return response.data;
+};

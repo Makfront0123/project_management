@@ -40,7 +40,6 @@ export const getProjects = async (teamId: string) => {
 }
 
 export const getProject = async (id: string, teamId: string) => {
-    console.log('id', id);
     const token = useAuthStore.getState().token;
     const response = await axios.get(`${baseUrl}/teams/${teamId}/projects/${id}`, {
         headers: {
