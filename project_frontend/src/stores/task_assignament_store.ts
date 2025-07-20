@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { assignTask, getTasksToUserAssignments } from "../services/task_assignament_services";
+import { assignTask, getAllUsersAssignedToTask, getTasksToUserAssignments, unassignTask } from "../services/task_assignament_services";
 import toast from "react-hot-toast";
 import type { TaskAssignment } from "../types/task_assignment";
 
@@ -9,7 +9,9 @@ interface TaskStore {
     taskAssignments: TaskAssignment[];
 
     assignTask: (taskId: string, userId: string) => Promise<void>;
+    unassignTask: (taskId: string, userId: string) => Promise<void>;
     getTasksToUserAssignments: (taskId: string) => Promise<void>;
+    getAllUsersAssignedToTask: (taskId: string, teamId: string) => Promise<void>;
 }
 
 const useTaskAssignamentStore = create<TaskStore>((set) => ({
@@ -24,12 +26,45 @@ const useTaskAssignamentStore = create<TaskStore>((set) => ({
         return response;
     },
 
-    getTasksToUserAssignments: async (taskId) => {
+    getTasksToUserAssignments: async (projectId) => {
         set({ isLoading: true });
-        const response = await getTasksToUserAssignments(taskId); 
-        set({ taskAssignments: response, isLoading: false });
+        const response = await getTasksToUserAssignments(projectId);
+        set({
+            taskAssignments: response,  
+            isLoading: false
+        });
+    }
+    ,
+
+
+
+    unassignTask: async (taskId, userId) => {
+        set({ isLoading: true });
+        try {
+            const response = await unassignTask(taskId, userId); // ✅ Servicio correcto
+            toast.success(response.message);
+            return response;
+        } catch (error) {
+            toast.error("Error al quitar asignación");
+            throw error;
+        } finally {
+            set({ isLoading: false });
+        }
+    },
+
+
+    getAllUsersAssignedToTask: async (taskId, teamId) => {
+        set({ isLoading: true });
+        const response = await getAllUsersAssignedToTask(taskId, teamId);
+        console.log("response:", response);
+        set((state) => ({
+            taskAssignments: [...state.taskAssignments, ...response],
+            isLoading: false
+        }));
+
         return response;
     },
+
 }));
 
 export default useTaskAssignamentStore;

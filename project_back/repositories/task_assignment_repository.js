@@ -15,7 +15,10 @@ class TaskAssignmentRepository {
     }
 
     async getAllUsersAssignedToTask(taskId) {
-        return await TaskAssignment.find({ taskId });
+        return await TaskAssignment.find({ taskId })
+            .populate("userId", "name email")
+            .populate("assignedBy", "name")
+            .populate("taskId", "name");
     }
 
     async getUserAssignedToTask(taskId, userId) {

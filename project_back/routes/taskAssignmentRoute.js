@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post("/tasks/:taskId/assignments", authenticate, isTeamAdmin, assignUserToTask);
 router.delete("/tasks/:taskId/assignments/:userId", authenticate, isTeamAdmin, removeUserFromTask);
-router.get("/tasks/:taskId/assignments", authenticate,isTeamMember, getAllUsersAssignedToTask);
+router.get("/tasks/:taskId/assignments", authenticate, isTeamMember, getAllUsersAssignedToTask);
 router.get("/tasks/:taskId/assignments/:userId",authenticate,isTeamMember, getUserAssignedToTask);
 router.get("/user/tasks/:taskId/assignments",authenticate, getTasksAssignedToUser);   
 

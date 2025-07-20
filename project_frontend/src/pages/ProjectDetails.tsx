@@ -8,7 +8,7 @@ import type { Task } from "../types/task";
 import { useForm } from "../hooks/useForm";
 import useTaskStore from "../stores/task_store";
 import useTaskAssignamentStore from "../stores/task_assignament_store";
-import { getTasksToUserAssignments } from "../services/task_assignament_services";
+
 type TaskFormValues = {
   name: string;
   description: string;
@@ -18,7 +18,7 @@ const ProjectDetails = () => {
   const { currentProject, isLoading, getProject } = useProjectStore();
   const { tasks, createTask, getTasks, deleteTask, updateTask } = useTaskStore();
   const { teamMemberships, getAllMembersOfTeam, teamMembers, getUserTeamStatus } = useTeamMemberStore();
-  const { taskAssignments, getTasksToUserAssignments: getTaskAssignments, assignTask } = useTaskAssignamentStore();
+  const { taskAssignments, getTasksToUserAssignments, assignTask, getAllUsersAssignedToTask } = useTaskAssignamentStore();
   const { projectId, teamId } = useParams<{ projectId: string; teamId: string }>();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,6 +28,10 @@ const ProjectDetails = () => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [selectedUserId, setSelectedUserId] = useState("");
 
+
+
+
+
   const team = useMemo(() => {
     return teamMemberships.find((t) => t.teamId === teamId);
   }, [teamId, teamMemberships]);
@@ -36,6 +40,7 @@ const ProjectDetails = () => {
   const acceptedMembers = useMemo(() => {
     return teamMembers.filter(m => m.status === "accepted" && m.role !== "admin");
   }, [teamMembers]);
+
 
   const isAdmin = team?.role === "admin";
 
@@ -75,17 +80,39 @@ const ProjectDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (!projectId || !teamId) return;
-      await getUserTeamStatus();  
+
+      await getUserTeamStatus();
       await getProject(projectId, teamId);
       await getTasks(projectId);
-      await getTaskAssignments(projectId);
+
+      const loadedTasks = useTaskStore.getState().tasks;
+
       await getAllMembersOfTeam(teamId);
-      await getTasksToUserAssignments(projectId);
+
+      // Limpiar taskAssignments antes
+      useTaskAssignamentStore.setState({ taskAssignments: [] });
+
+      if (isAdmin) {
+        for (const task of loadedTasks) {
+          await getAllUsersAssignedToTask(task._id, teamId);
+        }
+
+        const uniqueAssignments = Array.from(
+          new Map(useTaskAssignamentStore.getState().taskAssignments.map(a => [a._id, a])).values()
+        );
+        useTaskAssignamentStore.setState({ taskAssignments: uniqueAssignments });
+
+      } else {
+        await getTasksToUserAssignments(projectId);
+      }
+
+
+
       setTasksLoaded(true);
     };
 
     fetchData();
-  }, [getUserTeamStatus, getProject, getTasks, getTaskAssignments, projectId, teamId, getAllMembersOfTeam]);
+  }, [getUserTeamStatus, getProject, getTasks, projectId, teamId, getAllMembersOfTeam, getTasksToUserAssignments, getAllUsersAssignedToTask, isAdmin]);
 
   if (!team) {
     return <p className="text-gray-500 w-full h-screen flex items-center justify-center">Cargando equipo...</p>;
@@ -115,6 +142,17 @@ const ProjectDetails = () => {
     );
   }
 
+  const findAssignmentForTask = (taskId: string) => {
+    const { taskAssignments } = useTaskAssignamentStore.getState();
+    return taskAssignments.find((a) => a.taskId?._id === taskId);  
+  };
+
+  console.log("Asignaciones al usuario:", taskAssignments);
+
+
+
+
+
   return (
     <div className="flex flex-col gap-8 w-full h-full p-20">
       <div className="flex items-center justify-between">
@@ -133,74 +171,108 @@ const ProjectDetails = () => {
         )}
       </div>
 
-      {!isAdmin && taskAssignments.length === 0 && (
+      {!isAdmin && taskAssignments?.length === 0 && (
         <div className="flex items-center justify-center">
           <p className="text-gray-500">No hay tareas asignadas para este usuario</p>
         </div>
       )}
 
-      {!isAdmin && taskAssignments.length > 0 && (
+
+      {!isAdmin && Array.isArray(taskAssignments) && taskAssignments.length > 0 && (
         <div className="flex flex-col gap-4">
-          {taskAssignments.map((assignment) => (
-            <div
-              key={assignment.taskId._id}
-              className="bg-gray-100 flex items-center justify-between p-4 rounded-lg"
-            >
-              <div className="flex flex-col">
-                <p className="text-lg font-semibold">{assignment.taskId.name}</p>
-                <p className="text-gray-600">{assignment.taskId.description}</p>
-                <p className="text-sm text-gray-400">
-                  Asignado el {new Date(assignment.createdAt).toLocaleString()}
-                </p>
+          {taskAssignments.map((assignment) => {
+            const task = assignment.taskId;
+ 
+            if (!task || !task.name || !task.description) return null;
+
+            return (
+              <div
+                key={assignment._id}
+                className="bg-gray-100 flex items-center justify-between p-4 rounded-lg"
+              >
+                <div className="flex flex-col">
+                  <p className="text-lg font-semibold">{task.name}</p>
+                  <p className="text-gray-600">{task.description}</p>
+                  <p className="text-sm text-gray-400">
+                    Asignado el {new Date(assignment.createdAt).toLocaleString()}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
-      {isAdmin && tasks.map((task: Task) => (
-        <div
-          key={task._id}
-          className="bg-gray-100 flex items-center justify-between p-4 rounded-lg"
-        >
-          <div className="flex flex-col">
-            <p className="text-lg font-semibold">{task.name}</p>
-            <p className="text-gray-600">{task.description}</p>
-          </div>
 
-          <div className="flex gap-x-5 items-center">
-            <button
-              className="px-5 py-2 rounded-md bg-purple-500 text-white"
-              onClick={() => {
-                setSelectedTask(task);
-                setShowAssignModal(true);
-              }}
-            >
-              Asignar Tarea
-            </button>
-            <button
-              onClick={() => {
-                setEditingTask(task);
-                setValues({ name: task.name, description: task.description });
-                setIsModalOpen(true);
-              }}
-              className="px-5 py-2 rounded-md bg-blue-500 text-white"
-            >
-              Editar
-            </button>
-            <button
-              onClick={async () => {
-                if (!projectId) return;
-                await deleteTask(task._id, projectId);
-                await getTasks(projectId);
-              }}
-              className="px-5 py-2 rounded-md bg-red-500 text-white"
-            >
-              Eliminar
-            </button>
+      {isAdmin && tasks.map((task: Task) => {
+        const assignment = findAssignmentForTask(task._id);
+        const assignedUser = assignment?.userId;
+
+        return (
+          <div
+            key={task._id}
+            className="bg-gray-100 flex items-center justify-between p-4 rounded-lg"
+          >
+            <div className="flex flex-col">
+              <p className="text-lg font-semibold">{task.name}</p>
+              <p className="text-gray-600">{task.description}</p>
+              {assignedUser && (
+                <p className="text-sm text-gray-500 mt-1">
+                  Asignada a: <strong>{assignedUser.name}</strong>
+                </p>
+              )}
+            </div>
+
+            <div className="flex gap-x-5 items-center">
+              {assignedUser ? (
+                <button
+                  className="px-5 py-2 rounded-md bg-red-500 text-white"
+                  onClick={async () => {
+                    await useTaskAssignamentStore.getState().unassignTask(task._id, assignedUser._id);
+                    await getTasksToUserAssignments(projectId!);  
+                  }}
+                >
+                  ❌ Quitar asignación
+                </button>
+              ) : (
+                <button
+                  className="px-5 py-2 rounded-md bg-purple-500 text-white"
+                  onClick={() => {
+                    setSelectedTask(task);
+                    setShowAssignModal(true);
+                  }}
+                >
+                  Asignar Tarea
+                </button>
+              )}
+
+              <button
+                onClick={() => {
+                  setEditingTask(task);
+                  setValues({ name: task.name, description: task.description });
+                  setIsModalOpen(true);
+                }}
+                className="px-5 py-2 rounded-md bg-blue-500 text-white"
+              >
+                Editar
+              </button>
+
+              <button
+                onClick={async () => {
+                  if (!projectId) return;
+                  await deleteTask(task._id, projectId);
+                  await getTasks(projectId);
+                }}
+                className="px-5 py-2 rounded-md bg-red-500 text-white"
+              >
+                Eliminar
+              </button>
+
+
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       <Modal
         isOpen={isModalOpen}
