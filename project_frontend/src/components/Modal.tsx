@@ -20,7 +20,7 @@ const Modal = ({
   footer,
   className = "",
 }: ModalProps) => {
-  // Cerrar con tecla ESC
+ 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
@@ -33,7 +33,7 @@ const Modal = ({
     return () => document.removeEventListener("keydown", handleEsc)
   }, [isOpen, onClose])
 
-  // Portal root
+  
   const modalRoot = document.getElementById("modal-root") || document.body
 
   if (!isOpen) return null

@@ -49,7 +49,7 @@ export const useTeamStore = create<TeamStore>((set) => ({
   getAllTeams: async () => {
     set({ isLoading: true })
     try {
-      const teams = await fetchAllTeams() // ✅ Ya no hay conflicto
+      const teams = await fetchAllTeams() 
       set({ teams, isLoading: false })
     } catch (error) {
       console.error("Error fetching teams:", error)

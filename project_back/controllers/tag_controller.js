@@ -6,7 +6,10 @@ export const createTag = async (req, res) => {
         const name = req.body.name;
 
         const tag = await tagService.createTag(name, teamId);
-        res.status(201).json(tag);
+        res.status(201).json({
+            message: "Tag created successfully",
+            tag,
+        });
     } catch (error) {
         res.status(500).json(error.message);
     }

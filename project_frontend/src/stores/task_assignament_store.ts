@@ -41,7 +41,7 @@ const useTaskAssignamentStore = create<TaskStore>((set) => ({
     unassignTask: async (taskId, userId) => {
         set({ isLoading: true });
         try {
-            const response = await unassignTask(taskId, userId); // ✅ Servicio correcto
+            const response = await unassignTask(taskId, userId); 
             toast.success(response.message);
             return response;
         } catch (error) {
@@ -56,7 +56,7 @@ const useTaskAssignamentStore = create<TaskStore>((set) => ({
     getAllUsersAssignedToTask: async (taskId, teamId) => {
         set({ isLoading: true });
         const response = await getAllUsersAssignedToTask(taskId, teamId);
-        console.log("response:", response);
+     
         set((state) => ({
             taskAssignments: [...state.taskAssignments, ...response],
             isLoading: false

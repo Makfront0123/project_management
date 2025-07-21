@@ -1,13 +1,15 @@
 import type { TeamMember } from "../types/teamMember";
 
+
+import { useAuthStore } from "../stores/auth_store";
+
 type Props = {
     member: TeamMember;
-    onDelete?: (memberId: string,teamId: string) => void;  
+    onDelete?: (memberId: string, teamId: string) => void;
 };
-import { useAuthStore } from "../stores/auth_store";  
 
 const Table = ({ member, onDelete }: Props) => {
-    const currentUserId = useAuthStore(state => state.user?.id); 
+    const currentUserId = useAuthStore(state => state.user?.id);
 
     const isSelfAdmin = member.role === 'admin' && member.userId._id === currentUserId;
 

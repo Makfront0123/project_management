@@ -5,8 +5,8 @@ import { isTeamMember } from "../middlewares/isTeamMember_middleware.js";
 import { isTeamAdmin } from "../middlewares/admin_middleware.js";
 const router = express.Router();
 
-router.post("/tasks/:taskId/tags/:tagId", authenticate, isTeamAdmin, addTagToTask);
-router.delete("/tasks/:taskId/tags/:tagId", authenticate, isTeamAdmin, removeTagFromTask);
+router.post("/tasks/:taskId/tags/:tagId", authenticate, isTeamMember, addTagToTask);
+router.delete("/tasks/:taskId/tags/:tagId", authenticate, isTeamMember, removeTagFromTask);
 router.get("/tasks/:taskId/tags", authenticate, isTeamMember, getAllTagsOfTask);
 router.get("/tasks/:taskId/tags/:tagId", authenticate, isTeamMember, getTagOfTask);
 

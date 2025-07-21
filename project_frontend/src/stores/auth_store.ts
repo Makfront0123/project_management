@@ -5,20 +5,9 @@ import { jwtDecode } from 'jwt-decode'
 
 import { loginUser, logoutUser, registerUser } from '../services/auth_services'
 import { getErrorMessage } from '../utils/getErrorMessage'
+import type { JwtPayload, User } from '../types/auth'
 
-type User = {
-    id: string
-    email: string
-}
-
-
-type JwtPayload = {
-    id: string
-    email: string
-    exp: number
-    iat: number
-}
-
+ 
 
 type AuthStore = {
     user: User | null

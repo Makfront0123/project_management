@@ -10,9 +10,6 @@ import toast from "react-hot-toast"
 const LoginPage = () => {
     const { login } = useAuthStore()
 
-
-
-
     const form = useForm({
         initialValues: {
             email: "",

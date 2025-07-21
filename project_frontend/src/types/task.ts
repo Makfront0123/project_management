@@ -1,3 +1,5 @@
+import type { Tag } from "./tag";
+
 export interface Task {
     _id: string;
     name: string;
@@ -5,6 +7,7 @@ export interface Task {
     projectId: string;
     status: string;
     assignedTo?: string;
+    tags?: Tag[]; 
 }
 
 

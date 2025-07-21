@@ -5,13 +5,7 @@ import { useProjectStore } from "../stores/project_store";
 import { useForm } from "../hooks/useForm";
 import Table from "../components/Table";
 import Modal from "../components/Modal";
-
-
-
-type ProjectForm = {
-  name: string;
-  description: string;
-};
+import type { ProjectForm } from "../types/projects";
 
 const TeamPage = () => {
   const { teamId } = useParams<{ teamId: string }>();

@@ -3,10 +3,9 @@ import { useAuthStore } from "../stores/auth_store";
 
 const baseUrl = "/api/v1";
 
-export const assignTask = async (taskId: string, userId: string) => {
+export const addTagToTask = async (taskId: string, tagId: string) => {
     const token = useAuthStore.getState().token;
-    const response = await axios.post(`${baseUrl}/tasks/${taskId}/assignments`, {
-        userId,
+    const response = await axios.post(`${baseUrl}/tasks/${taskId}/tags/${tagId}`, {
     }, {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -15,9 +14,9 @@ export const assignTask = async (taskId: string, userId: string) => {
     return response.data;
 };
 
-export const unassignTask = async (taskId: string, userId: string) => {
+export const removeTagFromTask = async (taskId: string, tagId: string) => {
     const token = useAuthStore.getState().token;
-    const response = await axios.delete(`${baseUrl}/tasks/${taskId}/assignments/${userId}`, {
+    const response = await axios.delete(`${baseUrl}/tasks/${taskId}/tags/${tagId}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -25,9 +24,9 @@ export const unassignTask = async (taskId: string, userId: string) => {
     return response.data;
 };
 
-export const getTasksToUserAssignments = async (taskId: string) => {
+export const getAllTagsOfTask = async (taskId: string) => {
     const token = useAuthStore.getState().token;
-    const response = await axios.get(`${baseUrl}/user/tasks/${taskId}/assignments`, {
+    const response = await axios.get(`${baseUrl}/tasks/${taskId}/tags`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -35,14 +34,12 @@ export const getTasksToUserAssignments = async (taskId: string) => {
     return response.data;
 };
 
-
-export const getAllUsersAssignedToTask = async (taskId: string, teamId: string) => {
+export const getTagOfTask = async (taskId: string, tagId: string) => {
     const token = useAuthStore.getState().token;
-    const response = await axios.get(`${baseUrl}/tasks/${taskId}/assignments?teamId=${teamId}`, {
+    const response = await axios.get(`${baseUrl}/tasks/${taskId}/tags/${tagId}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     });
     return response.data;
-};
-
+};  

@@ -12,3 +12,8 @@ export type NewProject = {
   name: string;
   description: string;
 };
+
+export type ProjectForm = {
+  name: string;
+  description: string;
+};
