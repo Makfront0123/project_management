@@ -15,7 +15,8 @@ interface Props {
     onUnassign?: () => void;
     onAttachmentClick?: (taskId: string) => void;
     fetchAttachmentsForTask?: (taskId: string) => void;
-    onUpdateAttachment?: (attachmentId: string, fileName: string, taskId: string) => void;
+    onUpdateAttachment?: (attachmentId: string, file: File) => void;
+
     onDeleteAttachment?: (attachmentId: string, taskId: string) => void;
 
 }
@@ -51,20 +52,27 @@ const TaskCard: React.FC<Props> = ({
                                         <a href={file.fileUrl} download={file.fileName} target="_blank" rel="noopener noreferrer">
                                             {file.fileName}
                                         </a>
-                                        <button
-                                            className="text-xs text-yellow-600 underline"
-                                            onClick={() => {
+                                        <label htmlFor={`file-input-${file._id}`} className="cursor-pointer text-blue-600 hover:underline">
+                                            Cambiar archivo
+                                        </label>
+                                        <input
+                                            id={`file-input-${file._id}`}
+                                            type="file"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                const selectedFile = e.target.files?.[0];
+                                                if (!selectedFile) return;
+
                                                 const taskId = typeof assignment?.taskId === "string"
                                                     ? assignment.taskId
                                                     : assignment?.taskId?._id;
 
                                                 if (onUpdateAttachment && taskId) {
-                                                    onUpdateAttachment(file._id, file.fileName, taskId);
+                                                    onUpdateAttachment(file._id, selectedFile);
                                                 }
                                             }}
-                                        >
-                                            Renombrar
-                                        </button>
+                                        />
+
                                         <button
                                             className="text-xs text-red-600 underline"
                                             onClick={() => {

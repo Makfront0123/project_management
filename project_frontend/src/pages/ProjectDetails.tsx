@@ -58,7 +58,7 @@ const ProjectDetails = () => {
     onDeleteAttachment,
     attachmentTaskId,
     attachmentsByTask,
-    
+    onUpdateAttachment,
 
   } = useProjectDetails();
 
@@ -223,6 +223,7 @@ const ProjectDetails = () => {
                   openAttachmentModal(taskId);
                 }}
                 onDeleteAttachment={onDeleteAttachment}
+                onUpdateAttachment={onUpdateAttachment}
               
               />
 

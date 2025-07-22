@@ -94,7 +94,16 @@ export const useProjectDetails = () => {
         await deleteAttachment(attachmentId, teamId);
         await getAllAttachmentsForTasks([taskId], teamId);
     };
-    
+
+    const onUpdateAttachment = async (
+        attachmentId: string,
+        file: File
+    ): Promise<void> => {
+        await updateAttachment(attachmentId, teamId!, file);
+    };
+
+
+
 
 
 
@@ -252,5 +261,6 @@ export const useProjectDetails = () => {
         closeEditAttachmentModal,
         setAttachmentToEdit,
         onDeleteAttachment,
+        onUpdateAttachment,
     };
 };
