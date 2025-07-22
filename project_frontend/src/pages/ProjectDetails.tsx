@@ -1,4 +1,5 @@
 import AssignTaskModal from "../components/projectDetails/AssignTaskModal";
+import AttachmentModal from "../components/projectDetails/attachmentModal";
 import CreateTag from "../components/projectDetails/CreateTag";
 import TagList from "../components/projectDetails/TagList";
 import TagModal from "../components/projectDetails/TagModal";
@@ -50,7 +51,15 @@ const ProjectDetails = () => {
     setIsTagModalOpen,
     editingTag,
     setEditingTag,
-    toggleTagOnTask
+    toggleTagOnTask,
+    isAttachmentModalOpen,
+    openAttachmentModal,
+    closeAttachmentModal,
+    onDeleteAttachment,
+    attachmentTaskId,
+    attachmentsByTask,
+    
+
   } = useProjectDetails();
 
 
@@ -201,7 +210,33 @@ const ProjectDetails = () => {
         <div className="space-y-4">
           {taskAssignments.map((assignment) => (
             <div key={assignment._id} className="flex flex-col gap-2 border rounded p-4">
-              <TaskCard assignment={assignment} />
+              <TaskCard
+                assignment={assignment}
+                attachments={
+                  attachmentsByTask[
+                  typeof assignment.taskId === "string"
+                    ? assignment.taskId
+                    : assignment.taskId?._id || ""
+                  ]
+                }
+                onAttachmentClick={(taskId) => {
+                  openAttachmentModal(taskId);
+                }}
+                onDeleteAttachment={onDeleteAttachment}
+              
+              />
+
+
+
+              <AttachmentModal
+                isOpen={isAttachmentModalOpen}
+                onClose={closeAttachmentModal}
+                taskId={attachmentTaskId}
+                teamId={teamId ?? ""}
+              />
+
+              
+
               <div className="flex gap-2 flex-wrap items-center">
                 <span className="font-semibold">Etiquetas:</span>
                 {tags.map((tag) => {

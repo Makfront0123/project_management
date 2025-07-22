@@ -15,7 +15,7 @@ export interface RegisterResponse {
   email: string;
 }
 export type User = {
-    id: string
+    _id: string
     email: string
     name: string
 }

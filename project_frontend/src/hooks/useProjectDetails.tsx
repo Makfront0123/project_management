@@ -9,6 +9,8 @@ import { useForm } from "./useForm";
 import useTagStore from "../stores/tag_store";
 import type { Tag } from "../types/tag";
 import useTagTaskStore from "../stores/tagTask_store";
+import useAttachmentStore from "../stores/attachment_store";
+import type { Attachment } from "../types/attachment";
 
 
 export type TaskFormValues = {
@@ -36,6 +38,7 @@ export const useProjectDetails = () => {
 
     const { tags, getAllTags, deleteTag, updateTag, } = useTagStore();
     const { addTagToTask, removeTagFromTask } = useTagTaskStore();
+    const { attachmentsByTask, getAllAttachmentsForTasks, updateAttachment, deleteAttachment } = useAttachmentStore();
 
     const toggleTagOnTask = async (taskId: string, tagId: string, isAssigned: boolean) => {
         if (isAssigned) {
@@ -47,7 +50,7 @@ export const useProjectDetails = () => {
             if (task._id !== taskId) return task;
 
             const updatedTags = isAssigned
-                ? task.tags?.filter(tag => tag._id !== tagId) 
+                ? task.tags?.filter(tag => tag._id !== tagId)
                 : [...(task.tags ?? []), tags.find(tag => tag._id === tagId)!];
 
             return {
@@ -71,8 +74,39 @@ export const useProjectDetails = () => {
     const [tasksLoaded, setTasksLoaded] = useState(false);
     const [isTagModalOpen, setIsTagModalOpen] = useState(false);
     const [editingTag, setEditingTag] = useState<Tag | null>(null);
+    const [isAttachmentModalOpen, setIsAttachmentModalOpen] = useState(false);
+    const [attachmentTaskId, setAttachmentTaskId] = useState<string | null>(null);
+    const [attachmentToEdit, setAttachmentToEdit] = useState<Attachment | null>(null);
+    const [isEditAttachmentModalOpen, setIsEditAttachmentModalOpen] = useState(false);
+
+    const openEditAttachmentModal = (attachment: Attachment) => {
+        setAttachmentToEdit(attachment);
+        setIsEditAttachmentModalOpen(true);
+    };
+
+    const closeEditAttachmentModal = () => {
+        setAttachmentToEdit(null);
+        setIsEditAttachmentModalOpen(false);
+    };
+
+    const onDeleteAttachment = async (attachmentId: string, taskId: string) => {
+        if (!teamId) return;
+        await deleteAttachment(attachmentId, teamId);
+        await getAllAttachmentsForTasks([taskId], teamId);
+    };
+    
 
 
+
+    const openAttachmentModal = (taskId: string) => {
+        setAttachmentTaskId(taskId);
+        setIsAttachmentModalOpen(true);
+    };
+
+    const closeAttachmentModal = () => {
+        setAttachmentTaskId(null);
+        setIsAttachmentModalOpen(false);
+    };
 
     const team = useMemo(() => teamMemberships.find((t) => t.teamId === teamId), [teamId, teamMemberships]);
     const acceptedMembers = useMemo(() => teamMembers.filter((m) => m.status === "accepted" && m.role !== "admin"), [teamMembers]);
@@ -123,6 +157,11 @@ export const useProjectDetails = () => {
 
             const loadedTasks = useTaskStore.getState().tasks;
 
+            for (const task of loadedTasks) {
+                await getAllAttachmentsForTasks([task._id], teamId); // sobrescribe attachments cada vez
+            }
+
+
             await getAllMembersOfTeam(teamId);
             await getAllTags(teamId);
 
@@ -148,11 +187,13 @@ export const useProjectDetails = () => {
         };
 
         fetchData();
-    }, [getUserTeamStatus, getProject, getTasks, getAllTags, projectId, teamId, getAllMembersOfTeam, getTasksToUserAssignments, getAllUsersAssignedToTask, isAdmin]);
+    }, [getUserTeamStatus, getProject, getTasks, getAllTags, projectId, teamId, getAllMembersOfTeam, getTasksToUserAssignments, getAllUsersAssignedToTask, isAdmin, getAllAttachmentsForTasks]);
 
     const findAssignmentForTask = (taskId: string) => {
         return useTaskAssignamentStore.getState().taskAssignments.find((a) => a.taskId?._id === taskId);
     };
+
+
 
     return {
         isModalOpen,
@@ -195,5 +236,21 @@ export const useProjectDetails = () => {
         editingTag,
         updateTag,
         setEditingTag,
+
+        isAttachmentModalOpen,
+        openAttachmentModal,
+        closeAttachmentModal,
+        attachmentTaskId,
+
+        attachmentsByTask,
+        updateAttachment,
+
+
+        attachmentToEdit,
+        isEditAttachmentModalOpen,
+        openEditAttachmentModal,
+        closeEditAttachmentModal,
+        setAttachmentToEdit,
+        onDeleteAttachment,
     };
 };

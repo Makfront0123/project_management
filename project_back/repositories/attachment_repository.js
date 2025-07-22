@@ -11,13 +11,15 @@ class AttachmentRepository {
         return await Attachment.findOne({ _id: attachmentId, teamId });
     }
     async updateAttachment(attachmentId, teamId, data) {
-        return await Attachment.findByIdAndUpdate(attachmentId, teamId, { $set: data }, { new: true });
-    }
-    async deleteAttachment(attachmentId, teamId) {
-        return await Attachment.findByIdAndDelete(
+        return await Attachment.findOneAndUpdate(
             { _id: attachmentId, teamId },
+            { $set: data },
             { new: true }
         );
+
+    }
+    async deleteAttachment(attachmentId, teamId) {
+        return await Attachment.findOneAndDelete({ _id: attachmentId, teamId });
     }
 }
 export default new AttachmentRepository();  
