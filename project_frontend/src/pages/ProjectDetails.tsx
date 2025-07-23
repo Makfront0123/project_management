@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Modal from "../components/Modal";
 import AssignTaskModal from "../components/projectDetails/AssignTaskModal";
 import AttachmentModal from "../components/projectDetails/attachmentModal";
@@ -9,6 +10,8 @@ import TaskCard from "../components/projectDetails/TaskCard";
 import TaskModal from "../components/projectDetails/TaskModal";
 import { useProjectDetails } from "../hooks/useProjectDetails";
 import type { Tag } from "../types/tag";
+import TaskComments from "../components/TaskComment";
+import type { Task } from "../types/task";
 
 
 
@@ -73,6 +76,10 @@ const ProjectDetails = () => {
 
   } = useProjectDetails();
 
+  const [selectedCommentTask, setSelectedCommentTask] = useState<Task | null>(null);
+
+
+
 
   if (!team || isLoading || !currentProject || !tasksLoaded) {
     return (
@@ -122,38 +129,50 @@ const ProjectDetails = () => {
               const assignment = findAssignmentForTask(task._id);
 
               return (
-                <TaskCard
-                  key={task._id}
-                  task={task}
-                  isCompleted={task.status === "completed"}
-                  assignment={assignment}
-                  isAdmin
-                  onAssign={() => {
-                    setSelectedTask(task);
-                    setShowAssignModal(true);
-                  }}
-                  onUnassign={async () => {
-                    setSelectedTask(task);
-                    const userId = typeof assignment?.userId === "string"
-                      ? assignment.userId
-                      : assignment?.userId?._id;
-                    if (!userId) return;
-                    await unassignTask(task._id, userId);
-                    await getTasksToUserAssignments(projectId!);
-                  }}
-                  onEdit={() => {
-                    setEditingTask(task);
-                    setValues({ name: task.name, description: task.description });
-                    setIsModalOpen(true);
-                  }}
-                  onDelete={async () => {
-                    await deleteTask(task._id, projectId!);
-                    await getTasks(projectId!);
-                  }}
-                />
+                <div key={task._id} className="w-full">
+                  <TaskCard
+                    task={task}
+                    isCompleted={task.status === "completed"}
+                    assignment={assignment}
+                    isAdmin
+                    onAssign={() => {
+                      setSelectedTask(task);
+                      setShowAssignModal(true);
+                    }}
+                    onUnassign={async () => {
+                      setSelectedTask(task);
+                      const userId = typeof assignment?.userId === "string"
+                        ? assignment.userId
+                        : assignment?.userId?._id;
+                      if (!userId) return;
+                      await unassignTask(task._id, userId);
+                      await getTasksToUserAssignments(projectId!);
+                    }}
+                    onEdit={() => {
+                      setEditingTask(task);
+                      setValues({ name: task.name, description: task.description });
+                      setIsModalOpen(true);
+                    }}
+                    onDelete={async () => {
+                      await deleteTask(task._id, projectId!);
+                      await getTasks(projectId!);
+                    }}
+                  />
+
+                  {/* Botón para abrir sección de comentarios */}
+                  <div className="mt-2 ml-4">
+                    <button
+                      onClick={() => setSelectedCommentTask(task)}
+                      className="text-blue-600 text-sm hover:underline"
+                    >
+                      💬 Ver comentarios
+                    </button>
+                  </div>
+                </div>
               );
             })}
           </div>
+
           <div className="flex flex-col">
             <CreateTag />
             <TagList
@@ -276,6 +295,25 @@ const ProjectDetails = () => {
           </Modal>
         )}
 
+        {selectedCommentTask && (
+          <div className="mt-10 border-t pt-6">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-xl font-bold text-gray-700">
+                Comentarios sobre:{" "}
+                <span className="text-indigo-600">{selectedCommentTask.name}</span>
+              </h3>
+              <button
+                onClick={() => setSelectedCommentTask(null)}
+                className="text-sm text-red-500 hover:underline"
+              >
+                Cerrar comentarios
+              </button>
+            </div>
+            <TaskComments taskId={selectedCommentTask._id} />
+          </div>
+        )}
+
+
       </div>
     );
   }
@@ -356,6 +394,40 @@ const ProjectDetails = () => {
 
                   )
                 }
+                {selectedCommentTask && (
+                  <div className="mt-10 border-t pt-6">
+                    <div className="flex justify-between items-center mb-3">
+                      <h3 className="text-xl font-bold text-gray-700">
+                        Comentarios sobre:{" "}
+                        <span className="text-indigo-600">{selectedCommentTask.name}</span>
+                      </h3>
+                      <button
+                        onClick={() => setSelectedCommentTask(null)}
+                        className="text-sm text-red-500 hover:underline"
+                      >
+                        Cerrar comentarios
+                      </button>
+                    </div>
+                    <TaskComments taskId={selectedCommentTask._id} />
+                  </div>
+                )}
+
+                <div className="mt-2 ml-4">
+                  <button
+                    onClick={() => {
+                      const taskId =
+                        typeof assignment.taskId === "string"
+                          ? assignment.taskId
+                          : assignment.taskId?._id;
+                      const task = tasks.find((t) => t._id === taskId);
+                      if (task) setSelectedCommentTask(task);
+                    }}
+                    className="text-blue-600 text-sm hover:underline"
+                  >
+                    💬 Ver comentarios
+                  </button>
+                </div>
+
               </div>
             ))}
           </div>

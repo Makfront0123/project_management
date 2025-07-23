@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useProjectStore } from "../stores/project_store";
 import useTaskAssignamentStore from "../stores/task_assignament_store";
 import useTaskStore from "../stores/task_store";
@@ -46,7 +46,9 @@ export const useProjectDetails = () => {
     const { addTagToTask, removeTagFromTask } = useTagTaskStore();
     const { attachmentsByTask, getAllAttachmentsForTasks, updateAttachment, deleteAttachment } = useAttachmentStore();
     const { completeAssignedTask } = useTaskAssignamentStore();
-    
+
+    const navigate = useNavigate();
+
 
     const toggleTagOnTask = async (taskId: string, tagId: string, isAssigned: boolean) => {
         if (isAssigned) {
@@ -86,9 +88,9 @@ export const useProjectDetails = () => {
     const [attachmentTaskId, setAttachmentTaskId] = useState<string | null>(null);
     const [attachmentToEdit, setAttachmentToEdit] = useState<Attachment | null>(null);
     const [isEditAttachmentModalOpen, setIsEditAttachmentModalOpen] = useState(false);
-    const [isEditingProject, setIsEditingProject] = useState(true);
+    const [isEditingProject, setIsEditingProject] = useState(false);
     const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
-  
+
 
     const [projectValues, setProjectValues] = useState<ProjectFormValues>({
         name: "",
@@ -96,21 +98,32 @@ export const useProjectDetails = () => {
     });
 
 
-    const onEditProject = () => {
+    const onEditProject = async () => {
         if (!currentProject) return;
+        await updateProject(
+            currentProject._id,
+            {
+                name: currentProject.name,
+                description: currentProject.description,
+            },
+            teamId!
+        );
 
         setProjectValues({
             name: currentProject.name,
             description: currentProject.description,
         });
 
-        setIsProjectModalOpen(true);  
+        setIsEditingProject(true);
+        setIsProjectModalOpen(true);
     };
+
 
     const onDeleteProject = async () => {
         if (!currentProject) return;
         await deleteProject(currentProject._id, teamId!);
-        
+        navigate(`/team/${teamId}/projects`);
+
     };
 
 

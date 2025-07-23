@@ -1,20 +1,20 @@
 import commentRepo from "../repositories/comment_repository.js";
 
 class CommentService {
-    async createComment(data) {
-        return await commentRepo.createComment(data);
-    }
+  async createComment(data) {
+    return await commentRepository.createComment(data);
+  }
 
-    async getAllCommentsByTask( taskId) {
-        return await commentRepo.getAllCommentsByTask(taskId);
-    }
+  async getAllCommentsByTask(taskId) {
+    return await commentRepository.getAllCommentsByTask(taskId);
+  }
 
-    async getCommentById(commentId, taskId) {
-        return await commentRepo.getCommentById(commentId, taskId);
-    }
+  async getCommentById(commentId, taskId) {
+    return await commentRepository.getCommentById(commentId, taskId);
+  }
 
-    async deleteComment(commentId, taskId) {
-        return await commentRepo.deleteComment(commentId, taskId);
-    }
+  async deleteComment(commentId, taskId) {
+    return await commentRepository.deleteComment(commentId, taskId);
+  }
 }
 export default new CommentService();

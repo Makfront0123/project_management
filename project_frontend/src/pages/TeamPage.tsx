@@ -164,7 +164,7 @@ const TeamPage = () => {
           )}
 
           {
-            isAdmin &&
+            isAdmin && projects.length > 0 &&
             <div className="flex items-center mt-20 gap-x-10">
               <button
                 onClick={() => setIsModalOpen(true)}
