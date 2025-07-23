@@ -159,7 +159,6 @@ const ProjectDetails = () => {
                     }}
                   />
 
-                  {/* Botón para abrir sección de comentarios */}
                   <div className="mt-2 ml-4">
                     <button
                       onClick={() => setSelectedCommentTask(task)}

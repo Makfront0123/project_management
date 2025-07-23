@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
- 
+
 import type { TaskComment } from "../types/comment";
 import { useCommentStore } from "../stores/comment_store";
 
@@ -31,12 +31,17 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
         <div className="mt-4 bg-white border-t pt-4">
             <h4 className="text-md font-semibold mb-2">Comentarios</h4>
 
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                 {comments.map((c: TaskComment) => (
-                    <div key={c._id} className="flex justify-between items-start text-sm bg-gray-50 p-2 rounded">
+                    <div
+                        key={c._id}
+                        className="flex justify-between items-start text-sm bg-gray-50 p-2 rounded"
+                    >
                         <div>
                             <p className="text-gray-800">{c.comment}</p>
-                            <p className="text-gray-400 text-xs">{new Date(c.createdAt).toLocaleString()}</p>
+                            <p className="text-gray-400 text-xs">
+                                {new Date(c.createdAt).toLocaleString()}
+                            </p>
                         </div>
                         <button
                             onClick={() => handleDeleteComment(c._id)}
@@ -64,6 +69,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
             </div>
         </div>
     );
+
 };
 
 export default TaskComments;

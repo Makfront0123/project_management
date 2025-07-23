@@ -5,30 +5,33 @@ const baseUrl = "/api/v1";
 
 export const getCommentsByTask = async (taskId: string) => {
     const token = useAuthStore.getState().token;
-    const response = await axios.get(`${baseUrl}/projects/${taskId}/comments`, {
+    const response = await axios.get(`${baseUrl}/task/${taskId}/comment`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     });
+
     return response.data;
 };
 
 export const createComment = async (taskId: string, comment: string) => {
+    console.log("createComment", taskId, comment);
     const token = useAuthStore.getState().token;
-    const response = await axios.post(`${baseUrl}/projects/${taskId}/comments`, {
+    const response = await axios.post(`${baseUrl}/task/${taskId}/comment`, {
         comment,
     }, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     });
+ 
     return response.data;
 };
 
 export const deleteComment = async (taskId: string, commentId: string) => {
     const token = useAuthStore.getState().token;       
     
-    const response = await axios.delete(`${baseUrl}/projects/${taskId}/comments/${commentId}`, {
+    const response = await axios.delete(`${baseUrl}/task/${taskId}/comment/${commentId}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },

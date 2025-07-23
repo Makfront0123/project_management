@@ -6,7 +6,7 @@ class CommentRepository {
   }
 
   async getAllCommentsByTask(taskId) {
-    return await Comment.find({ taskId }).populate("userId", "username");
+    return await Comment.find({ taskId }).populate("userId", "username")
   }
 
   async getCommentById(commentId, taskId) {

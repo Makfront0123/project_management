@@ -2,6 +2,7 @@
 import { create } from "zustand";
 import { createComment, deleteComment, getCommentsByTask } from "../services/comments_services";
 import type { TaskComment } from "../types/comment";
+import toast from "react-hot-toast";
 
 
 
@@ -19,17 +20,22 @@ export const useCommentStore = create<CommentStore>((set) => ({
     getCommentsByTask: async (taskId) => {
         set({ isLoading: true });
         const response = await getCommentsByTask(taskId);
-        set({ comments: response, isLoading: false });
+        const comments = response?.comments ?? [];
+        set({ comments: comments || [], isLoading: false });
+
     },
     createComment: async (taskId, comment) => {
         set({ isLoading: true });
         const response = await createComment(taskId, comment);
-
-        set({ comments: response, isLoading: false });
+        const updateComment = await getCommentsByTask(taskId);
+        set({ comments: updateComment?.comments, isLoading: false });
+        toast.success(response.message);
     },
     deleteComment: async (taskId, commentId) => {
         set({ isLoading: true });
         const response = await deleteComment(taskId, commentId);
-        set({ comments: response, isLoading: false });
+        const updateComment = await getCommentsByTask(taskId);
+        set({ comments: updateComment?.comments, isLoading: false });
+        toast.success(response.message);
     },
 }));

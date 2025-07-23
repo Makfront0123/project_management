@@ -1,4 +1,4 @@
-import commentRepo from "../repositories/comment_repository.js";
+import commentRepository from "../repositories/comment_repository.js";
 
 class CommentService {
   async createComment(data) {
