@@ -15,8 +15,9 @@ class ProjectService {
     async updateProject(teamId, projectId, data) {
         return await projectRepo.updateProject(teamId, projectId, data);
     }
-    async deleteProject(teamId, projectId) {
-        return await projectRepo.deleteProject(teamId, projectId);
+
+    async deleteProjectCascade(teamId, projectId) {
+        return await projectRepo.deleteProjectCascade(teamId, projectId);
     }
 }
 export default new ProjectService();

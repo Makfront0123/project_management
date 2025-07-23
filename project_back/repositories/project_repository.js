@@ -1,4 +1,9 @@
 import Project from "../models/Project.js";
+import Task from "../models/Task.js";
+import TaskAssignment from "../models/TaksAssignment.js";
+import TagTask from "../models/TaskTag.js";
+import Tag from "../models/Tag.js";
+import Attachment from "../models/Attachment.js";
 import mongoose from "mongoose";
 class ProjectRepository {
     async createProject(data) {
@@ -24,14 +29,6 @@ class ProjectRepository {
         );
     }
 
-    async deleteProject(teamId, projectId) {
-        return await Project.findByIdAndDelete(
-            {
-                _id: new mongoose.Types.ObjectId(projectId),
-                teamId: new mongoose.Types.ObjectId(teamId)
-            }
-        );
-    }
 
     async getProjectByIdOnly(projectId) {
         return await Project.findById(new mongoose.Types.ObjectId(projectId));
@@ -39,6 +36,25 @@ class ProjectRepository {
 
     async findProjectById(projectId) {
         return await Project.findById(new mongoose.Types.ObjectId(projectId));
+    }
+    async deleteProjectCascade(teamId, projectId) {
+        const project = await this.getProjectById(teamId, projectId);
+        if (!project) return;
+        const tasks = await Task.find({ projectId });
+        const taskIds = tasks.map(t => t._id);
+
+
+        await TaskAssignment.deleteMany({ taskId: { $in: taskIds } });
+        await TagTask.deleteMany({ taskId: { $in: taskIds } });
+        await Attachment.deleteMany({ taskId: { $in: taskIds } });
+        await Task.deleteMany({ _id: { $in: taskIds } });
+        await Tag.deleteMany({ projectId });
+
+
+
+        const deletedProject = await Project.findByIdAndDelete(projectId);
+
+        return deletedProject;
     }
 }
 

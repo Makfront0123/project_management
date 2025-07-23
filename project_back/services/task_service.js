@@ -36,6 +36,9 @@ class TaskService {
     async deleteTask(projectId, taskId) {
         return await taskRepo.deleteTask(projectId, taskId);
     }
+    async markTaskAsCompleted(taskId) {
+        return await taskRepo.markTaskAsCompleted(taskId);
+    }
 }
 
 export default new TaskService();

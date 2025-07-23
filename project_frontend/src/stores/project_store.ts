@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { createProject, getProject, getProjects, } from "../services/project_services";
+import { createProject, deleteProject, getProject, getProjects, updateProject, } from "../services/project_services";
 import type { NewProject, Project } from "../types/projects";
 import toast from "react-hot-toast";
 
@@ -10,6 +10,8 @@ type ProjectStore = {
   getProjects: (teamId: string) => Promise<void>;
   createProject: (teamId: string, data: NewProject) => Promise<void>;
   getProject: (id: string, teamId: string) => Promise<void>;
+  updateProject: (id: string, data: Partial<Project>, teamId: string) => Promise<void>;
+  deleteProject: (id: string, teamId: string) => Promise<void>;
 };
 
 export const useProjectStore = create<ProjectStore>((set) => ({
@@ -32,7 +34,7 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     set({ isLoading: true });
     try {
       const data = await getProject(id, teamId);
-      set({ currentProject: data, isLoading: false });  
+      set({ currentProject: data, isLoading: false });
     } catch (error) {
       console.error("Error fetching project:", error);
       set({ isLoading: false });
@@ -50,6 +52,37 @@ export const useProjectStore = create<ProjectStore>((set) => ({
       toast.success(message);
     } catch (error) {
       console.error("Error creando proyecto:", error);
+      set({ isLoading: false });
+    }
+  },
+
+  updateProject: async (id: string, data: Partial<Project>, teamId: string) => {
+    set({ isLoading: true });
+    try {
+      const { message, project } = await updateProject(id, data, teamId);
+      set((state) => ({
+        projects: state.projects.map((p) =>
+          p._id === project._id ? project : p
+        ),
+        isLoading: false,
+      }));
+      toast.success(message);
+    } catch (error) {
+      console.error("Error actualizando proyecto:", error);
+      set({ isLoading: false });
+    }
+  },
+  deleteProject: async (id: string, teamId: string) => {
+    set({ isLoading: true });
+    try {
+      const { message } = await deleteProject(id, teamId);
+      set((state) => ({
+        projects: state.projects.filter((p) => p._id !== id),
+        isLoading: false,
+      }));
+      toast.success(message);
+    } catch (error) {
+      console.error("Error eliminando proyecto:", error);
       set({ isLoading: false });
     }
   },

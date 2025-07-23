@@ -26,7 +26,15 @@ class TaskRepository {
     }
 
     async findTaskById(taskId) {
-       return await Task.findById(taskId).lean(); 
+        return await Task.findById(taskId).lean();
+    }
+
+    async markTaskAsCompleted(taskId) {
+        return await Task.findOneAndUpdate(
+            { _id: new mongoose.Types.ObjectId(taskId) },
+            { $set: { status: "completed" } },
+            { new: true }
+        );
     }
 }
 

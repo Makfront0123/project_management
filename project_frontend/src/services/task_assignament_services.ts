@@ -46,3 +46,15 @@ export const getAllUsersAssignedToTask = async (taskId: string, teamId: string) 
     return response.data;
 };
 
+export const completeAssignedTask = async (taskId: string, userId: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.post(`${baseUrl}/tasks/${taskId}/assignments/complete`, {
+        userId,
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    console.log(response.data);
+    return response.data;
+};

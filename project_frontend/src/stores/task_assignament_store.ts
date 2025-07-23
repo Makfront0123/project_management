@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { assignTask, getAllUsersAssignedToTask, getTasksToUserAssignments, unassignTask } from "../services/task_assignament_services";
+import { assignTask, completeAssignedTask, getAllUsersAssignedToTask, getTasksToUserAssignments, unassignTask } from "../services/task_assignament_services";
 import toast from "react-hot-toast";
 import type { TaskAssignment } from "../types/task_assignment";
 
@@ -12,6 +12,7 @@ interface TaskStore {
     unassignTask: (taskId: string, userId: string) => Promise<void>;
     getTasksToUserAssignments: (taskId: string) => Promise<void>;
     getAllUsersAssignedToTask: (taskId: string, teamId: string) => Promise<void>;
+    completeAssignedTask: (taskId: string, userId: string) => Promise<void>;
 }
 
 const useTaskAssignamentStore = create<TaskStore>((set) => ({
@@ -30,7 +31,7 @@ const useTaskAssignamentStore = create<TaskStore>((set) => ({
         set({ isLoading: true });
         const response = await getTasksToUserAssignments(projectId);
         set({
-            taskAssignments: response,  
+            taskAssignments: response,
             isLoading: false
         });
     }
@@ -41,7 +42,7 @@ const useTaskAssignamentStore = create<TaskStore>((set) => ({
     unassignTask: async (taskId, userId) => {
         set({ isLoading: true });
         try {
-            const response = await unassignTask(taskId, userId); 
+            const response = await unassignTask(taskId, userId);
             toast.success(response.message);
             return response;
         } catch (error) {
@@ -56,12 +57,19 @@ const useTaskAssignamentStore = create<TaskStore>((set) => ({
     getAllUsersAssignedToTask: async (taskId, teamId) => {
         set({ isLoading: true });
         const response = await getAllUsersAssignedToTask(taskId, teamId);
-     
+
         set((state) => ({
             taskAssignments: [...state.taskAssignments, ...response],
             isLoading: false
         }));
 
+        return response;
+    },
+
+    completeAssignedTask: async (taskId, userId) => {
+        set({ isLoading: true });
+        const response = await completeAssignedTask(taskId, userId);
+        toast.success(response.message);
         return response;
     },
 

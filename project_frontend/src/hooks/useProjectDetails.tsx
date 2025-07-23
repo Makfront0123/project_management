@@ -18,9 +18,15 @@ export type TaskFormValues = {
     description: string;
 };
 
+type ProjectFormValues = {
+    name: string;
+    description: string;
+};
+
+
 export const useProjectDetails = () => {
     const { projectId, teamId } = useParams<{ projectId: string; teamId: string }>();
-    const { currentProject, isLoading, getProject } = useProjectStore();
+    const { currentProject, isLoading, getProject, updateProject, deleteProject } = useProjectStore();
     const { tasks, createTask, getTasks, deleteTask, updateTask } = useTaskStore();
     const {
         taskAssignments,
@@ -39,6 +45,8 @@ export const useProjectDetails = () => {
     const { tags, getAllTags, deleteTag, updateTag, } = useTagStore();
     const { addTagToTask, removeTagFromTask } = useTagTaskStore();
     const { attachmentsByTask, getAllAttachmentsForTasks, updateAttachment, deleteAttachment } = useAttachmentStore();
+    const { completeAssignedTask } = useTaskAssignamentStore();
+    
 
     const toggleTagOnTask = async (taskId: string, tagId: string, isAssigned: boolean) => {
         if (isAssigned) {
@@ -78,6 +86,35 @@ export const useProjectDetails = () => {
     const [attachmentTaskId, setAttachmentTaskId] = useState<string | null>(null);
     const [attachmentToEdit, setAttachmentToEdit] = useState<Attachment | null>(null);
     const [isEditAttachmentModalOpen, setIsEditAttachmentModalOpen] = useState(false);
+    const [isEditingProject, setIsEditingProject] = useState(true);
+    const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  
+
+    const [projectValues, setProjectValues] = useState<ProjectFormValues>({
+        name: "",
+        description: "",
+    });
+
+
+    const onEditProject = () => {
+        if (!currentProject) return;
+
+        setProjectValues({
+            name: currentProject.name,
+            description: currentProject.description,
+        });
+
+        setIsProjectModalOpen(true);  
+    };
+
+    const onDeleteProject = async () => {
+        if (!currentProject) return;
+        await deleteProject(currentProject._id, teamId!);
+        
+    };
+
+
+
 
     const openEditAttachmentModal = (attachment: Attachment) => {
         setAttachmentToEdit(attachment);
@@ -87,6 +124,11 @@ export const useProjectDetails = () => {
     const closeEditAttachmentModal = () => {
         setAttachmentToEdit(null);
         setIsEditAttachmentModalOpen(false);
+    };
+
+    const onCompleteAssignedTask = async (taskId: string, userId: string) => {
+        await completeAssignedTask(taskId, userId);
+        await getTasksToUserAssignments(projectId!);
     };
 
     const onDeleteAttachment = async (attachmentId: string, taskId: string) => {
@@ -141,7 +183,13 @@ export const useProjectDetails = () => {
         onSubmit: async (formValues) => {
             if (!projectId) return;
 
-            if (editingTask) {
+            if (isEditingProject) {
+                await updateProject(projectId, {
+                    ...currentProject!,
+                    ...projectValues,
+                }, teamId!);
+                setIsEditingProject(false);
+            } else if (editingTask) {
                 await updateTask(editingTask._id, formValues, projectId);
                 setEditingTask(null);
             } else {
@@ -150,8 +198,13 @@ export const useProjectDetails = () => {
 
             setIsModalOpen(false);
             setValues({ name: "", description: "" });
+            setProjectValues({ name: "", description: "" });
+
             await getTasks(projectId);
-        },
+            await getProject(projectId, teamId!);
+        }
+
+
     });
 
 
@@ -167,14 +220,16 @@ export const useProjectDetails = () => {
             const loadedTasks = useTaskStore.getState().tasks;
 
             for (const task of loadedTasks) {
-                await getAllAttachmentsForTasks([task._id], teamId); // sobrescribe attachments cada vez
+                await getAllAttachmentsForTasks([task._id], teamId);
             }
-
 
             await getAllMembersOfTeam(teamId);
             await getAllTags(teamId);
 
             useTaskAssignamentStore.setState({ taskAssignments: [] });
+
+            const team = useTeamMemberStore.getState().teamMemberships.find((t) => t.teamId === teamId);
+            const isAdmin = team?.role === "admin";
 
             if (isAdmin) {
                 for (const task of loadedTasks) {
@@ -185,18 +240,15 @@ export const useProjectDetails = () => {
                     new Map(useTaskAssignamentStore.getState().taskAssignments.map(a => [a._id, a])).values()
                 );
                 useTaskAssignamentStore.setState({ taskAssignments: uniqueAssignments });
-
             } else {
                 await getTasksToUserAssignments(projectId);
             }
-
-
 
             setTasksLoaded(true);
         };
 
         fetchData();
-    }, [getUserTeamStatus, getProject, getTasks, getAllTags, projectId, teamId, getAllMembersOfTeam, getTasksToUserAssignments, getAllUsersAssignedToTask, isAdmin, getAllAttachmentsForTasks]);
+    }, [getAllAttachmentsForTasks, getAllMembersOfTeam, getAllTags, getAllUsersAssignedToTask, getProject, getTasks, getTasksToUserAssignments, getUserTeamStatus, projectId, teamId]);
 
     const findAssignmentForTask = (taskId: string) => {
         return useTaskAssignamentStore.getState().taskAssignments.find((a) => a.taskId?._id === taskId);
@@ -262,5 +314,16 @@ export const useProjectDetails = () => {
         setAttachmentToEdit,
         onDeleteAttachment,
         onUpdateAttachment,
+        onCompleteAssignedTask,
+
+        onEditProject
+        ,
+        isProjectModalOpen,
+        setIsProjectModalOpen,
+        projectValues,
+        setProjectValues,
+        updateProject,
+        getProject,
+        onDeleteProject,
     };
 };

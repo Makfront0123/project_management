@@ -13,7 +13,6 @@ export const assignUserToTask = async (req, res) => {
         }
 
         const result = await taskService.findTaskWithTeam(taskId);
-        console.log("result:", result);
         if (!result) {
             return res.status(404).json({ message: "Task or Project not found" });
         }
@@ -96,6 +95,27 @@ export const getTasksAssignedToUser = async (req, res) => {
         const userId = req.user.id;
         const tasks = await taskAssignmentService.getTasksAssignedToUser(userId);
         res.status(200).json(tasks);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+ 
+export const completeAssignedTask = async (req, res) => {
+    try {
+        const { taskId } = req.params;
+        const userId = req.user.id;
+
+        const assignment = await taskAssignmentService.getUserAssignedToTask(taskId, userId);
+        if (!assignment) {
+            return res.status(403).json({ message: "You are not assigned to this task" });
+        }
+
+        await taskService.markTaskAsCompleted(taskId);
+        ///await taskAssignmentService.removeUserFromTask(taskId, userId);
+
+        res.status(200).json({ message: "Task marked as completed and assignment removed" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -16,7 +16,7 @@ export const createProject = async (req, res) => {
             ownerId: owner_id,
         };
 
-        const project = await projectService.createProject(data);  
+        const project = await projectService.createProject(data);
 
         res.status(201).json({
             message: "Project created successfully",
@@ -68,18 +68,26 @@ export const updateProject = async (req, res) => {
     }
 }
 
+
 export const deleteProject = async (req, res) => {
     try {
         const { teamId, projectId } = req.params;
-        console.log("teamId:", teamId);
-        console.log("projectId:", projectId);
-        const deletedProject = await projectService.deleteProject(teamId, projectId);
+
+        const deletedProject = await projectService.deleteProjectCascade(
+            teamId,
+            projectId
+        );
+
+        if (!deletedProject) {
+            return res.status(404).json({ message: "Project not found" });
+        }
+
         res.status(200).json({
-            message: "Project deleted successfully",
+            message: "Project and related data deleted successfully",
             deletedProject,
         });
     } catch (error) {
+        console.error("Error deleting project:", error);
         res.status(500).json({ message: error.message });
     }
-
-}
+};
