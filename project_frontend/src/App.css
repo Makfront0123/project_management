@@ -1,3 +1,15 @@
 @import "tailwindcss";
 
- 
+@theme {
+    --animate-slide-in-top: animate-slide-in-top 300ms ease-in-out;
+
+    @keyframes animate-slide-in-top {
+        0% {
+            transform: translateY(-100%);
+        }
+
+        100% {
+            transform: translateY(0);
+        }
+    }
+}

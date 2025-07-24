@@ -161,12 +161,35 @@ const ProjectDetails = () => {
 
                   <div className="mt-2 ml-4">
                     <button
-                      onClick={() => setSelectedCommentTask(task)}
+                      onClick={() =>
+                        setSelectedCommentTask(
+                          selectedCommentTask?._id === task._id ? null : task
+                        )
+                      }
                       className="text-blue-600 text-sm hover:underline"
                     >
-                      💬 Ver comentarios
+                      💬 {selectedCommentTask?._id === task._id ? "Ocultar" : "Ver"} comentarios
                     </button>
+
+                    {selectedCommentTask?._id === task._id && (
+                      <div className="animate-slide-in-top mt-4 border rounded-lg p-4 bg-gray-50">
+                        <div className="flex justify-between items-center mb-3">
+                          <h3 className="text-md font-bold text-gray-700">
+                            Comentarios sobre:{" "}
+                            <span className="text-indigo-600">{task.name}</span>
+                          </h3>
+                          <button
+                            onClick={() => setSelectedCommentTask(null)}
+                            className="text-sm text-red-500 hover:underline"
+                          >
+                            Cerrar
+                          </button>
+                        </div>
+                        <TaskComments taskId={task._id} />
+                      </div>
+                    )}
                   </div>
+
                 </div>
               );
             })}
@@ -294,23 +317,6 @@ const ProjectDetails = () => {
           </Modal>
         )}
 
-        {selectedCommentTask && (
-          <div className="mt-10 border-t pt-6">
-            <div className="flex justify-between items-center mb-3">
-              <h3 className="text-xl font-bold text-gray-700">
-                Comentarios sobre:{" "}
-                <span className="text-indigo-600">{selectedCommentTask.name}</span>
-              </h3>
-              <button
-                onClick={() => setSelectedCommentTask(null)}
-                className="text-sm text-red-500 hover:underline"
-              >
-                Cerrar comentarios
-              </button>
-            </div>
-            <TaskComments taskId={selectedCommentTask._id} />
-          </div>
-        )}
 
 
       </div>
@@ -393,23 +399,7 @@ const ProjectDetails = () => {
 
                   )
                 }
-                {selectedCommentTask && (
-                  <div className="mt-10 border-t pt-6">
-                    <div className="flex justify-between items-center mb-3">
-                      <h3 className="text-xl font-bold text-gray-700">
-                        Comentarios sobre:{" "}
-                        <span className="text-indigo-600">{selectedCommentTask.name}</span>
-                      </h3>
-                      <button
-                        onClick={() => setSelectedCommentTask(null)}
-                        className="text-sm text-red-500 hover:underline"
-                      >
-                        Cerrar comentarios
-                      </button>
-                    </div>
-                    <TaskComments taskId={selectedCommentTask._id} />
-                  </div>
-                )}
+
 
                 <div className="mt-2 ml-4">
                   <button
@@ -419,13 +409,41 @@ const ProjectDetails = () => {
                           ? assignment.taskId
                           : assignment.taskId?._id;
                       const task = tasks.find((t) => t._id === taskId);
-                      if (task) setSelectedCommentTask(task);
+                      if (selectedCommentTask?._id === taskId) {
+                        setSelectedCommentTask(null); // toggle
+                      } else if (task) {
+                        setSelectedCommentTask(task);
+                      }
                     }}
                     className="text-blue-600 text-sm hover:underline"
                   >
-                    💬 Ver comentarios
+                    💬 {selectedCommentTask?._id === (typeof assignment.taskId === "string" ? assignment.taskId : assignment.taskId?._id) ? "Ocultar" : "Ver"} comentarios
                   </button>
+
+                  {selectedCommentTask?._id ===
+                    (typeof assignment.taskId === "string"
+                      ? assignment.taskId
+                      : assignment.taskId?._id) && (
+                      <div className="animate-slide-in-top mt-4 border rounded-lg p-4 bg-gray-50">
+                        <div className="flex justify-between items-center mb-3">
+                          <h3 className="text-md font-bold text-gray-700">
+                            Comentarios sobre:{" "}
+                            <span className="text-indigo-600">
+                              {selectedCommentTask.name}
+                            </span>
+                          </h3>
+                          <button
+                            onClick={() => setSelectedCommentTask(null)}
+                            className="text-sm text-red-500 hover:underline"
+                          >
+                            Cerrar
+                          </button>
+                        </div>
+                        <TaskComments taskId={selectedCommentTask._id} />
+                      </div>
+                    )}
                 </div>
+
 
               </div>
             ))}

@@ -30,6 +30,13 @@ export const assignUserToTask = async (req, res) => {
             return res.status(409).json({ message: "User already assigned to task" });
         }
 
+        const MAX_ASSIGNMENTS = 2;
+        const currentAssignments = await taskAssignmentService.getTasksAssignedToUser(userId);
+
+        if (currentAssignments.length >= MAX_ASSIGNMENTS) {
+            return res.status(403).json({ message: "You can only assign up to 3 users to a task" });
+        }
+
 
         const data = { taskId, userId, assignedBy };
         const taskAssignment = await taskAssignmentService.createTaskAssignment(data);

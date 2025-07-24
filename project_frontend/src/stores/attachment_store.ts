@@ -21,20 +21,24 @@ const useAttachmentStore = create<AttachmentStore>((set) => ({
     createAttachment: async (taskId, teamId, file) => {
         set({ isLoading: true });
         try {
-            const response = await createAttachment(taskId, teamId, file);
+            const response=await createAttachment(taskId, teamId, file);
+            const updatedAttachments = await getAllAttachments(taskId, teamId);
+
             set((state) => ({
                 attachmentsByTask: {
                     ...state.attachmentsByTask,
-                    [taskId]: response.data,
+                    [taskId]: updatedAttachments,
                 },
                 isLoading: false,
             }));
+
             toast.success(response.message);
         } catch (err) {
             console.error(err);
             set({ isLoading: false });
         }
     },
+
 
     getAllAttachmentsForTasks: async (taskIds: string[], teamId: string) => {
         set({ isLoading: true });

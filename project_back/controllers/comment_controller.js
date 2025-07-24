@@ -3,6 +3,7 @@ import Task from "../models/Task.js";
 import TeamMember from "../models/TeamMember.js";
 import taskService from "../services/task_service.js";
 import projectService from "../services/project_service.js";
+import TaskAssignment from "../models/TaksAssignment.js";
 export const createComment = async (req, res) => {
   try {
     const { taskId } = req.params;
@@ -32,7 +33,10 @@ export const createComment = async (req, res) => {
     }
 
     const isAdmin = teamMember.role === "admin";
-    const isAssigned = task.assignedTo?.toString() === userId;
+    const isAssigned = await TaskAssignment.findOne({
+      taskId,
+      userId,
+    });
 
     if (!isAdmin && !isAssigned) {
       return res.status(403).json({ message: "Not authorized to comment on this task" });
@@ -82,7 +86,12 @@ export const getCommentsByTask = async (req, res) => {
     }
 
     const isAdmin = teamMember.role === "admin";
-    const isAssigned = task.assignedTo?.toString() === userId;
+    const isAssigned = await TaskAssignment.findOne({
+      taskId,
+      userId,
+    });
+
+
 
     if (!isAdmin && !isAssigned) {
       return res.status(403).json({ message: "Not authorized to view comments on this task" });

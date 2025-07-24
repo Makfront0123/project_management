@@ -21,6 +21,11 @@ class TaskAssignmentRepository {
             .populate("taskId", "name");
     }
 
+    async getTasksAssignedToUser(userId) {
+    return await TaskAssignment.find({ userId });
+}
+
+
     async getUserAssignedToTask(taskId, userId) {
         return await TaskAssignment.findOne({ taskId, userId });
     }
