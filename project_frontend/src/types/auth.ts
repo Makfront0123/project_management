@@ -13,6 +13,7 @@ export interface RegisterResponse {
   message?: string;
   _id: string;
   email: string;
+  name: string;
 }
 export type User = {
     id: string

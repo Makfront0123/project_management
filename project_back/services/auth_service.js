@@ -18,24 +18,35 @@ class AuthService {
         return user;
     }
     async login(data) {
-
-        const existingUser = await authRepo.findUserByEmail(data.email)
-        if (!existingUser) throw new Error("User does not exist")
-
-
-        const isPassword = await bcrypt.compare(data.password, existingUser.password)
-        if (!isPassword) throw new Error("Invalid password")
-        const token = jwt.sign(
-            { id: existingUser._id, email: existingUser.email },
-            process.env.JWT_SECRET,
-            { expiresIn: "2h" }
-        );
-
-        await authRepo.setLoginStatus(existingUser, true);
-        return {
-            token,
-            ...data
+        const user = await authRepo.findUserByEmail(data.email);
+        if (!user) {
+            throw new Error("User does not exist");
         }
+
+        const isPasswordValid = await bcrypt.compare(data.password, user.password);
+        if (!isPasswordValid) {
+            throw new Error("Invalid password");
+        }
+
+
+        const payload = {
+            id: user._id,
+            email: user.email,
+            name: user.name,
+        };
+
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+        });
+
+
+        return {
+            _id: user._id,
+            email: user.email,
+            name: user.name,
+            token,
+        };
     }
     async logout(data) {
         console.log(data.email)

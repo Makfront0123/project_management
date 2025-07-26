@@ -8,6 +8,8 @@ import { useTeamMemberStore } from "../stores/team_member_store";
 import type { User } from "../types/auth";
 import usePrivateChat from "../hooks/usePrivateChat";
 import type { MessageFormValues } from "../types/message";
+import useMessageSound from "../hooks/useMessageSound";
+
 
 
 const TeamChatPage = () => {
@@ -21,6 +23,7 @@ const TeamChatPage = () => {
 
     const { sendMessage: sendGlobalMessage } = useTeamChat(teamId ?? "");
     const { sendPrivateMessage } = usePrivateChat(user?.id ?? "", selectedMember?.id ?? "");
+    const { playSentSound } = useMessageSound();
 
 
 
@@ -60,6 +63,8 @@ const TeamChatPage = () => {
                 } else {
                     sendGlobalMessage(values.message, user, null);
                 }
+
+                playSentSound();
             }
             setValues({ message: "" });
         },

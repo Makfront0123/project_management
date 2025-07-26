@@ -3,10 +3,12 @@ import type { Message } from "../types/message"
 import { io, type Socket } from "socket.io-client"
 import type { User } from "../types/auth"
 import useMessageStore from "../stores/message_store"
+import useMessageSound from "./useMessageSound"
 
 const useTeamChat = (teamId: string) => {
     const addMessage = useMessageStore((state) => state.addMessage);
     const socketRef = useRef<Socket | null>(null)
+      const { playReceivedSound } = useMessageSound();
 
     useEffect(() => {
         const socket = io("http://localhost:3000", {
@@ -23,6 +25,7 @@ const useTeamChat = (teamId: string) => {
 
         socket.on("newMessage", (message: Message) => {
             addMessage(message);
+            playReceivedSound();
         });
 
         socket.on("connect", () => {
@@ -37,7 +40,7 @@ const useTeamChat = (teamId: string) => {
             socket.disconnect();
 
         };
-    }, [addMessage, teamId]);
+    }, [addMessage, playReceivedSound, teamId]);
 
     const sendMessage = useCallback((text: string, sender: User, receiverId?: string | null) => {
 

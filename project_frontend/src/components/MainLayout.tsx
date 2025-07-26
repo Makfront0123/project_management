@@ -1,11 +1,12 @@
 import { Link, Outlet } from "react-router"
 import { useAuthStore } from "../stores/auth_store"
 import { icons } from "../core/icons"
- 
+
 
 
 const MainLayout = () => {
-    const { logout } = useAuthStore()
+    const { logout, user } = useAuthStore()
+    console.log(user)
     return (
 
         <main className="w-full h-full flex flex-col">
@@ -15,7 +16,10 @@ const MainLayout = () => {
 
                 </div>
                 <div className="flex items-center gap-x-8">
-                    <span className="flex items-center gap-x-2 text-white"><img src={icons.user} className="size-4" alt="" /> User</span>
+                    <span className="flex items-center gap-x-2 font-medium text-white">
+                        <img src={icons.user} className="size-4" alt="" />
+                        Welcome <span className="uppercase">{user?.name}</span>
+                    </span>
                     <button
                         onClick={logout}
                         className="px-10  bg-blue-600 rounded-lg text-white cursor-pointer hover:opacity-70">Logout</button>

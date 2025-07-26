@@ -26,11 +26,12 @@ export const useAuthStore = create<AuthStore>()(
             token: null,
             loading: false,
 
+
             login: async (email, password) => {
-                set({ loading: true })
+                set({ loading: true });
                 try {
-                    const data = await loginUser(email, password)
-                    const decoded: JwtPayload = jwtDecode(data.user.token)
+                    const data = await loginUser(email, password);
+                    const decoded: JwtPayload = jwtDecode(data.user.token);
 
                     set({
                         user: {
@@ -42,13 +43,12 @@ export const useAuthStore = create<AuthStore>()(
                         loading: false,
                     });
 
-                    return data.message
+                    return data.message;
                 } catch (error: unknown) {
-                    set({ user: null, token: null, loading: false })
-                    throw new Error(getErrorMessage(error))
+                    set({ user: null, token: null, loading: false });
+                    throw new Error(getErrorMessage(error));
                 }
-            }
-            ,
+            },
 
             register: async (name, email, password) => {
                 set({ loading: true })
@@ -59,7 +59,7 @@ export const useAuthStore = create<AuthStore>()(
                         user: {
                             id: data._id,
                             email: data.email,
-                            name: data.email,
+                            name: data.name,
                         },
                         loading: false
                     })
