@@ -3,8 +3,8 @@ class ProjectService {
     async createProject(data) {
         return await projectRepo.createProject(data);
     }
-    async getAllProjects() {
-        return await projectRepo.getAllProjects();
+    async getAllProjects(teamId) {
+        return await projectRepo.getAllProjects(teamId);
     }
     async getProjectById(teamId, projectId) {
         return await projectRepo.getProjectById(teamId, projectId);

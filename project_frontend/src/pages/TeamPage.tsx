@@ -91,40 +91,53 @@ const TeamPage = () => {
   }
 
   return (
-    <div className="flex w-full h-full">
-      <div className="min-w-6xl h-full">
-        <div className="mt-20">
-          <div className="flex flex-col items-center justify-center">
-            <h2 className="text-3xl font-bold mb-4">{team.name}</h2>
+    <div className="flex w-full h-screen">
+      <div className="w-2/3 overflow-y-auto mt-20 px-4">
+
+        <div className="flex items-center justify-between px-20">
+
+          <h2 className="text-3xl font-bold mb-13">{team.name}</h2>
+          <div className="flex item-center gap-2">
             {isAdmin && (
               <Link
                 to={`/team/${team.teamId}/requests`}
-                className="px-4 py-2 bg-blue-600 mx-auto text-white rounded-md mb-10"
+                className="px-4 py-2 bg-blue-600 mx-auto text-white rounded-md mb-12"
               >
                 Ver Solicitudes
               </Link>
             )}
+
+            <Link
+              to={`/team/${team.teamId}/chat`}
+              className="px-4 py-2 bg-green-600 mx-auto text-white rounded-md mb-12"
+            >
+              Entrar al Chat del Equipo
+            </Link>
           </div>
 
-          {teamMembers.length === 0 ? (
-            <p className="text-gray-500">Este equipo aún no tiene miembros.</p>
-          ) : (
-            <ul className="space-y-2 w-full px-20">
-              {teamMembers
-                .filter((member) => member.teamId === teamId && member.status === "accepted")
-                .map((member) => (
-                  <Table
-                    key={member._id}
-                    member={member}
-                    onDelete={isAdmin ? deleteMember : undefined}
-                  />
-                ))}
-            </ul>
-          )}
         </div>
+
+
+        {teamMembers.length === 0 ? (
+          <p className="text-gray-500">Este equipo aún no tiene miembros.</p>
+        ) : (
+          <ul className="space-y-2 w-full px-20 min-h-[130vh] block">
+            {teamMembers
+              .filter((member) => member.teamId === teamId && member.status === "accepted")
+              .map((member) => (
+                <Table
+                  key={member._id}
+                  member={member}
+                  onDelete={isAdmin ? deleteMember : undefined}
+                />
+              ))}
+          </ul>
+        )}
+
       </div>
 
-      <div className="w-full h-screen bg-gray-400">
+      <div className="w-1/3 h-screen bg-gray-400 px-4 py-8">
+
         <div className="flex flex-col items-center justify-center">
           <h2 className="text-3xl font-bold mb-6 mt-14">Proyectos</h2>
 

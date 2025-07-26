@@ -15,7 +15,7 @@ export interface RegisterResponse {
   email: string;
 }
 export type User = {
-    _id: string
+    id: string
     email: string
     name: string
 }
@@ -24,6 +24,7 @@ export type User = {
 export type JwtPayload = {
     id: string
     email: string
+    name: string
     exp: number
     iat: number
 }

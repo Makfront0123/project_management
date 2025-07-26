@@ -8,3 +8,10 @@ export interface Attachment {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface RenameAttachmentModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    currentName: string;
+    onSubmit: (newName: string) => void;
+}

@@ -10,6 +10,11 @@ export interface Task {
     tags?: Tag[]; 
 }
 
+export type TaskFormValues = {
+    name: string;
+    description: string;
+};
+
 
 export type TaskInput = {
     name: string;

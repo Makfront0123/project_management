@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
+import type { TagModalProps } from "../../types/tag";
 
-interface TagModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (name: string) => void;
-  initialName: string;
-}
+ 
 
 const TagModal = ({ isOpen, onClose, onSubmit, initialName }: TagModalProps) => {
   const [name, setName] = useState(initialName);

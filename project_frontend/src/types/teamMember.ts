@@ -9,3 +9,12 @@ export type TeamMember = {
   role: string
   status: string
 }
+
+export interface Member {
+  _id: string;
+  userId: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+}

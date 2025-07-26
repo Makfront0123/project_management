@@ -143,7 +143,7 @@ const ProjectDetails = () => {
                       setSelectedTask(task);
                       const userId = typeof assignment?.userId === "string"
                         ? assignment.userId
-                        : assignment?.userId?._id;
+                        : assignment?.userId?.id;
                       if (!userId) return;
                       await unassignTask(task._id, userId);
                       await getTasksToUserAssignments(projectId!);

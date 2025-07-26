@@ -1,6 +1,7 @@
 import { Link, Outlet } from "react-router"
 import { useAuthStore } from "../stores/auth_store"
 import { icons } from "../core/icons"
+ 
 
 
 const MainLayout = () => {
@@ -11,10 +12,7 @@ const MainLayout = () => {
             <nav className="w-full py-3 bg-black flex items-center z-80 justify-between px-10 fixed top-0 overflow-hidden">
                 <div className="flex justify-evenly items-center min-w-2xl">
                     <Link to="/" className="text-white">Logo</Link>
-                    <div className="flex items-center gap-x-8">
-                        <span className="flex items-center gap-x-2 text-white cursor-pointer hover:opacity-70"><img src={icons.user} className="size-4" alt="" /> Notification</span>
-                        <span className="flex items-center gap-x-2 text-white cursor-pointer hover:opacity-70"><img src={icons.user} className="size-4" alt="" /> Teams</span>
-                    </div>
+
                 </div>
                 <div className="flex items-center gap-x-8">
                     <span className="flex items-center gap-x-2 text-white"><img src={icons.user} className="size-4" alt="" /> User</span>

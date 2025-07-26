@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@tailwindcss/vite':
         specifier: ^4.1.11
-        version: 4.1.11(vite@7.0.2(jiti@2.4.2)(lightningcss@1.30.1))
+        version: 4.1.11(vite@7.0.2(@types/node@24.1.0)(jiti@2.4.2)(lightningcss@1.30.1))
       axios:
         specifier: ^1.10.0
         version: 1.10.0
@@ -29,6 +29,9 @@ importers:
       react-router:
         specifier: ^7.6.3
         version: 7.6.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      socket.io-client:
+        specifier: ^4.8.1
+        version: 4.8.1
       tailwindcss:
         specifier: ^4.1.11
         version: 4.1.11
@@ -47,7 +50,7 @@ importers:
         version: 19.1.6(@types/react@19.1.8)
       '@vitejs/plugin-react':
         specifier: ^4.5.2
-        version: 4.6.0(vite@7.0.2(jiti@2.4.2)(lightningcss@1.30.1))
+        version: 4.6.0(vite@7.0.2(@types/node@24.1.0)(jiti@2.4.2)(lightningcss@1.30.1))
       eslint:
         specifier: ^9.29.0
         version: 9.30.1(jiti@2.4.2)
@@ -68,7 +71,7 @@ importers:
         version: 8.36.0(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3)
       vite:
         specifier: ^7.0.0
-        version: 7.0.2(jiti@2.4.2)(lightningcss@1.30.1)
+        version: 7.0.2(@types/node@24.1.0)(jiti@2.4.2)(lightningcss@1.30.1)
 
 packages:
 
@@ -509,6 +512,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@socket.io/component-emitter@3.1.2':
+    resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
+
   '@tailwindcss/node@4.1.11':
     resolution: {integrity: sha512-yzhzuGRmv5QyU9qLNg4GTlYI6STedBWRE7NjxP45CsFYYq9taI0zJXZBMqIC/c8fViNLhmrbpSFS57EoxUmD6Q==}
 
@@ -616,6 +622,9 @@ packages:
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  '@types/node@24.1.0':
+    resolution: {integrity: sha512-ut5FthK5moxFKH2T1CUOC6ctR67rQRvvHdFLCD2Ql6KXmMuCrjsSsRI9UsLCm9M18BMwClv4pn327UvB7eeO1w==}
 
   '@types/react-dom@19.1.6':
     resolution: {integrity: sha512-4hOiT/dwO8Ko0gV1m/TJZYk3y0KBnY9vzDh7W+DH17b2HFSOGgdj33dhihPeuy3l0q23+4e+hoXHV6hCC4dCXw==}
@@ -781,6 +790,15 @@ packages:
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
 
+  debug@4.3.7:
+    resolution: {integrity: sha512-Er2nc/H7RrMXZBFCEim6TCmMk02Z8vLC2Rbi1KEBggpo0fS6l0S1nnapwmIi3yW/+GOJap1Krg4w0Hg80oCqgQ==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
   debug@4.4.1:
     resolution: {integrity: sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==}
     engines: {node: '>=6.0'}
@@ -807,6 +825,13 @@ packages:
 
   electron-to-chromium@1.5.180:
     resolution: {integrity: sha512-ED+GEyEh3kYMwt2faNmgMB0b8O5qtATGgR4RmRsIp4T6p7B8vdMbIedYndnvZfsaXvSzegtpfqRMDNCjjiSduA==}
+
+  engine.io-client@6.6.3:
+    resolution: {integrity: sha512-T0iLjnyNWahNyv/lcjS2y4oE358tVS/SYQNxYXGAJ9/GLgH4VCvOQ/mhTjqU88mLZCQgiG8RIegFHYCdVC+j5w==}
+
+  engine.io-parser@5.2.3:
+    resolution: {integrity: sha512-HqD3yTBfnBxIrbnM1DoD6Pcq8NECnh8d4As1Qgh0z5Gg3jRRIqijury0CL3ghu/edArpUYiYqQiDUQBIs4np3Q==}
+    engines: {node: '>=10.0.0'}
 
   enhanced-resolve@5.18.2:
     resolution: {integrity: sha512-6Jw4sE1maoRJo3q8MsSIn2onJFbLTOjY9hlx4DZXmOKvLRd1Ok2kXmAGXaafL2+ijsJZ1ClYbl/pmqr9+k4iUQ==}
@@ -1342,6 +1367,14 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
+  socket.io-client@4.8.1:
+    resolution: {integrity: sha512-hJVXfu3E28NmzGk8o1sHhN3om52tRvwYeidbj7xKy2eIIse5IoKX3USlS6Tqt3BHAtflLIkCQBkzVrEEfWUyYQ==}
+    engines: {node: '>=10.0.0'}
+
+  socket.io-parser@4.2.4:
+    resolution: {integrity: sha512-/GbIKmo8ioc+NIWIhwdecY0ge+qVBSMdgxGygevmdHj24bsfgtCmcUUcQ5ZzcylGFHsN3k4HB4Cgkl96KVnuew==}
+    engines: {node: '>=10.0.0'}
+
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
@@ -1394,6 +1427,9 @@ packages:
     resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  undici-types@7.8.0:
+    resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
   update-browserslist-db@1.1.3:
     resolution: {integrity: sha512-UxhIZQ+QInVdunkDAaiazvvT/+fXL5Osr0JZlJulepYu6Jd7qJtDZjlur0emRlT71EN3ScPoE7gvsuIKKNavKw==}
@@ -1452,6 +1488,22 @@ packages:
   word-wrap@1.2.5:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}
     engines: {node: '>=0.10.0'}
+
+  ws@8.17.1:
+    resolution: {integrity: sha512-6XQFvXTkbfUOZOKKILFG1PDK2NDQs4azKQl26T0YS5CxqWLgXajbPZ+h4gZekJyRqFU8pvnbAbbs/3TgRPy+GQ==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
+  xmlhttprequest-ssl@2.1.2:
+    resolution: {integrity: sha512-TEU+nJVUUnA4CYJFLvK5X9AOeH4KvDvhIfm0vV1GaQRtchnG0hgK5p8hw/xjv8cunWYCsiPCSDzObPyhEwq3KQ==}
+    engines: {node: '>=0.4.0'}
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
@@ -1832,6 +1884,8 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.44.2':
     optional: true
 
+  '@socket.io/component-emitter@3.1.2': {}
+
   '@tailwindcss/node@4.1.11':
     dependencies:
       '@ampproject/remapping': 2.3.0
@@ -1896,12 +1950,12 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.1.11
       '@tailwindcss/oxide-win32-x64-msvc': 4.1.11
 
-  '@tailwindcss/vite@4.1.11(vite@7.0.2(jiti@2.4.2)(lightningcss@1.30.1))':
+  '@tailwindcss/vite@4.1.11(vite@7.0.2(@types/node@24.1.0)(jiti@2.4.2)(lightningcss@1.30.1))':
     dependencies:
       '@tailwindcss/node': 4.1.11
       '@tailwindcss/oxide': 4.1.11
       tailwindcss: 4.1.11
-      vite: 7.0.2(jiti@2.4.2)(lightningcss@1.30.1)
+      vite: 7.0.2(@types/node@24.1.0)(jiti@2.4.2)(lightningcss@1.30.1)
 
   '@types/babel__core@7.20.5':
     dependencies:
@@ -1927,6 +1981,11 @@ snapshots:
   '@types/estree@1.0.8': {}
 
   '@types/json-schema@7.0.15': {}
+
+  '@types/node@24.1.0':
+    dependencies:
+      undici-types: 7.8.0
+    optional: true
 
   '@types/react-dom@19.1.6(@types/react@19.1.8)':
     dependencies:
@@ -2028,7 +2087,7 @@ snapshots:
       '@typescript-eslint/types': 8.36.0
       eslint-visitor-keys: 4.2.1
 
-  '@vitejs/plugin-react@4.6.0(vite@7.0.2(jiti@2.4.2)(lightningcss@1.30.1))':
+  '@vitejs/plugin-react@4.6.0(vite@7.0.2(@types/node@24.1.0)(jiti@2.4.2)(lightningcss@1.30.1))':
     dependencies:
       '@babel/core': 7.28.0
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.28.0)
@@ -2036,7 +2095,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.19
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 7.0.2(jiti@2.4.2)(lightningcss@1.30.1)
+      vite: 7.0.2(@types/node@24.1.0)(jiti@2.4.2)(lightningcss@1.30.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -2131,6 +2190,10 @@ snapshots:
 
   csstype@3.1.3: {}
 
+  debug@4.3.7:
+    dependencies:
+      ms: 2.1.3
+
   debug@4.4.1:
     dependencies:
       ms: 2.1.3
@@ -2148,6 +2211,20 @@ snapshots:
       gopd: 1.2.0
 
   electron-to-chromium@1.5.180: {}
+
+  engine.io-client@6.6.3:
+    dependencies:
+      '@socket.io/component-emitter': 3.1.2
+      debug: 4.3.7
+      engine.io-parser: 5.2.3
+      ws: 8.17.1
+      xmlhttprequest-ssl: 2.1.2
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  engine.io-parser@5.2.3: {}
 
   enhanced-resolve@5.18.2:
     dependencies:
@@ -2655,6 +2732,24 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
+  socket.io-client@4.8.1:
+    dependencies:
+      '@socket.io/component-emitter': 3.1.2
+      debug: 4.3.7
+      engine.io-client: 6.6.3
+      socket.io-parser: 4.2.4
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  socket.io-parser@4.2.4:
+    dependencies:
+      '@socket.io/component-emitter': 3.1.2
+      debug: 4.3.7
+    transitivePeerDependencies:
+      - supports-color
+
   source-map-js@1.2.1: {}
 
   strip-json-comments@3.1.1: {}
@@ -2705,6 +2800,9 @@ snapshots:
 
   typescript@5.8.3: {}
 
+  undici-types@7.8.0:
+    optional: true
+
   update-browserslist-db@1.1.3(browserslist@4.25.1):
     dependencies:
       browserslist: 4.25.1
@@ -2715,7 +2813,7 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  vite@7.0.2(jiti@2.4.2)(lightningcss@1.30.1):
+  vite@7.0.2(@types/node@24.1.0)(jiti@2.4.2)(lightningcss@1.30.1):
     dependencies:
       esbuild: 0.25.6
       fdir: 6.4.6(picomatch@4.0.2)
@@ -2724,6 +2822,7 @@ snapshots:
       rollup: 4.44.2
       tinyglobby: 0.2.14
     optionalDependencies:
+      '@types/node': 24.1.0
       fsevents: 2.3.3
       jiti: 2.4.2
       lightningcss: 1.30.1
@@ -2733,6 +2832,10 @@ snapshots:
       isexe: 2.0.0
 
   word-wrap@1.2.5: {}
+
+  ws@8.17.1: {}
+
+  xmlhttprequest-ssl@2.1.2: {}
 
   yallist@3.1.1: {}
 

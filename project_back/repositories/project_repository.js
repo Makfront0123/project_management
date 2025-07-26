@@ -9,8 +9,8 @@ class ProjectRepository {
     async createProject(data) {
         return await Project.create(data);
     }
-    async getAllProjects() {
-        return await Project.find();
+    async getAllProjects(teamId) {
+        return await Project.find({ teamId });
     }
     async getProjectById(teamId, projectId) {
         return await Project.findOne({

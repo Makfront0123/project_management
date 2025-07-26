@@ -116,7 +116,7 @@ const TaskCard: React.FC<Props> = ({
                                                         const userId =
                                                             typeof assignment?.userId === "string"
                                                                 ? assignment.userId
-                                                                : assignment?.userId?._id;
+                                                                : assignment?.userId?.id;
 
                                                         if (onCompleteAssignedTask && taskId && userId) {
                                                             onCompleteAssignedTask(taskId, userId);

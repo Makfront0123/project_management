@@ -5,25 +5,21 @@ import { getErrorMessage } from "../utils/getErrorMessage"
 import { useForm } from "../hooks/useForm"
 import { createTeam } from "../services/team_services"
 import Modal from "../components/Modal"
-import type { TeamResponse } from "../types/team"
+import type { CreateTeamFormValue, TeamResponse } from "../types/team"
 import { images } from "../core/images"
 
-type CreateTeamForm = {
-    name: string
-    description: string
-}
-
+ 
 const CreateTeamPage = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const [createdCode, setCreatedCode] = useState("")
 
-    const form = useForm<CreateTeamForm>({
+    const form = useForm<CreateTeamFormValue>({
         initialValues: {
             name: "",
             description: ""
         },
         validate: (values) => {
-            const errors: Partial<Record<keyof CreateTeamForm, string>> = {}
+            const errors: Partial<Record<keyof CreateTeamFormValue, string>> = {}
             if (!values.name.trim()) errors.name = "El nombre del equipo es obligatorio"
             if (!values.description.trim()) errors.description = "La descripción del equipo es obligatoria"
             return errors

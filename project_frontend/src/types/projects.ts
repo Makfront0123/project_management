@@ -8,6 +8,12 @@ export interface Project {
     updatedAt: string;
 }
 
+export type ProjectFormValues = {
+    name: string;
+    description: string;
+};
+
+
 export type NewProject = {
   name: string;
   description: string;

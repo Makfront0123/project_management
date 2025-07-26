@@ -4,24 +4,14 @@ import { useProjectStore } from "../stores/project_store";
 import useTaskAssignamentStore from "../stores/task_assignament_store";
 import useTaskStore from "../stores/task_store";
 import { useTeamMemberStore } from "../stores/team_member_store";
-import type { Task } from "../types/task";
+import type { Task, TaskFormValues } from "../types/task";
 import { useForm } from "./useForm";
 import useTagStore from "../stores/tag_store";
 import type { Tag } from "../types/tag";
 import useTagTaskStore from "../stores/tagTask_store";
 import useAttachmentStore from "../stores/attachment_store";
 import type { Attachment } from "../types/attachment";
-
-
-export type TaskFormValues = {
-    name: string;
-    description: string;
-};
-
-type ProjectFormValues = {
-    name: string;
-    description: string;
-};
+import type { ProjectFormValues } from "../types/projects";
 
 
 export const useProjectDetails = () => {
@@ -37,7 +27,7 @@ export const useProjectDetails = () => {
     } = useTaskAssignamentStore();
     const {
         teamMemberships,
-        getAllMembersOfTeam,
+        fetchTeamMembers,
         teamMembers,
         getUserTeamStatus,
     } = useTeamMemberStore();
@@ -236,7 +226,7 @@ export const useProjectDetails = () => {
                 await getAllAttachmentsForTasks([task._id], teamId);
             }
 
-            await getAllMembersOfTeam(teamId);
+            await fetchTeamMembers(teamId);
             await getAllTags(teamId);
 
             useTaskAssignamentStore.setState({ taskAssignments: [] });
@@ -261,7 +251,7 @@ export const useProjectDetails = () => {
         };
 
         fetchData();
-    }, [getAllAttachmentsForTasks, getAllMembersOfTeam, getAllTags, getAllUsersAssignedToTask, getProject, getTasks, getTasksToUserAssignments, getUserTeamStatus, projectId, teamId]);
+    }, [fetchTeamMembers, getAllAttachmentsForTasks, getAllTags, getAllUsersAssignedToTask, getProject, getTasks, getTasksToUserAssignments, getUserTeamStatus, projectId, teamId]);
 
     const findAssignmentForTask = (taskId: string) => {
         return useTaskAssignamentStore.getState().taskAssignments.find((a) => a.taskId?._id === taskId);

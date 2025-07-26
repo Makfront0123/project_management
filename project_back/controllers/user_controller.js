@@ -52,13 +52,15 @@ export const getUserTeamStatus = async (req, res) => {
         }
 
         res.status(200).json({
-
-            teams: teams.map((teamMember) => ({
-                teamId: teamMember.teamId._id,
-                name: teamMember.teamId.name,
-                role: teamMember.role
-            }))
+            teams: teams
+                .filter(teamMember => teamMember.teamId) 
+                .map((teamMember) => ({
+                    teamId: teamMember.teamId._id,
+                    name: teamMember.teamId.name,
+                    role: teamMember.role
+                }))
         });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

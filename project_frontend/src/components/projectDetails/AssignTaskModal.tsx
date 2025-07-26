@@ -1,15 +1,5 @@
+import type { Member } from "../../types/teamMember";
 import Modal from "../Modal";
-
- 
-
-interface Member {
-  _id: string;
-  userId: {
-    _id: string;
-    name: string;
-    email: string;
-  };
-}
 
 interface Props {
   isOpen: boolean;

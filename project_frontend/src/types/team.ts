@@ -1,6 +1,6 @@
 export type Team = {
   _id: string
-  teamName: string
+  name: string
   description: string
   code: string
   role: string
@@ -11,6 +11,11 @@ export type Team = {
   }
   createdAt: string
   updatedAt: string
+}
+
+export type CreateTeamFormValue = {
+    name: string
+    description: string
 }
 
 

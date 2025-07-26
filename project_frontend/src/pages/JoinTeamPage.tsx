@@ -27,7 +27,7 @@ const JoinTeamPage = () => {
       ) : (
         <ul className="space-y-4">
           {teams.map((team) => {
-            console.log('teamMemberships', teamMemberships);
+            console.log('teams', team);
 
             const isMember = teamMemberships.some(m => m.teamId === team._id);
 
@@ -40,7 +40,7 @@ const JoinTeamPage = () => {
                 className="flex items-center justify-between border p-4 rounded-lg shadow hover:shadow-md transition"
               >
                 <li>
-                  <p className="text-sm text-gray-600">{team.description}</p>
+                  <p className="text-sm text-gray-600">{team.name}</p>
                   <p className="text-sm text-gray-400">
                     Creador: {team.creator.name} ({team.creator.email})
                   </p>

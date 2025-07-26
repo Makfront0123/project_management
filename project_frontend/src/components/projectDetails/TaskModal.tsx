@@ -1,7 +1,8 @@
  
 import React from "react";
-import type { TaskFormValues } from "../../hooks/useProjectDetails";
+ 
 import Modal from "../Modal";
+import type { TaskFormValues } from "../../types/task";
  
 
 interface Props {

@@ -2,11 +2,10 @@
 import { useParams } from "react-router";
 import { useForm } from "../../hooks/useForm";
 import useTagStore from "../../stores/tag_store";
+import type { TagFormValues } from "../../types/tag";
 
 
-type TagFormValues = {
-    name: string;
-};
+
 
 const CreateTag = () => {
     const { teamId } = useParams();

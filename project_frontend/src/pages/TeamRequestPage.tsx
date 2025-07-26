@@ -1,5 +1,3 @@
-
-
 import { useEffect } from "react";
 import TeamMemberTable from "../components/TeamMemberTable";
 import { useParams } from "react-router";

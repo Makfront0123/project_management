@@ -20,7 +20,7 @@ export const useProjectStore = create<ProjectStore>((set) => ({
   isLoading: false,
 
   getProjects: async (teamId: string) => {
-    set({ isLoading: true });
+    set({ isLoading: true, projects: [] });  
     try {
       const data = await getProjects(teamId);
       set({ projects: data, isLoading: false });
@@ -30,16 +30,16 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     }
   },
 
-  getProject: async (id: string, teamId: string) => {
-    set({ isLoading: true });
-    try {
-      const data = await getProject(id, teamId);
-      set({ currentProject: data, isLoading: false });
-    } catch (error) {
-      console.error("Error fetching project:", error);
-      set({ isLoading: false });
-    }
-  },
+getProject: async (id: string, teamId: string) => {
+  set({ isLoading: true, currentProject: null });  
+  try {
+    const data = await getProject(id, teamId);
+    set({ currentProject: data, isLoading: false });
+  } catch (error) {
+    console.error("Error fetching project:", error);
+    set({ isLoading: false });
+  }
+},
 
   createProject: async (teamId: string, data: NewProject) => {
     set({ isLoading: true });

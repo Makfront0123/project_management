@@ -1,10 +1,6 @@
-import type { Tag } from "../../types/tag";
+import type { TagListProps } from "../../types/tag";
 
-interface TagListProps {
-    tags: Tag[];
-    onRemoveTag?: (tagId: string) => Promise<void>;
-    onEditTag?: (tag: Tag) => void;
-}
+
 
 const TagList = ({ tags, onRemoveTag, onEditTag }: TagListProps) => {
     return (

@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import Modal from "../Modal";
-
-interface RenameAttachmentModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  currentName: string;
-  onSubmit: (newName: string) => void;
-}
+import type { RenameAttachmentModalProps } from "../../types/attachment";
 
 const RenameAttachmentModal: React.FC<RenameAttachmentModalProps> = ({
   isOpen,

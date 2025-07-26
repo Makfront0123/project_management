@@ -73,11 +73,13 @@ const DashboardPage = () => {
   const handleTeam = () => navigate('/create-team')
   const handleJoinTeam = () => navigate('/join-team')
 
+  
+
   return (
     <div className="flex flex-col items-center justify-start w-full h-screen">
-      <h3 className="text-4xl text-center flex flex-col gap-3 mt-20">
+      <h4 className="text-4xl text-center flex flex-col gap-3 mt-20">
         Bienvenido a<br /> <span className="text-blue-600">Project Management</span>
-      </h3>
+      </h4>
 
       {isLoading ? (
         <p className="mt-36 text-gray-500 font-light text-2xl">Cargando equipos...</p>

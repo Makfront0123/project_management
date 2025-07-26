@@ -7,7 +7,7 @@ import { loginUser, logoutUser, registerUser } from '../services/auth_services'
 import { getErrorMessage } from '../utils/getErrorMessage'
 import type { JwtPayload, User } from '../types/auth'
 
- 
+
 
 type AuthStore = {
     user: User | null
@@ -35,11 +35,13 @@ export const useAuthStore = create<AuthStore>()(
                     set({
                         user: {
                             id: decoded.id,
-                            email: decoded.email
+                            email: decoded.email,
+                            name: decoded.name,
                         },
                         token: data.user.token,
-                        loading: false
-                    })
+                        loading: false,
+                    });
+
                     return data.message
                 } catch (error: unknown) {
                     set({ user: null, token: null, loading: false })
@@ -55,8 +57,9 @@ export const useAuthStore = create<AuthStore>()(
 
                     set({
                         user: {
-                            id: data._id,      
-                            email: data.email
+                            id: data._id,
+                            email: data.email,
+                            name: data.email,
                         },
                         loading: false
                     })
