@@ -124,7 +124,7 @@ const ProjectDetails = () => {
         )}
 
         <div className="flex items-start space-y-4 gap-x-10">
-          <div className="flex flex-col gap-y-6 items-center min-w-4xl">
+          <div className="flex flex-col gap-y-6 items-center min-w-4xl min-h-[130vh]">
             {tasks.map((task) => {
               const assignment = findAssignmentForTask(task._id);
 
@@ -157,6 +157,7 @@ const ProjectDetails = () => {
                       await deleteTask(task._id, projectId!);
                       await getTasks(projectId!);
                     }}
+                    onCompleteAssignedTask={onCompleteAssignedTask}
                   />
 
                   <div className="mt-2 ml-4">

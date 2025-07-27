@@ -12,6 +12,8 @@ const DashboardPage = () => {
     confirmJoinWithCode,
   } = useTeamMemberStore()
 
+
+
   const navigate = useNavigate()
 
   const [showWelcomeModal, setShowWelcomeModal] = useState(false)
@@ -73,7 +75,7 @@ const DashboardPage = () => {
   const handleTeam = () => navigate('/create-team')
   const handleJoinTeam = () => navigate('/join-team')
 
-  
+
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-screen">

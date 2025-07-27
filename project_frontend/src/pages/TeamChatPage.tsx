@@ -9,6 +9,7 @@ import type { User } from "../types/auth";
 import usePrivateChat from "../hooks/usePrivateChat";
 import type { MessageFormValues } from "../types/message";
 import useMessageSound from "../hooks/useMessageSound";
+import { formatDate } from "../utils/formatDate";
 
 
 
@@ -131,7 +132,13 @@ const TeamChatPage = () => {
                             messages.map((msg) => (
                                 <div key={msg._id} className="p-2 rounded bg-gray-100">
                                     <p className="text-sm text-gray-600">
-                                        <strong>{msg.sender?.name || 'Usuario desconocido'}</strong>: {msg.text}
+                                        <strong>
+                                            {msg.sender?.name || 'Usuario desconocido'}
+                                            <span className="text-[12px] text-gray-400 font-light ml-2">
+                                                {formatDate(msg.createdAt)}
+                                            </span>
+                                        </strong>
+                                        <p>{msg.text}</p>
                                     </p>
                                 </div>
                             ))

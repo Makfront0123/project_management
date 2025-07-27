@@ -14,6 +14,7 @@ import type { Attachment } from "../types/attachment";
 import type { ProjectFormValues } from "../types/projects";
 
 
+
 export const useProjectDetails = () => {
     const { projectId, teamId } = useParams<{ projectId: string; teamId: string }>();
     const { currentProject, isLoading, getProject, updateProject, deleteProject } = useProjectStore();
@@ -36,6 +37,8 @@ export const useProjectDetails = () => {
     const { addTagToTask, removeTagFromTask } = useTagTaskStore();
     const { attachmentsByTask, getAllAttachmentsForTasks, updateAttachment, deleteAttachment } = useAttachmentStore();
     const { completeAssignedTask } = useTaskAssignamentStore();
+    //const socket = useNotifications(teamId);
+
 
     const navigate = useNavigate();
 
@@ -128,12 +131,28 @@ export const useProjectDetails = () => {
         setAttachmentToEdit(null);
         setIsEditAttachmentModalOpen(false);
     };
-
     const onCompleteAssignedTask = async (taskId: string, userId: string) => {
         await completeAssignedTask(taskId, userId);
         await getTasksToUserAssignments(projectId!);
-    };
 
+        // const completedTask = tasks.find(task => task._id === taskId);
+
+        // Verifica si el socket está disponible y el usuario existe
+        /*
+         if (socket && user && completedTask) {
+             // Usa el socket existente para emitir el evento
+             socket.emit("taskCompleted", {
+                 taskId,
+                 taskName: completedTask.name,
+                 completedBy: {
+                     userId: user.id,
+                     userName: user.name,
+                 },
+                 teamId: teamId,
+             });
+         }
+        */
+    };
     const onDeleteAttachment = async (attachmentId: string, taskId: string) => {
         if (!teamId) return;
         await deleteAttachment(attachmentId, teamId);
@@ -163,9 +182,15 @@ export const useProjectDetails = () => {
     };
 
     const team = useMemo(() => teamMemberships.find((t) => t.teamId === teamId), [teamId, teamMemberships]);
-    const acceptedMembers = useMemo(() => teamMembers.filter((m) => m.status === "accepted" && m.role !== "admin"), [teamMembers]);
-    const isAdmin = team?.role === "admin";
 
+    
+    const acceptedMembers = useMemo(() =>
+        (teamMembers ?? []).filter((m) => m.status === "accepted" && m.role !== "admin"),
+        [teamMembers]
+    );
+
+    const isAdmin = team?.role === "admin";
+    
     const validate = (values: TaskFormValues) => {
         const errors: Partial<Record<keyof TaskFormValues, string>> = {};
         if (!values.name.trim()) errors.name = "El nombre es obligatorio";

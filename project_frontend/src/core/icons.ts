@@ -1,6 +1,6 @@
 export const icons = {
     user: "/icons/user.png",
-    notification: "/images/icons/notification.webp",
+    notification: "/icons/mdi--bell.svg",
     team: "/images/icons/team.webp",
     logout: "/images/icons/logout.webp",
 }
