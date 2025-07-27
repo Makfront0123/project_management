@@ -1,5 +1,5 @@
 export type NotificationType = {
-  _id: string;
+ 
   message: string;
   read: boolean;
   recipient: {
@@ -7,4 +7,5 @@ export type NotificationType = {
     name: string;
     email: string;
   };
+  teamId: string;
 };

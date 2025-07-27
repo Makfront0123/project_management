@@ -3,8 +3,8 @@ import { useAuthStore } from "../stores/auth_store"
 import { icons } from "../core/icons"
 
 import NotificationDropdown from "./DropdownNotification"
-import { useProjectDetails } from "../hooks/useProjectDetails";
 import { useNotifications } from "../hooks/useNotications";
+
 
 
 
@@ -12,11 +12,9 @@ import { useNotifications } from "../hooks/useNotications";
 const MainLayout = () => {
     const { logout, user } = useAuthStore();
 
-    // Llama al hook que obtiene los detalles del proyecto (incluyendo teamId)
-    const { teamId } = useProjectDetails();
 
-    // Llama al hook de notificaciones, pasándole el teamId
-    useNotifications(teamId);
+
+    useNotifications();
 
     return (
         <main className="w-full h-full flex flex-col">

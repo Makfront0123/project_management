@@ -6,9 +6,11 @@ import { useForm } from "../hooks/useForm";
 import Table from "../components/Table";
 import Modal from "../components/Modal";
 import type { ProjectForm } from "../types/projects";
+import { useNotifications } from "../hooks/useNotications";
 
 const TeamPage = () => {
   const { teamId } = useParams<{ teamId: string }>();
+  useNotifications(teamId);
 
   const {
     teamMemberships,

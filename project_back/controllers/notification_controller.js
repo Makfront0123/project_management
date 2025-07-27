@@ -17,7 +17,7 @@ export const createNotification = async (req, res) => {
 
 export const getNotificationsForUser = async (req, res) => {
     try {
-        const userId = req.user.id; // asegúrate de tener middleware de auth que setea req.user
+        const userId = req.user.id;  
         const notifications = await NotificationRepository.getAllByUser(userId);
         res.json(notifications);
     } catch (err) {
