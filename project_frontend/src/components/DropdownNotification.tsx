@@ -33,7 +33,7 @@ const NotificationDropdown = () => {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-64 z-90 bg-white shadow-lg rounded-lg max-h-80 overflow-y-auto">
+        <div className="absolute left-[110%] bottom-[10%] mt-2 w-64 z-90 bg-white shadow-lg rounded-lg max-h-80 overflow-y-auto">
           {isLoading ? (
             <div className="p-4 text-gray-500 text-sm">Cargando notificaciones...</div>
           ) : validNotifications.length === 0 ? (

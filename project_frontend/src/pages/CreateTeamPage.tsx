@@ -50,7 +50,7 @@ const CreateTeamPage = () => {
     return (
         <section className="w-full h-full flex items-center justify-center">
             <div className="max-w-xl mx-auto mt-20 p-6 min-h-[50vh] shadow rounded">
-                <h2 className="text-2xl font-semibold mb-4 text-center">Crear nuevo equipo</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-center text-white">Crear nuevo equipo</h2>
                 <CreateTeamForm form={form} />
 
                 <Modal

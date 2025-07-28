@@ -35,7 +35,7 @@ export const createTeam = async (req, res) => {
 };
 
 export const getAllTeams = async (req, res) => {
-    const teams = await teamService.getAllTeams();
+    const teams = await teamService.getAllTeams(req.query.page, req.query.limit);
     res.status(200).json(teams);
 };
 export const getTeam = async (req, res) => {
@@ -45,7 +45,7 @@ export const getTeam = async (req, res) => {
 
 export const updateTeam = async (req, res) => {
     try {
-        const teamId = req.params?.teamId 
+        const teamId = req.params?.teamId
         const updatedTeam = await teamService.updateTeam(teamId, req.body);
         res.status(200).json({
             message: "Team updated successfully",

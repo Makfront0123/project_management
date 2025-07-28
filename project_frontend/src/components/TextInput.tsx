@@ -19,7 +19,7 @@ export const TextInput = ({
 }: TextInputProps) => {
   return (
     <div className="flex flex-col gap-y-1">
-      <label htmlFor={name} className="text-sm font-medium">
+      <label htmlFor={name} className="text-sm font-medium text-white">
         {label}
       </label>
       <input
@@ -29,7 +29,7 @@ export const TextInput = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="border border-gray-300 rounded-[20px] p-3 w-[30rem]"
+        className="border border-gray-300 rounded-[20px] p-3 w-[30rem] text-white"
       />
       {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>

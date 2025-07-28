@@ -1,16 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
-import { useTeamMemberStore } from "../stores/team_member_store";
-import { Link, useParams } from "react-router";
-import { useProjectStore } from "../stores/project_store";
-import { useForm } from "../hooks/useForm";
-import Table from "../components/Table";
+import { useState, useMemo, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router";
 import Modal from "../components/Modal";
-import type { ProjectForm } from "../types/projects";
-import { useNotifications } from "../hooks/useNotications";
-import { useNavigate } from 'react-router';
-import { useTeamStore } from "../stores/team_store";
-import type { CreateTeamFormValue } from "../types/team";
+import Paginator from "../components/Paginator";
+import Table from "../components/Table";
 import TeamMenuButton from "../components/TeamMenuButton";
+import { useForm } from "../hooks/useForm";
+import { useNotifications } from "../hooks/useNotications";
+import { useProjectStore } from "../stores/project_store";
+import { useTeamMemberStore } from "../stores/team_member_store";
+import { useTeamStore } from "../stores/team_store";
+import type { ProjectForm } from "../types/projects";
+import type { CreateTeamFormValue } from "../types/team";
 
 const TeamPage = () => {
   const { teamId } = useParams<{ teamId: string }>();
@@ -31,16 +31,22 @@ const TeamPage = () => {
     isLoading,
     getProjects,
     createProject,
+    page, 
+    totalPages,  
   } = useProjectStore();
 
   const { updateTeam, deleteTeam } = useTeamStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [teamsLoading, setTeamsLoading] = useState(true);
-
   const [isEditTeamModalOpen, setIsEditTeamModalOpen] = useState(false);
 
-
+ 
+  const handlePageChange = (newPage: number) => {
+    if (teamId) {
+      getProjects(teamId, newPage);
+    }
+  };
 
   const handleDeleteTeam = async (teamId: string) => {
     if (!teamId) return;
@@ -48,11 +54,9 @@ const TeamPage = () => {
     if (window.confirm("¿Estás seguro de que quieres eliminar este equipo? Esta acción es irreversible.")) {
       try {
         await deleteTeam(teamId);
-
         navigate('/teams');
       } catch (error) {
         console.error("Error al eliminar el equipo:", error);
-
       }
     }
   };
@@ -73,7 +77,8 @@ const TeamPage = () => {
 
   useEffect(() => {
     if (teamId) {
-      getProjects(teamId);
+       
+      getProjects(teamId); 
       fetchTeamMembers(teamId);
     }
   }, [teamId, getProjects, fetchTeamMembers]);
@@ -114,7 +119,6 @@ const TeamPage = () => {
       name: team?.name || '',
       description: team?.description || '',
     },
-
     onSubmit: async (formValues) => {
       if (!teamId) return;
       try {
@@ -144,11 +148,9 @@ const TeamPage = () => {
 
   return (
     <div className="flex w-full h-screen">
-      <div className="w-2/3 overflow-y-auto mt-20 px-4">
-
+      <div className="w-2/3 overflow-y-auto mt-0 px-4">
         <div className="flex items-center justify-between px-20">
-
-          <h2 className="text-3xl font-bold mb-13">{team.name}</h2>
+          <h2 className="text-3xl mb-13 text-white font-light">{team.name}</h2>
           <div className="flex item-center gap-2">
             {isAdmin && (
               <Link
@@ -158,27 +160,21 @@ const TeamPage = () => {
                 Ver Solicitudes
               </Link>
             )}
-
             <Link
               to={`/team/${team.teamId}/chat`}
               className="px-4 py-2 bg-green-600 mx-auto text-white rounded-md mb-12"
             >
               Entrar al Chat del Equipo
             </Link>
-            {
-              isAdmin && (
-                <TeamMenuButton onDelete={() => handleDeleteTeam(teamId ?? '')} onEdit={() => setIsEditTeamModalOpen(true)} />
-              )
-            }
+            {isAdmin && (
+              <TeamMenuButton onDelete={() => handleDeleteTeam(teamId ?? '')} onEdit={() => setIsEditTeamModalOpen(true)} />
+            )}
           </div>
-
         </div>
-
-
         {teamMembers.length === 0 ? (
           <p className="text-gray-500">Este equipo aún no tiene miembros.</p>
         ) : (
-          <ul className="space-y-2 w-full px-20 min-h-[130vh] block">
+          <ul className="space-y-2 w-full px-0 min-h-[130vh] block text-white">
             {teamMembers
               .filter((member) => member.teamId === teamId && member.status === "accepted")
               .map((member) => (
@@ -190,31 +186,35 @@ const TeamPage = () => {
               ))}
           </ul>
         )}
-
       </div>
-
-      <div className="w-1/3 h-screen bg-gray-400 px-4 py-8">
-
+      <div className="w-1/3 h-screen px-4 py-8">
         <div className="flex flex-col items-center justify-center">
-          <h2 className="text-3xl font-bold mb-6 mt-14">Proyectos</h2>
-
+          <h2 className="text-3xl font-bold mb-6 mt-14 text-white">Proyectos</h2>
           {isLoading ? (
             <p className="text-gray-500">Cargando proyectos...</p>
           ) : (
-            <ul className="space-y-2 w-full px-20">
-              {projects.map((project) => (
-                <Link
-                  to={`/team/${team.teamId}/project/${project._id}`}
-                  key={project._id}
-                  className="flex flex-col gap-y-2 items-start justify-between p-5 rounded-lg bg-white shadow hover:shadow-xl shadow-gray-300 transition"
-                >
-                  <p className="text-xl font-medium">{project.name}</p>
-                  <p>{project.description}</p>
-                </Link>
-              ))}
-            </ul>
+            <>
+              <ul className="space-y-2 w-full px-20">
+                {projects.map((project) => (
+                  <Link
+                    to={`/team/${team.teamId}/project/${project._id}`}
+                    key={project._id}
+                    className="flex flex-col gap-y-2 items-start justify-between p-5 rounded-lg bg-white shadow hover:shadow-xl shadow-gray-300 transition"
+                  >
+                    <p className="text-xl font-medium">{project.name}</p>
+                    <p>{project.description}</p>
+                  </Link>
+                ))}
+              </ul>
+              {totalPages > 1 && (
+                <Paginator
+                  page={page}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}  
+                />
+              )}
+            </>
           )}
-
           {!projects.length && (
             <div className="flex flex-col items-center justify-center mt-40">
               <p className="text-gray-500">No hay proyectos en este equipo.</p>
@@ -222,31 +222,26 @@ const TeamPage = () => {
                 <div className="flex items-center mt-20 gap-x-10">
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="px-4 py-3 border-2 border-gray-600 rounded-lg cursor-pointer hover:scale-105 transition"
+                    className="px-4 py-3 border-2 border-gray-600 text-white rounded-lg cursor-pointer hover:scale-105 transition"
                   >
                     Crear Proyecto
                   </button>
                 </div>
               )}
             </div>
-
-
           )}
-
-          {
-            isAdmin && projects.length > 0 &&
+          {isAdmin && projects.length > 0 && (
             <div className="flex items-center mt-20 gap-x-10">
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="px-4 py-3 border-2 border-gray-600 rounded-lg cursor-pointer hover:scale-105 transition"
+                className="px-4 py-3 border-2 border-gray-600 text-white rounded-lg cursor-pointer hover:scale-105 transition"
               >
                 Crear Proyecto
               </button>
             </div>
-          }
+          )}
         </div>
       </div>
-
       {isAdmin && (
         <Modal
           isOpen={isModalOpen}
@@ -264,7 +259,6 @@ const TeamPage = () => {
               />
               {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
             </div>
-
             <div>
               <label className="block text-sm font-medium">Descripción</label>
               <textarea
@@ -275,7 +269,6 @@ const TeamPage = () => {
               />
               {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
             </div>
-
             <button
               type="submit"
               disabled={isSubmitting}
@@ -286,7 +279,6 @@ const TeamPage = () => {
           </form>
         </Modal>
       )}
-
       {isAdmin && (
         <Modal
           isOpen={isEditTeamModalOpen}

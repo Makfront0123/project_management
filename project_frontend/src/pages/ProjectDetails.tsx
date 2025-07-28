@@ -91,9 +91,9 @@ const ProjectDetails = () => {
 
   if (isAdmin) {
     return (
-      <div className="p-20 w-full h-full flex flex-col  gap-8">
+      <div className="p-0 w-full h-full flex flex-col  gap-8">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">📋 Tareas del proyecto</h2>
+          <h2 className="text-2xl font-bold text-white">📋 Tareas del proyecto</h2>
           <div className="flex items-center gap-x-20">
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded-lg"

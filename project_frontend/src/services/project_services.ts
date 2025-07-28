@@ -28,10 +28,10 @@ export const createProject = async (
 };
 
 
-export const getProjects = async (teamId: string) => {
+export const getProjects = async (teamId: string, page = 1, limit = 10) => {
 
     const token = useAuthStore.getState().token;
-    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects`, {
+    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects?page=${page}&limit=${limit}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }

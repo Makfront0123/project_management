@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { useAuthStore } from '../stores/auth_store'
-import type { Team, TeamResponse } from '../types/team'
+import type { PagedTeamsResponse, Team, TeamResponse } from '../types/team'
 
 export const createTeam = async (
   name: string,
@@ -22,21 +22,20 @@ export const createTeam = async (
   return response.data
 }
 
-export const getAllTeams = async (): Promise<Team[]> => {
- 
-  const token = useAuthStore.getState().token
+export const getAllTeams = async (page: number, limit: number): Promise<PagedTeamsResponse> => {
+  const token = useAuthStore.getState().token;
 
   const response = await axios.get(
-    '/api/v1/teams',
+    `/api/v1/teams?page=${page}&limit=${limit}`,
     {
       headers: {
         Authorization: `Bearer ${token}`
       }
     }
-  )
- 
+  );
+
   return response.data;
-}
+};
 
 export const updateTeam = async (id: string, data: Partial<Team>) => {
   const token = useAuthStore.getState().token
@@ -54,7 +53,7 @@ export const updateTeam = async (id: string, data: Partial<Team>) => {
   return response.data
 }
 
-export const  deleteTeam = async (id: string) => {
+export const deleteTeam = async (id: string) => {
   const token = useAuthStore.getState().token
 
   const response = await axios.delete<TeamResponse>(

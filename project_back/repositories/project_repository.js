@@ -12,9 +12,31 @@ class ProjectRepository {
     async createProject(data) {
         return await Project.create(data);
     }
-    async getAllProjects(teamId) {
-        return await Project.find({ teamId });
+   async getAllProjects(teamId, page = 1, limit = 10) {
+    try {
+        const skip = (page - 1) * limit;  
+        
+       
+        const projects = await Project.find({ teamId })
+            .skip(skip)
+            .limit(limit);
+        
+     
+        const totalProjects = await Project.countDocuments({ teamId });
+        
+ 
+        const totalPages = Math.ceil(totalProjects / limit);
+        
+        return {
+            projects,
+            totalPages,
+            totalProjects,
+        };
+    } catch (error) {
+        console.error("Error fetching projects with pagination:", error);
+        throw error;
     }
+}
     async getProjectById(teamId, projectId) {
         return await Project.findOne({
             _id: new mongoose.Types.ObjectId(projectId),

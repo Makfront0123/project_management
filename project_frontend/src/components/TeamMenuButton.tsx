@@ -20,7 +20,7 @@ const TeamMenuButton: React.FC<TeamMenuButtonProps> = ({ onEdit, onDelete }) => 
   }, []);
 
   return (
-    <div className="relative" ref={menuRef}>
+    <div className="relative mt-2 ml-5" ref={menuRef}>
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         className="text-gray-700 hover:text-gray-900 focus:outline-none"

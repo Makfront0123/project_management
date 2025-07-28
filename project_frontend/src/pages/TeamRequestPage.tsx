@@ -13,7 +13,7 @@ const TeamRequestPage = () => {
 
     return (
         <div className="w-full h-full px-10 ">
-            <h2 className="text-2xl font-bold mt-20 mb-6">Solicitudes pendientes</h2>
+            <h2 className="text-2xl font-bold mt-20 mb-6 text-white">Solicitudes pendientes</h2>
 
             {teamMembers.length === 0 ? (
                 <p className="text-gray-500">No hay solicitudes pendientes.</p>

@@ -4,8 +4,8 @@ import notificationRepo from "../repositories/notification_repository.js";
 import teamMemberRepo from "../repositories/team_member_repository.js";
 import messageRepo from "../repositories/message_repository.js";
 class TeamService {
-    async getAllTeams() {
-        return await teamRepo.getAllTeams();
+    async getAllTeams( page = 1, limit = 4) {
+        return await teamRepo.getAllTeams( page, limit);
     }
 
     async getTeamById(id) {

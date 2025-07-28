@@ -85,8 +85,8 @@ const TeamChatPage = () => {
     );
 
     return (
-        <div className="h-screen w-screen flex p-20">
-            <div className="bg-gray-200 rounded-xl min-w-[30vh] h-full">
+        <div className="h-screen w-full flex p-0">
+            <div className="bg-white rounded-xl min-w-[30vh] max-h-[77.5vh]">
                 <div className="flex flex-col p-10 gap-y-2">
                     <button
                         onClick={() => {
@@ -122,9 +122,8 @@ const TeamChatPage = () => {
                     ))}
                 </div>
             </div>
-
             <div className="flex flex-col w-full">
-                <div className="flex flex-col min-h-[72vh] overflow-y-auto bg-gray-100 p-4 rounded">
+                <div className="flex flex-col min-h-[72vh] overflow-y-auto bg-gray-900 p-4 rounded">
                     <div className="mt-4 space-y-2">
                         {isLoading ? (
                             <p>Cargando mensajes...</p>
@@ -146,19 +145,19 @@ const TeamChatPage = () => {
                     </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-2 mt-2">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                     <div className="flex">
                         <input
                             name="message"
                             value={values.message}
                             onChange={handleChange}
-                            className="flex-1 border p-2 rounded-l"
+                            className="flex-1 border p-2 rounded-l bg-gray-900"
                             placeholder="Mensaje para el equipo..."
                             disabled={isSubmitting}
                         />
                         <button
                             type="submit"
-                            className="bg-blue-600 text-white px-4 rounded-r"
+                            className="bg-red-600 text-white px-4 rounded-r"
                             disabled={isSubmitting}
                         >
                             Enviar
@@ -169,6 +168,7 @@ const TeamChatPage = () => {
                     )}
                 </form>
             </div>
+
         </div>
     );
 };

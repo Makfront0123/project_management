@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { getUserTeamStatus } from '../services/auth_services'
-import { createTeam, deleteTeam, getAllTeams as fetchAllTeams, updateTeam } from '../services/team_services'
+import { createTeam, deleteTeam, getAllTeams, updateTeam } from '../services/team_services'
 import { getErrorMessage } from '../utils/getErrorMessage'
 import type { Team } from '../types/team'
 import toast from 'react-hot-toast'
@@ -10,9 +10,13 @@ import toast from 'react-hot-toast'
 type TeamStore = {
   teams: Team[]
   isLoading: boolean
+  page: number
+  limit: number
+  totalPages: number
+  totalTeams: number
   fetchTeams: () => Promise<void>
   createTeam: (name: string, description: string) => Promise<string>
-  getAllTeams: () => Promise<void>
+  getAllTeams: (page?: number, limit?: number) => Promise<void>
   updateTeam: (data: Partial<Team>, teamId: string) => Promise<string>
   deleteTeam: (id: string) => Promise<string>
 }
@@ -20,7 +24,10 @@ type TeamStore = {
 export const useTeamStore = create<TeamStore>((set) => ({
   teams: [],
   isLoading: false,
-
+  page: 1,
+  limit: 4,
+  totalPages: 1,
+  totalTeams: 0,
   fetchTeams: async () => {
     set({ isLoading: true })
     try {
@@ -50,18 +57,25 @@ export const useTeamStore = create<TeamStore>((set) => ({
     }
   },
 
-  getAllTeams: async () => {
-    set({ isLoading: true })
+  getAllTeams: async (page = 1, limit = 4) => {
+    set({ isLoading: true, teams: [] })
     try {
-      const teams = await fetchAllTeams()
-      set({ teams, isLoading: false })
+      const response = await getAllTeams(page, limit)
+      console.log('response', response)
+       set({
+        teams: response.teams,         
+        totalPages: response.totalPages,
+        totalTeams: response.totalTeams,
+        page,                          
+        isLoading: false,
+      });
     } catch (error) {
       console.error("Error fetching teams:", error)
       set({ isLoading: false })
     }
   },
   updateTeam: async (data: Partial<Team>, teamId: string) => {
-    console.log('state',teamId)
+    console.log('state', teamId)
     set({ isLoading: true })
     try {
       const { team, message } = await updateTeam(teamId, data)

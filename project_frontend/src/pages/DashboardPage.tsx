@@ -79,8 +79,8 @@ const DashboardPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-screen">
-      <h4 className="text-4xl text-center flex flex-col gap-3 mt-20">
-        Bienvenido a<br /> <span className="text-blue-600">Project Management</span>
+      <h4 className="text-4xl text-center flex flex-col gap-3 mt-20 text-white">
+        Bienvenido a<br /> <span className="text-white">Project Management</span>
       </h4>
 
       {isLoading ? (
@@ -89,7 +89,7 @@ const DashboardPage = () => {
         <>
           <h3 className="mt-36 text-gray-500 font-light text-3xl">Aún no perteneces a ningún equipo.</h3>
           <div className="flex items-center mt-20 gap-x-10">
-            <button onClick={handleTeam} className="px-4 py-3 border-2 border-gray-600 rounded-lg cursor-pointer hover:scale-105 transition">
+            <button onClick={handleTeam} className="px-4 py-3 border-2 text-white border-gray-600 rounded-lg cursor-pointer hover:scale-105 transition">
               Crear equipo
             </button>
             <button onClick={handleJoinTeam} className="px-4 py-3 bg-blue-600 text-white rounded-lg cursor-pointer hover:scale-105 transition">
@@ -105,15 +105,15 @@ const DashboardPage = () => {
               <button
                 key={team.teamId}
                 onClick={() => handleTeamClick(team.teamId, team.role)}
-                className="w-full text-left p-4 border rounded shadow hover:bg-gray-50 transition"
+                className="w-full text-left p-4 border rounded shadow hover:bg-gray-50 bg-gray-300 transition"
               >
                 <p className="text-xl font-medium">{team.name}</p>
                 <p className="text-gray-500 text-sm">Rol: {team.role}</p>
               </button>
             ))}
           </ul>
-          <div className="flex items-center mt-20 gap-x-10">
-            <button onClick={handleTeam} className="px-4 py-3 border-2 border-gray-600 rounded-lg cursor-pointer hover:scale-105 transition">
+          <div className="flex items-center mt-10 gap-x-10">
+            <button onClick={handleTeam} className="px-4 py-3 border-2 border-gray-600 text-white rounded-lg cursor-pointer hover:scale-105 transition">
               Crear equipo
             </button>
             <button onClick={handleJoinTeam} className="px-4 py-3 bg-blue-600 text-white rounded-lg cursor-pointer hover:scale-105 transition">

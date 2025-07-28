@@ -31,12 +31,18 @@ export const createProject = async (req, res) => {
 export const getAllProjects = async (req, res) => {
     try {
         const { teamId } = req.params;
-        const projects = await projectService.getAllProjects(teamId);
-        res.status(200).json(projects);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;  
+
+        const data = await projectService.getAllProjects(teamId, page, limit);
+
+        res.status(200).json(data);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Error fetching projects:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 };
+
 
 export const getProject = async (req, res) => {
     try {
