@@ -11,23 +11,17 @@ export const useNotifications = () => {
     const socketRef = useRef<Socket | null>(null);
 
     useEffect(() => {
-        // La conexión solo debe ocurrir si el usuario está autenticado y no hay un socket activo.
         if (user && !socketRef.current) {
             console.log("Condiciones cumplidas. Conectando al socket y cargando notificaciones para el usuario.");
-
-            // Conecta el socket al servidor
             const socket = io("http://localhost:3000", {
                 withCredentials: true,
             });
             socketRef.current = socket;
-
-            // Une al usuario a su sala personal para recibir notificaciones
             socket.emit("joinUserRoom", user.id);
 
-            // Carga las notificaciones existentes del usuario
             fetchNotifications(user.id);
 
-            // Escucha los eventos de notificaciones
+         
             socket.on("newNotification", (notification: NotificationType) => {
                 console.log("📩 Notificación general recibida:", notification);
                 addNotification(notification);

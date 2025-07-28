@@ -9,7 +9,7 @@ const router = express.Router();
 router.post("/teams",authenticate ,createTeam);
 router.get("/teams",authenticate, getAllTeams);
 router.get("/teams/:id",authenticate ,getTeam);
-router.put("/teams/:id",authenticate, isTeamAdmin, updateTeam);
-router.delete("/teams/:id",authenticate, isTeamAdmin, deleteTeam);
+router.put("/teams/:teamId",authenticate, isTeamAdmin, updateTeam);
+router.delete("/teams/:teamId",authenticate, isTeamAdmin, deleteTeam);
 
 export default router;

@@ -19,5 +19,8 @@ class TaskAssignmentService {
     async getTasksAssignedToUser(userId) {
         return await taskAssignmentRepo.getTasksAssignedToUser(userId);
     }
+    async deleteByTaskId(taskId) {
+        return await taskAssignmentRepo.deleteByTaskId(taskId);
+    }
 }
 export default new TaskAssignmentService();

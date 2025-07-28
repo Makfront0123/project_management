@@ -22,8 +22,8 @@ class TaskAssignmentRepository {
     }
 
     async getTasksAssignedToUser(userId) {
-    return await TaskAssignment.find({ userId });
-}
+        return await TaskAssignment.find({ userId });
+    }
 
 
     async getUserAssignedToTask(taskId, userId) {
@@ -55,6 +55,10 @@ class TaskAssignmentRepository {
 
         return filtered;
     }
+    async deleteByTaskId(taskId) {
+        return await TaskAssignment.deleteMany({ taskId });
+    }
+
 }
 
 export default new TaskAssignmentRepository();

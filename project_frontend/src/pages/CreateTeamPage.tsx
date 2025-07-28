@@ -7,12 +7,16 @@ import { createTeam } from "../services/team_services"
 import Modal from "../components/Modal"
 import type { CreateTeamFormValue, TeamResponse } from "../types/team"
 import { images } from "../core/images"
+import { useNavigate } from "react-router"
 
- 
+
+
+
+
 const CreateTeamPage = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const [createdCode, setCreatedCode] = useState("")
-
+    const navigate = useNavigate()
     const form = useForm<CreateTeamFormValue>({
         initialValues: {
             name: "",
@@ -30,6 +34,7 @@ const CreateTeamPage = () => {
                 toast.success(message)
                 setCreatedCode(team.code)
                 setModalOpen(true)
+                navigate("/dashboard")
             } catch (err: unknown) {
                 const msg = getErrorMessage(err)
                 toast.error(msg)

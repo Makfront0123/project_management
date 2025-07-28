@@ -127,3 +127,13 @@ export const completeAssignedTask = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const deleteAllAssignmentsByTaskId = async (req, res) => {
+    try {
+        const { taskId } = req.params;
+        const deleted = await taskAssignmentService.deleteByTaskId(taskId);
+        res.status(200).json({ message: "Assignments deleted successfully", deleted });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}

@@ -64,3 +64,16 @@ export const deleteAttachment = async (attachmentId: string, teamId: string) => 
     console.log(response.data);
     return response.data;
 };
+
+
+export const deleteByTaskId = async (taskId: string) => {
+    const token = useAuthStore.getState().token;
+
+    const response = await axios.delete(`${baseUrl}/tasks/${taskId}/attachments`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    console.log(response.data);
+    return response.data;
+};

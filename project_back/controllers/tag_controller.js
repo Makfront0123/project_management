@@ -53,6 +53,16 @@ export const deleteTag = async (req, res) => {
     }
 }
 
+export const deleteTagsByProjectId = async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const deletedTags = await tagService.deleteTagsByProjectId(projectId);
+        res.status(200).json({ message: "Tags deleted successfully", deletedTags });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 export const updateTag = async (req, res) => {
     try {
         const tagId = req.params.tagId;

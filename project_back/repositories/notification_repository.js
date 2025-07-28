@@ -11,5 +11,16 @@ export const NotificationRepository = {
 
   markAsRead: async (id) => {
     return await Notification.findByIdAndUpdate(id, { read: true }, { new: true });
-  }
+  },
+  deleteByTeamId: async (teamId) => {
+    return await Notification.deleteMany({ team: teamId });
+  },
+
+ 
+  deleteByProjectId: async (projectId) => {
+    return await Notification.deleteMany({ project: projectId });
+  },
+
 };
+
+export default NotificationRepository;

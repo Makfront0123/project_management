@@ -24,6 +24,7 @@ export const getTasks = async (projectId: string) => {
             }
         }
     )
+    console.log('api', response.data)
     return response.data
 }
 

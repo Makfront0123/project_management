@@ -142,7 +142,7 @@ export const useProjectDetails = () => {
 
         const completedTeamMember = teamMembers.find(member => member.userId._id === userId);
 
-        // Encuentra al miembro del equipo que es el administrador
+    
         const adminTeamMember = teamMembers.find(member => member.role === "admin");
 
 

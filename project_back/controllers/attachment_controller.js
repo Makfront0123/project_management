@@ -82,3 +82,12 @@ export const deleteAttachment = async (req, res) => {
 
 }
  
+export const deleteByTaskId = async (req, res) => {
+    try {
+        const { taskId } = req.params;
+        await attachmentService.deleteByTaskId(taskId);
+        res.status(200).json({ message: "Attachments deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}

@@ -6,6 +6,7 @@ class TeamMemberRepository {
   }
 
   async deleteMembersByTeamId(teamId) {
+    console.log(teamId);
     return await TeamMember.deleteMany({ teamId });
   }
 

@@ -3,19 +3,19 @@ import { icons } from "../core/icons";
 import useNotificationStore from "../stores/notification_store";
 
 const NotificationDropdown = () => {
-  const { notifications, isLoading, markNotificationAsRead } = useNotificationStore(); // <-- Obtén la función del store
+  const { notifications, isLoading, markNotificationAsRead } = useNotificationStore();
   const [open, setOpen] = useState(false);
 
   const validNotifications = notifications ?? [];
 
   const unreadNotifications = validNotifications.filter((notif) => !notif.read);
 
- 
+
   const handleNotificationClick = async (notifId: string, isRead: boolean) => {
     if (!isRead) {
       await markNotificationAsRead(notifId);
     }
-    
+
   };
 
   return (
@@ -43,7 +43,7 @@ const NotificationDropdown = () => {
               <div
                 key={notif._id}
                 className={`p-3 border-b border-gray-200 text-sm cursor-pointer ${notif.read ? 'text-gray-500' : 'font-semibold text-gray-800'}`}
-                onClick={() => handleNotificationClick(notif._id, notif.read)}
+                onClick={() => handleNotificationClick(notif._id ?? '', notif.read)}
               >
                 {notif.message}
               </div>

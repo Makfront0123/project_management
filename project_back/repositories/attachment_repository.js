@@ -21,5 +21,8 @@ class AttachmentRepository {
     async deleteAttachment(attachmentId, teamId) {
         return await Attachment.findOneAndDelete({ _id: attachmentId, teamId });
     }
+    async deleteByTaskId(taskId) {
+        return await Attachment.deleteMany({ taskId });
+    }
 }
 export default new AttachmentRepository();  

@@ -34,3 +34,13 @@ export const markNotificationAsRead = async (req, res) => {
         res.status(500).json({ error: "Error al marcar como leída" });
     }
 };
+
+export const deleteNotificationsByTeamId = async (req, res) => {
+    const { teamId } = req.params;
+    try {
+        await NotificationRepository.deleteByTeamId(teamId);
+        res.status(200).json({ message: "Notificaciones eliminadas" });
+    } catch (err) {
+        res.status(500).json({ error: "Error al eliminar notificaciones" });
+    }
+};

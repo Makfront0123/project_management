@@ -37,3 +37,34 @@ export const getAllTeams = async (): Promise<Team[]> => {
  
   return response.data;
 }
+
+export const updateTeam = async (id: string, data: Partial<Team>) => {
+  const token = useAuthStore.getState().token
+
+  const response = await axios.put<TeamResponse>(
+    `/api/v1/teams/${id}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
+
+  return response.data
+}
+
+export const  deleteTeam = async (id: string) => {
+  const token = useAuthStore.getState().token
+
+  const response = await axios.delete<TeamResponse>(
+    `/api/v1/teams/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
+
+  return response.data
+} 

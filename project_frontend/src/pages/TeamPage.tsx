@@ -7,10 +7,16 @@ import Table from "../components/Table";
 import Modal from "../components/Modal";
 import type { ProjectForm } from "../types/projects";
 import { useNotifications } from "../hooks/useNotications";
+import { useNavigate } from 'react-router';
+import { useTeamStore } from "../stores/team_store";
+import type { CreateTeamFormValue } from "../types/team";
+import TeamMenuButton from "../components/TeamMenuButton";
 
 const TeamPage = () => {
   const { teamId } = useParams<{ teamId: string }>();
-  useNotifications(teamId);
+  useNotifications();
+
+  const navigate = useNavigate();
 
   const {
     teamMemberships,
@@ -27,8 +33,29 @@ const TeamPage = () => {
     createProject,
   } = useProjectStore();
 
+  const { updateTeam, deleteTeam } = useTeamStore();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [teamsLoading, setTeamsLoading] = useState(true);
+
+  const [isEditTeamModalOpen, setIsEditTeamModalOpen] = useState(false);
+
+
+
+  const handleDeleteTeam = async (teamId: string) => {
+    if (!teamId) return;
+
+    if (window.confirm("¿Estás seguro de que quieres eliminar este equipo? Esta acción es irreversible.")) {
+      try {
+        await deleteTeam(teamId);
+
+        navigate('/teams');
+      } catch (error) {
+        console.error("Error al eliminar el equipo:", error);
+
+      }
+    }
+  };
 
   const team = useMemo(() => {
     return teamMemberships.find((t) => t.teamId === teamId);
@@ -76,6 +103,29 @@ const TeamPage = () => {
     },
   });
 
+  const {
+    values: editTeamValues,
+    errors: editTeamErrors,
+    isSubmitting: isEditingTeam,
+    handleChange: handleEditTeamChange,
+    handleSubmit: handleEditTeamSubmit,
+  } = useForm<CreateTeamFormValue>({
+    initialValues: {
+      name: team?.name || '',
+      description: team?.description || '',
+    },
+
+    onSubmit: async (formValues) => {
+      if (!teamId) return;
+      try {
+        await updateTeam(formValues, teamId);
+        setIsEditTeamModalOpen(false);
+      } catch (err) {
+        console.error("Error al actualizar el equipo:", err);
+      }
+    },
+  });
+
   if (teamsLoading) {
     return (
       <div className="w-full h-full flex items-center justify-center mt-40">
@@ -115,6 +165,11 @@ const TeamPage = () => {
             >
               Entrar al Chat del Equipo
             </Link>
+            {
+              isAdmin && (
+                <TeamMenuButton onDelete={() => handleDeleteTeam(teamId ?? '')} onEdit={() => setIsEditTeamModalOpen(true)} />
+              )
+            }
           </div>
 
         </div>
@@ -227,6 +282,44 @@ const TeamPage = () => {
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
             >
               {isSubmitting ? "Creando..." : "Crear Proyecto"}
+            </button>
+          </form>
+        </Modal>
+      )}
+
+      {isAdmin && (
+        <Modal
+          isOpen={isEditTeamModalOpen}
+          onClose={() => setIsEditTeamModalOpen(false)}
+          title="Editar equipo"
+        >
+          <form onSubmit={handleEditTeamSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium">Nombre del equipo</label>
+              <input
+                name="name"
+                value={editTeamValues.name}
+                onChange={handleEditTeamChange}
+                className="w-full p-2 border rounded"
+              />
+              {editTeamErrors.name && <p className="text-red-500 text-sm">{editTeamErrors.name}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium">Descripción</label>
+              <textarea
+                name="description"
+                value={editTeamValues.description}
+                onChange={handleEditTeamChange}
+                className="w-full p-2 border rounded"
+              />
+              {editTeamErrors.description && <p className="text-red-500 text-sm">{editTeamErrors.description}</p>}
+            </div>
+            <button
+              type="submit"
+              disabled={isEditingTeam}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            >
+              {isEditingTeam ? "Guardando..." : "Guardar cambios"}
             </button>
           </form>
         </Modal>

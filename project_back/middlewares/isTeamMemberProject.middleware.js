@@ -10,7 +10,7 @@ export const isTeamMemberFromProject = async (req, res, next) => {
             return res.status(400).json({ message: "Missing projectId" });
         }
 
-        const project = await projectRepo.getProjectByIdOnly(projectId);
+        const project = await projectRepo.findProjectById(projectId);
         if (!project) {
             return res.status(404).json({ message: "Project not found" });
         }
@@ -27,6 +27,6 @@ export const isTeamMemberFromProject = async (req, res, next) => {
         next();
     } catch (error) {
         console.error("isTeamMemberFromProject error:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: error.message });
     }
 };

@@ -26,6 +26,9 @@ class TagRepository {
             teamId: new mongoose.Types.ObjectId(teamId)
         });
     }
+    async deleteByTeamId(teamId) {
+        return await Tag.deleteMany({ teamId });
+    }
 }
 
 export default new TagRepository();

@@ -14,6 +14,16 @@ const NotificationSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
+    team: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Team",
+        required: false,  
+    },
+    project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Project",
+        required: false, 
+    },
 }, {
     timestamps: true,
 });

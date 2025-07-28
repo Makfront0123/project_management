@@ -17,6 +17,9 @@ class TaskTagRepository {
     async getTagOfTask(taskId, tagId) {
         return await TaskTag.findOne({ taskId, tagId });
     }
+    async deleteByTaskId(taskId) {
+        return await TaskTag.deleteMany({ taskId });
+    }
 }
 
 export default new TaskTagRepository();

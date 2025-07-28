@@ -16,6 +16,12 @@ class CommentRepository {
   async deleteComment(commentId, taskId) {
     return await Comment.findOneAndDelete({ _id: commentId, taskId });
   }
+  async deleteByTaskId(taskId) {
+    return await Comment.deleteMany({ taskId });
+  }
+  async deleteByProjectId(projectId) {
+    return await Comment.deleteMany({ projectId });
+  }
 }
 
 export default new CommentRepository();

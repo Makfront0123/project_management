@@ -98,7 +98,7 @@ const DashboardPage = () => {
           </div>
         </>
       ) : (
-        <div className="mt-20 w-full max-w-xl">
+        <div className="mt-20 w-full max-w-xl ">
           <h3 className="text-2xl mb-4 text-gray-700 font-semibold">Tus Equipos</h3>
           <ul className="space-y-4">
             {teamMemberships.map((team) => (
@@ -112,6 +112,14 @@ const DashboardPage = () => {
               </button>
             ))}
           </ul>
+          <div className="flex items-center mt-20 gap-x-10">
+            <button onClick={handleTeam} className="px-4 py-3 border-2 border-gray-600 rounded-lg cursor-pointer hover:scale-105 transition">
+              Crear equipo
+            </button>
+            <button onClick={handleJoinTeam} className="px-4 py-3 bg-blue-600 text-white rounded-lg cursor-pointer hover:scale-105 transition">
+              Unirse a un equipo
+            </button>
+          </div>
         </div>
       )}
 

@@ -23,6 +23,10 @@ class TagService {
         return await tagRepo.deleteTag(tagId, teamId);
 
     }
+
+    async deleteTagsByProjectId(projectId) {
+        return await tagRepo.deleteByProjectId(projectId);
+    }
 }
 
 export default new TagService();

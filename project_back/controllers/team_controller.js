@@ -45,9 +45,12 @@ export const getTeam = async (req, res) => {
 
 export const updateTeam = async (req, res) => {
     try {
-        const teamId = req.params.id;
+        const teamId = req.params?.teamId 
         const updatedTeam = await teamService.updateTeam(teamId, req.body);
-        res.status(200).json(updatedTeam);
+        res.status(200).json({
+            message: "Team updated successfully",
+            updatedTeam,
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -55,7 +58,11 @@ export const updateTeam = async (req, res) => {
 
 
 export const deleteTeam = async (req, res) => {
-    const teamId = req.params.id;
+    const teamId = req.params.teamId;
+    console.log(teamId);
     const team = await teamService.deleteTeam(teamId);
-    res.status(200).json(team);
+    res.status(200).json({
+        message: "Team deleted successfully",
+        team,
+    });
 }

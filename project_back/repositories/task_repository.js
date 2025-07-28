@@ -25,6 +25,10 @@ class TaskRepository {
         return await Task.findByIdAndDelete({ _id: new mongoose.Types.ObjectId(taskId), projectId: projectId });
     }
 
+    async deleteByProjectId(projectId) {
+        return await Task.deleteMany({ projectId });
+    }
+
     async findTaskById(taskId) {
         return await Task.findById(taskId).lean();
     }

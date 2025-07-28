@@ -1,5 +1,8 @@
 import teamRepo from "../repositories/team_repository.js";
- 
+import projectRepo from "../repositories/project_repository.js";
+import notificationRepo from "../repositories/notification_repository.js";
+import teamMemberRepo from "../repositories/team_member_repository.js";
+import messageRepo from "../repositories/message_repository.js";
 class TeamService {
     async getAllTeams() {
         return await teamRepo.getAllTeams();
@@ -19,17 +22,32 @@ class TeamService {
     async deleteTeam(id) {
         const team = await teamRepo.getTeamById(id);
         if (!team) throw new Error("Team not found");
-        const deletedTeam = await teamRepo.deleteTeam(id);
-        if (!deletedTeam) throw new Error("Team not found");
+
+
         await teamMemberRepo.deleteMembersByTeamId(id);
+
+
+        const projects = await projectRepo.getAllProjects(id);
+        for (const project of projects) {
+            await projectRepo.deleteProjectCascade(id, project._id);
+        }
+
+        await notificationRepo.deleteByTeamId(id);
+        await messageRepo.deleteAllMessages(team);
+
+
+        const deletedTeam = await teamRepo.deleteTeam(id);
+
         return deletedTeam;
     }
+
+
 
     async createTeam(data) {
         return await teamRepo.createTeam(data);
     }
-    async getConfirmationCode(teamId ) {
-        return await teamRepo.getConfirmationCode(teamId );
+    async getConfirmationCode(teamId) {
+        return await teamRepo.getConfirmationCode(teamId);
     }
 }
 

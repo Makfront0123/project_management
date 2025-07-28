@@ -1,5 +1,5 @@
 import express from "express";
-import { createTag, getAllTags, getTag, deleteTag, updateTag } from "../controllers/tag_controller.js";
+import { createTag, getAllTags, getTag, deleteTag, updateTag, deleteTagsByProjectId } from "../controllers/tag_controller.js";
 import { isTeamAdmin } from "../middlewares/admin_middleware.js";
 import { isTeamMember } from "../middlewares/isTeamMember_middleware.js";
 import authenticate from "../middlewares/auth_middleware.js";
@@ -9,6 +9,7 @@ router.post("/teams/:teamId/tags", authenticate, isTeamAdmin, createTag);
 router.get("/teams/:teamId/tags", authenticate, isTeamMember, getAllTags);
 router.get("/teams/:teamId/tags/:tagId", authenticate, isTeamMember, getTag);
 router.delete("/teams/:teamId/tags/:tagId", authenticate, isTeamAdmin, deleteTag);
+router.delete("/teams/:teamId/tags", authenticate, isTeamAdmin, deleteTagsByProjectId);
 router.put("/teams/:teamId/tags/:tagId", authenticate, isTeamAdmin, updateTag);
 
 export default router;
