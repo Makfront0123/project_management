@@ -19,7 +19,7 @@ const useNotificationStore = create<NotificationStore>((set, get) => ({
         set({ isLoading: true });
         try {
             const notificationsData = await getNotificationsForUser();
-            console.log("notificationsData:", notificationsData);
+           
             set({ notifications: notificationsData, isLoading: false });
         } catch (error) {
             console.error("Error fetching notifications:", error);

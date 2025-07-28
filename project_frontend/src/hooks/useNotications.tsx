@@ -12,7 +12,7 @@ export const useNotifications = () => {
 
     useEffect(() => {
         if (user && !socketRef.current) {
-            console.log("Condiciones cumplidas. Conectando al socket y cargando notificaciones para el usuario.");
+           
             const socket = io("http://localhost:3000", {
                 withCredentials: true,
             });
@@ -35,7 +35,7 @@ export const useNotifications = () => {
 
         return () => {
             if (socketRef.current) {
-                console.log("Desconectando el socket.");
+              
                 socketRef.current.off("newNotification");
                 socketRef.current.off("taskCompletedNotification");
                 socketRef.current.disconnect();
