@@ -14,7 +14,7 @@ type AuthStore = {
     token: string | null
     loading: boolean
     login: (email: string, password: string) => Promise<string>
-    register: (name: string, email: string, password: string) => Promise<void>
+    register: (formData: FormData) => Promise<void>;
     logout: () => void
     checkTokenExpiration: () => void
 }
@@ -38,6 +38,7 @@ export const useAuthStore = create<AuthStore>()(
                             id: decoded.id,
                             email: decoded.email,
                             name: decoded.name,
+                            image: decoded.image
                         },
                         token: data.user.token,
                         loading: false,
@@ -50,16 +51,18 @@ export const useAuthStore = create<AuthStore>()(
                 }
             },
 
-            register: async (name, email, password) => {
+            register: async (formData) => {
                 set({ loading: true })
                 try {
-                    const data = await registerUser(name, email, password)
+                    const data = await registerUser(formData)
 
                     set({
                         user: {
-                            id: data._id,
+                            id: data.id,
                             email: data.email,
                             name: data.name,
+                            image: data.image
+
                         },
                         loading: false
                     })

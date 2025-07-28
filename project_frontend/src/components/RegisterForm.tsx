@@ -1,18 +1,18 @@
 import { TextInput } from "./TextInput"
 
-
-
 type RegisterFormProps = {
     form: {
         values: {
             name: string
             email: string
             password: string
+            image: File | null
         }
         errors: {
             name?: string
             email?: string
             password?: string
+            image?: string
         }
         handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
         handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
@@ -47,10 +47,24 @@ export const RegisterForm = ({ form }: RegisterFormProps) => {
                 name="password"
                 type="password"
                 placeholder="Enter your password"
+                labelColor="text-black"
+                textColor="text-black"
                 value={form.values.password}
                 error={form.errors.password}
                 onChange={form.handleChange}
             />
+            <div className="w-full">
+                <label htmlFor="image" className="block text-black text-sm font-bold mb-2">Profile Image</label>
+                <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    accept="image/*"  
+                    onChange={form.handleChange} 
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
+                />
+                {form.errors.image && <p className="text-red-500 text-xs italic mt-1">{form.errors.image}</p>}
+            </div>
             <button
                 type="submit"
                 disabled={form.isSubmitting}

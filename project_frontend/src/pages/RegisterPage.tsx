@@ -1,41 +1,52 @@
-import { Link,useNavigate } from "react-router"
-import { useAuthStore } from "../stores/auth_store"
-import { useForm } from "../hooks/useForm"
-import { images } from "../core/images"
-import { getErrorMessage } from "../utils/getErrorMessage"
-import toast from "react-hot-toast"
-import { RegisterForm } from "../components/RegisterForm"
+import toast from "react-hot-toast";
+import { useNavigate, Link } from "react-router";
+import { RegisterForm } from "../components/RegisterForm";
+import { images } from "../core/images";
+import { useForm } from "../hooks/useForm";
+import { useAuthStore } from "../stores/auth_store";
+import { getErrorMessage } from "../utils/getErrorMessage";
+
 
 
 const RegisterPage = () => {
-    const { register } = useAuthStore()
+    const { register } = useAuthStore();
     const navigate = useNavigate();
-
 
     const form = useForm({
         initialValues: {
             name: "",
             email: "",
-            password: ""
+            password: "",
+            image: null as File | null
         },
         validate: (values) => {
-            const errors: Partial<typeof values> = {}
-            if (!values.name) errors.name = "Name is required"
-            if (!values.email) errors.email = "Email is required"
-            else if (!/\S+@\S+\.\S+/.test(values.email)) errors.email = "Invalid email"
-            if (!values.password) errors.password = "Password is required"
-            else if (values.password.length < 6) errors.password = "Min 6 characters"
-            return errors
+            const errors: Partial<Record<keyof typeof values, string>> = {};
+
+            if (!values.name) errors.name = "Name is required";
+            if (!values.email) errors.email = "Email is required";
+            else if (!/\S+@\S+\.\S+/.test(values.email)) errors.email = "Invalid email";
+            if (!values.password) errors.password = "Password is required";
+            else if (values.password.length < 6) errors.password = "Min 6 characters";
+
+            return errors;
         },
         onSubmit: async (values) => {
             try {
-                await register(values.name, values.email, values.password)
+                const formData = new FormData();
+                formData.append('name', values.name);
+                formData.append('email', values.email);
+                formData.append('password', values.password);
+                if (values.image) {
+                    formData.append('image', values.image);
+                }
+
+
+                await register(formData)
                 navigate("/login")
             }
             catch (err: unknown) {
-                const msg = getErrorMessage(err)
-
-                toast.error(msg)
+                const msg = getErrorMessage(err);
+                toast.error(msg);
             }
         }
     });
@@ -54,7 +65,7 @@ const RegisterPage = () => {
                 }}
             />
 
-            <div className="flex flex-col items-center  gap-y-2 px-28 z-40">
+            <div className="flex flex-col items-center gap-y-2 px-28 z-40">
                 <div className="flex flex-col items-center justify-center mt-24 gap-2">
                     <h1 className="text-4xl">Welcome Back</h1>
                     <p className="text-gray-600 font-light">Welcome back, Please register your details</p>
@@ -66,9 +77,8 @@ const RegisterPage = () => {
                 <img src={images.login} alt="" className="w-full min-h-screen" />
                 <div className="absolute inset-0 bg-black opacity-70"></div>
             </div>
-
         </section>
-    )
-}
+    );
+};
 
-export default RegisterPage
+export default RegisterPage;

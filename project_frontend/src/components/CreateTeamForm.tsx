@@ -24,6 +24,8 @@ const CreateTeamForm = ({ form }: CreateTeamPageProps) => {
                     label="Nombre"
                     name="name"
                     placeholder="Nombre del equipo"
+                    labelColor="text-white"
+                    textColor="text-white"
                     value={form.values.name}
                     error={form.errors.name}
                     onChange={form.handleChange} />
@@ -33,6 +35,8 @@ const CreateTeamForm = ({ form }: CreateTeamPageProps) => {
                 <TextInput
                     label="Descripción"
                     name="description"
+                    labelColor="text-white"
+                    textColor="text-white"
                     placeholder="Enter your description"
                     value={form.values.description}
                     error={form.errors.description}

@@ -23,7 +23,7 @@ const JoinTeamPage = () => {
   }, [getAllTeams, getPendingRequests, getUserTeamStatus, page, limit]);
 
   return (
-    <div className="w-full min-h-screen p-6 mt-20">
+    <div className="w-full min-h-screen p-6">
       <h1 className="text-2xl font-bold mb-4 text-white">Unirse a un equipo</h1>
       
       {isLoading ? (

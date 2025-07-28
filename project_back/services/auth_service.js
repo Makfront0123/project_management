@@ -33,6 +33,7 @@ class AuthService {
             id: user._id,
             email: user.email,
             name: user.name,
+            image: user.image
         };
 
 
@@ -45,6 +46,7 @@ class AuthService {
             _id: user._id,
             email: user.email,
             name: user.name,
+            image: user.image,
             token,
         };
     }

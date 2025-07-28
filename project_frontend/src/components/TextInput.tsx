@@ -5,6 +5,8 @@ type TextInputProps = {
   placeholder?: string
   value: string
   error?: string
+  labelColor?: string
+  textColor?: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -16,10 +18,12 @@ export const TextInput = ({
   value,
   error,
   onChange,
+  labelColor,
+  textColor 
 }: TextInputProps) => {
   return (
     <div className="flex flex-col gap-y-1">
-      <label htmlFor={name} className="text-sm font-medium text-white">
+      <label htmlFor={name} className={`text-sm font-medium ${labelColor}`}>
         {label}
       </label>
       <input
@@ -29,7 +33,7 @@ export const TextInput = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="border border-gray-300 rounded-[20px] p-3 w-[30rem] text-white"
+        className={`border border-gray-300 rounded-[20px] p-3 w-[30rem] ${textColor}`}
       />
       {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>

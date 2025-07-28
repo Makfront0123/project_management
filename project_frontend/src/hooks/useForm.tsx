@@ -1,44 +1,58 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 type UseFormProps<T> = {
-    initialValues: T
-    onSubmit: (values: T) => Promise<void> | void
-    validate?: (values: T) => Partial<Record<keyof T, string>>
+    initialValues: T;
+    onSubmit: (values: T) => Promise<void> | void;
+    validate?: (values: T) => Partial<Record<keyof T, string>>;
 }
+
 export function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T>) {
-    const [values, setValues] = useState<T>(initialValues)
-    const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({})
-    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [values, setValues] = useState<T>(initialValues);
+    const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-        const { name, value } = e.target;
-        setValues((prev) => ({ ...prev, [name]: value }));
+        
+        const target = e.target as HTMLInputElement;
+        const { name, value } = target;
+
+        if (target.type === 'file') {
+            setValues((prev) => ({
+                ...prev,
+                [name]: target.files && target.files.length > 0 ? target.files[0] : null
+            }));
+        } else {
+            setValues((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
-
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setIsSubmitting(true)
+        e.preventDefault();
+        setIsSubmitting(true);
 
-        const validationErrors = validate?.(values) ?? {}
+        const validationErrors = validate?.(values) ?? {};
 
         if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors)
-            setIsSubmitting(false)
-            return
+            setErrors(validationErrors);
+            setIsSubmitting(false);
+            return;
         }
 
-        setErrors({})
+        setErrors({});
         try {
-            await onSubmit(values)
+            await onSubmit(values);
         } catch (err) {
-            console.error(err)
+            console.error(err);
         } finally {
-            setIsSubmitting(false)
+            setIsSubmitting(false);
         }
-    }
+    };
+
+    const setFieldValue = <K extends keyof T>(field: K, fieldValue: T[K]) => {
+        setValues((prev) => ({ ...prev, [field]: fieldValue }));
+    };
 
     return {
         values,
@@ -48,5 +62,6 @@ export function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T
         handleSubmit,
         setValues,
         setErrors,
-    }
+        setFieldValue
+    };
 }
