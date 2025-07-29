@@ -84,7 +84,7 @@ const ProjectDetails = () => {
   if (!team || isLoading || !currentProject || !tasksLoaded) {
     return (
       <div className="w-full h-screen flex items-center justify-center text-gray-500">
-        Cargando...
+        Loading...
       </div>
     );
   }
@@ -93,7 +93,7 @@ const ProjectDetails = () => {
     return (
       <div className="p-0 w-full h-full flex flex-col  gap-8">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-white">📋 Tareas del proyecto</h2>
+          <h2 className="text-2xl font-bold text-white">📋 Tasks in project</h2>
           <div className="flex items-center gap-x-20">
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded-lg"
@@ -103,7 +103,7 @@ const ProjectDetails = () => {
                 setIsModalOpen(true);
               }}
             >
-              ➕ Crear tarea
+              ➕ Create task
             </button>
 
             <MenuButton
@@ -120,7 +120,7 @@ const ProjectDetails = () => {
         </div>
 
         {tasks.length === 0 && (
-          <p className="text-gray-500 text-center">No tienes tareas pendientes</p>
+          <p className="text-gray-500 text-center">You have no pending tasks</p>
         )}
 
         <div className="flex items-start space-y-4 gap-x-10">
@@ -140,10 +140,14 @@ const ProjectDetails = () => {
                       setShowAssignModal(true);
                     }}
                     onUnassign={async () => {
+
                       setSelectedTask(task);
-                      const userId = typeof assignment?.userId === "string"
-                        ? assignment.userId
-                        : assignment?.userId?.id;
+                      const userId =
+                        typeof assignment?.userId === "string"
+                          ? assignment.userId
+                          : (assignment?.userId as unknown as { _id: string })?._id;
+
+
                       if (!userId) return;
                       await unassignTask(task._id, userId);
                       await getTasksToUserAssignments(projectId!);
@@ -162,28 +166,32 @@ const ProjectDetails = () => {
 
                   <div className="mt-2 ml-4">
                     <button
-                      onClick={() =>
+                      onClick={() => {
+                        if (task.status === "completed") return;
                         setSelectedCommentTask(
                           selectedCommentTask?._id === task._id ? null : task
-                        )
-                      }
-                      className="text-blue-600 text-sm hover:underline"
+                        );
+                      }}
+                      className={`text-sm ${task.status === "completed" ? "text-gray-400 cursor-not-allowed" : "text-blue-600 hover:underline"
+                        }`}
+                      disabled={task.status === "completed"}
                     >
-                      💬 {selectedCommentTask?._id === task._id ? "Ocultar" : "Ver"} comentarios
+                      💬 {selectedCommentTask?._id === task._id ? "Hide" : "Show"} comments
                     </button>
+
 
                     {selectedCommentTask?._id === task._id && (
                       <div className="animate-slide-in-top mt-4 border rounded-lg p-4 bg-gray-50">
                         <div className="flex justify-between items-center mb-3">
                           <h3 className="text-md font-bold text-gray-700">
-                            Comentarios sobre:{" "}
+                            Comments about:{" "}
                             <span className="text-indigo-600">{task.name}</span>
                           </h3>
                           <button
                             onClick={() => setSelectedCommentTask(null)}
                             className="text-sm text-red-500 hover:underline"
                           >
-                            Cerrar
+                            Close
                           </button>
                         </div>
                         <TaskComments taskId={task._id} />
@@ -274,7 +282,7 @@ const ProjectDetails = () => {
               setIsProjectModalOpen(false);
               setProjectValues({ name: "", description: "" });
             }}
-            title="Editar Proyecto"
+            title="Edit Project"
           >
             <form
               onSubmit={async (e) => {
@@ -287,7 +295,7 @@ const ProjectDetails = () => {
               className="space-y-4"
             >
               <div>
-                <label className="block text-sm font-medium">Nombre</label>
+                <label className="block text-sm font-medium">Name</label>
                 <input
                   value={projectValues.name}
                   onChange={(e) =>
@@ -298,7 +306,7 @@ const ProjectDetails = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium">Descripción</label>
+                <label className="block text-sm font-medium">Description</label>
                 <textarea
                   value={projectValues.description}
                   onChange={(e) =>
@@ -312,7 +320,7 @@ const ProjectDetails = () => {
                 type="submit"
                 className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
               >
-                Guardar Cambios
+                Save Changes
               </button>
             </form>
           </Modal>
@@ -347,15 +355,14 @@ const ProjectDetails = () => {
 
   return (
     <div className="p-20 w-full h-full flex flex-col gap-8">
-      <h2 className="text-2xl font-bold text-center">📋 Tareas asignadas</h2>
       {pendingAssignments.length === 0 ? (
-        <p className="text-gray-500 text-center">No tienes tareas pendientes</p>
+        <p className="text-gray-500 text-center">you have no pending tasks</p>
       ) : (
         <>
-          <h3 className="text-xl font-semibold mb-2">⏳ Tareas pendientes</h3>
+          <h3 className="text-xl font-semibold mb-2 text-white">⏳ Pending Tasks</h3>
           <div className="space-y-4 mb-8">
             {pendingAssignments.map((assignment) => (
-              <div key={assignment._id} className="flex flex-col gap-2 border rounded p-4">
+              <div key={assignment.id} className="flex flex-col gap-2 border border-white rounded p-4">
                 <TaskCard
                   assignment={assignment}
                   isCompleted={false}
@@ -372,7 +379,7 @@ const ProjectDetails = () => {
                 {
                   pendingAssignments.length > 0 && (
                     <div className="flex gap-2 flex-wrap items-center">
-                      <span className="font-semibold">Etiquetas:</span>
+                      <span className="font-semibold text-white">Tagsº:</span>
                       {tags.map((tag) => {
                         const taskId =
                           typeof assignment.taskId === "string"
@@ -411,7 +418,7 @@ const ProjectDetails = () => {
                           : assignment.taskId?._id;
                       const task = tasks.find((t) => t._id === taskId);
                       if (selectedCommentTask?._id === taskId) {
-                        setSelectedCommentTask(null); // toggle
+                        setSelectedCommentTask(null);
                       } else if (task) {
                         setSelectedCommentTask(task);
                       }
@@ -428,7 +435,7 @@ const ProjectDetails = () => {
                       <div className="animate-slide-in-top mt-4 border rounded-lg p-4 bg-gray-50">
                         <div className="flex justify-between items-center mb-3">
                           <h3 className="text-md font-bold text-gray-700">
-                            Comentarios sobre:{" "}
+                            Comments about:{" "}
                             <span className="text-indigo-600">
                               {selectedCommentTask.name}
                             </span>
@@ -437,7 +444,7 @@ const ProjectDetails = () => {
                             onClick={() => setSelectedCommentTask(null)}
                             className="text-sm text-red-500 hover:underline"
                           >
-                            Cerrar
+                            Close
                           </button>
                         </div>
                         <TaskComments taskId={selectedCommentTask._id} />
@@ -454,10 +461,10 @@ const ProjectDetails = () => {
 
       {completedAssignments.length > 0 && (
         <>
-          <h3 className="text-xl font-semibold mb-2">✅ Tareas completadas</h3>
+          <h3 className="text-xl font-semibold mb-2 text-white">✅ Completed Tasks</h3>
           <div className="space-y-4">
             {completedAssignments.map((assignment) => (
-              <div key={assignment._id} className="flex flex-col gap-2 border rounded p-4 bg-green-50">
+              <div key={assignment.id} className="flex flex-col gap-2 border rounded p-4 bg-green-50">
                 <TaskCard
                   assignment={assignment}
                   isCompleted={true}

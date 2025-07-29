@@ -29,15 +29,19 @@ const NotificationDropdown = () => {
             </span>
           )}
         </div>
-        <span className="text-white uppercase">Notificaciones</span>
+        <span className="text-white uppercase">
+          Notifications
+        </span>
       </button>
 
       {open && (
         <div className="absolute left-[110%] bottom-[10%] mt-2 w-64 z-90 bg-white shadow-lg rounded-lg max-h-80 overflow-y-auto">
           {isLoading ? (
-            <div className="p-4 text-gray-500 text-sm">Cargando notificaciones...</div>
+            <div className="p-4 text-gray-500 text-sm">Loading Notifications</div>
           ) : validNotifications.length === 0 ? (
-            <div className="p-4 text-gray-500 text-sm">Sin notificaciones</div>
+            <div className="p-4 text-gray-500 text-sm">
+              You have no notifications
+            </div>
           ) : (
             validNotifications.map((notif) => (
               <div

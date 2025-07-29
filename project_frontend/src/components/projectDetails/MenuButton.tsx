@@ -9,7 +9,7 @@ const MenuButton: React.FC<MenuButton> = ({ onEdit, onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -46,7 +46,7 @@ const MenuButton: React.FC<MenuButton> = ({ onEdit, onDelete }) => {
               setIsOpen(false);
             }}
           >
-            ✏️ Editar Proyecto
+            ✏️ Edit Project
           </button>
           <button
             className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 text-sm"
@@ -55,7 +55,7 @@ const MenuButton: React.FC<MenuButton> = ({ onEdit, onDelete }) => {
               setIsOpen(false);
             }}
           >
-            🗑️ Eliminar Proyecto
+            🗑️ Delete Project
           </button>
         </div>
       )}

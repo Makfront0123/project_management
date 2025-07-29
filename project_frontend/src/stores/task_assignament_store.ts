@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { assignTask, completeAssignedTask, getAllUsersAssignedToTask, getTasksToUserAssignments, unassignTask } from "../services/task_assignament_services";
 import toast from "react-hot-toast";
 import type { TaskAssignment } from "../types/task_assignment";
+import { getErrorMessage } from "../utils/getErrorMessage";
 
 
 interface TaskStore {
@@ -20,13 +21,18 @@ const useTaskAssignamentStore = create<TaskStore>((set) => ({
     taskAssignments: [],
 
     assignTask: async (taskId, userId) => {
-        set({ isLoading: true });
-        const response = await assignTask(taskId, userId);
-        set({ isLoading: false });
-        toast.success(response.message);
-        return response;
+        try {
+            set({ isLoading: true });
+            const response = await assignTask(taskId, userId);
+            set({ isLoading: false });
+            toast.success(response.message);
+            return response;
+        } catch (error) {
+            set({ isLoading: false });
+            toast.error(getErrorMessage(error));
+            throw error;
+        }
     },
-
     getTasksToUserAssignments: async (projectId) => {
         set({ isLoading: true });
         const response = await getTasksToUserAssignments(projectId);
@@ -40,9 +46,11 @@ const useTaskAssignamentStore = create<TaskStore>((set) => ({
 
 
     unassignTask: async (taskId, userId) => {
+     
         set({ isLoading: true });
         try {
             const response = await unassignTask(taskId, userId);
+          
             toast.success(response.message);
             return response;
         } catch (error) {

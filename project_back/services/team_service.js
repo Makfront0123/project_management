@@ -19,28 +19,30 @@ class TeamService {
         return await teamRepo.updateTeam(id, data);
     }
 
-    async deleteTeam(id) {
+   async deleteTeam(id) {
         const team = await teamRepo.getTeamById(id);
         if (!team) throw new Error("Team not found");
 
-
         await teamMemberRepo.deleteMembersByTeamId(id);
 
+ 
+        const projectData = await projectRepo.getAllProjects(id);  
 
-        const projects = await projectRepo.getAllProjects(id);
-        for (const project of projects) {
-            await projectRepo.deleteProjectCascade(id, project._id);
-        }
-
+       
+        const projectsToDelete = projectData.projects; 
+ 
+        if (Array.isArray(projectsToDelete)) {
+            for (const project of projectsToDelete) {  
+                await projectRepo.deleteProjectCascade(id, project._id);
+            }
+        }  
         await notificationRepo.deleteByTeamId(id);
         await messageRepo.deleteAllMessages(team);
-
 
         const deletedTeam = await teamRepo.deleteTeam(id);
 
         return deletedTeam;
     }
-
 
 
     async createTeam(data) {

@@ -1,8 +1,9 @@
- 
+
 
 export interface AuthResponse {
   message: string
   user: {
+    _id: string
     email: string
     password: string
     token: string
@@ -16,20 +17,20 @@ export interface RegisterResponse {
   name: string;
 }
 export type User = {
-    id: string
-    email: string
-    name: string
-    image: string
+  id: string
+  email: string
+  name: string
+  image?: string
 }
 
 
 export type JwtPayload = {
-    id: string
-    email: string
-    name: string
-    image: string
-    exp: number
-    iat: number
+  id: string
+  email: string
+  name: string
+  image: string
+  exp: number
+  iat: number
 }
 
 

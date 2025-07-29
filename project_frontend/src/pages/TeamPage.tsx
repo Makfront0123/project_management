@@ -54,7 +54,7 @@ const TeamPage = () => {
     if (window.confirm("¿Estás seguro de que quieres eliminar este equipo? Esta acción es irreversible.")) {
       try {
         await deleteTeam(teamId);
-        navigate('/teams');
+        navigate('/dashboard');
       } catch (error) {
         console.error("Error al eliminar el equipo:", error);
       }

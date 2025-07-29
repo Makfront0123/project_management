@@ -43,12 +43,12 @@ const TaskCard: React.FC<Props> = ({
                 <p className="text-lg font-semibold">{assignment?.taskId.name}</p>
                 <p className="text-gray-600">{assignment?.taskId.description}</p>
                 <p className="text-sm text-gray-400">
-                    Asignado el {new Date(assignment!.createdAt).toLocaleString()}
+                    Assigned to: {new Date(assignment!.createdAt).toLocaleString()}
                 </p>
 
                 {Array.isArray(attachments) && attachments.length > 0 && (
                     <div className="mt-2">
-                        <p className="text-sm font-semibold text-gray-500">Archivos adjuntos:</p>
+                        <p className="text-sm font-semibold text-gray-500">Attachments:</p>
                         <ul className="list-disc list-inside text-sm text-blue-600 mt-2">
                             {attachments.map((file: Attachment) => (
                                 <li key={file._id} className="flex items-center justify-between gap-2">
@@ -68,7 +68,7 @@ const TaskCard: React.FC<Props> = ({
                                                     htmlFor={`file-input-${file._id}`}
                                                     className="cursor-pointer text-blue-600 hover:underline"
                                                 >
-                                                    Cambiar archivo
+                                                    Change file
                                                 </label>
                                                 <input
                                                     id={`file-input-${file._id}`}
@@ -102,7 +102,7 @@ const TaskCard: React.FC<Props> = ({
                                                         }
                                                     }}
                                                 >
-                                                    Eliminar
+                                                    Delete
                                                 </button>
 
                                                 <button
@@ -116,14 +116,14 @@ const TaskCard: React.FC<Props> = ({
                                                         const userId =
                                                             typeof assignment?.userId === "string"
                                                                 ? assignment.userId
-                                                                : assignment?.userId?.id;
+                                                                : assignment?.userId?._id;
 
                                                         if (onCompleteAssignedTask && taskId && userId) {
                                                             onCompleteAssignedTask(taskId, userId);
                                                         }
                                                     }}
                                                 >
-                                                    Completar tarea
+                                                    Complete task
                                                 </button>
                                             </>
                                         )}
@@ -150,12 +150,12 @@ const TaskCard: React.FC<Props> = ({
                         }}
                         className="bg-purple-600 text-white px-3 py-1 rounded text-sm"
                     >
-                        📎 Adjuntar archivo
+                        📎 Attach file
                     </button>
                 </div>
             )}
 
-            
+
         </div>
     );
 
@@ -167,7 +167,7 @@ const TaskCard: React.FC<Props> = ({
                 <p className="text-gray-600">{task?.description}</p>
                 {assignment?.userId?.name && (
                     <p className="text-sm text-gray-500 mt-1">
-                        Asignada a: <strong>{assignment.userId.name}</strong>
+                        Assigned to: <strong>{assignment.userId.name}</strong>
                     </p>
                 )}
                 <p className="mt-5">Status: {task?.status}</p>
@@ -181,25 +181,25 @@ const TaskCard: React.FC<Props> = ({
                                 onClick={onUnassign}
                                 className="bg-red-500 text-white px-3 py-1 rounded"
                             >
-                                Quitar asignación
+                                Unassign
                             </button>
                         ) : (
                             <button
                                 onClick={onAssign}
                                 className="bg-purple-500 text-white px-3 py-1 rounded"
                             >
-                                Asignar tarea
+                                Assign task
                             </button>
                         )}
 
                         <button onClick={onEdit} className="bg-blue-500 text-white px-3 py-1 rounded">
-                            Editar
+                            Edit
                         </button>
 
                     </>
                 )}
                 <button onClick={onDelete} className="bg-red-600 text-white px-3 py-1 rounded">
-                    Eliminar
+                    Delete
                 </button>
             </div>
 

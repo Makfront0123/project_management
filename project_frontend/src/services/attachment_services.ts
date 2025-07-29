@@ -34,7 +34,7 @@ export const getAttachment = async (attachmentId: string, teamId: string) => {
             Authorization: `Bearer ${token}`,
         },
     });
-    console.log(response.data);
+    
     return response.data;
 };
 
@@ -48,7 +48,7 @@ export const updateAttachment = async (attachmentId: string, teamId: string, fil
             Authorization: `Bearer ${token}`,
         },
     });
-    console.log(response.data);
+    
     return response.data;
 };
 
@@ -60,8 +60,7 @@ export const deleteAttachment = async (attachmentId: string, teamId: string) => 
             Authorization: `Bearer ${token}`,
         },
     });
-
-    console.log(response.data);
+ 
     return response.data;
 };
 
@@ -74,6 +73,6 @@ export const deleteByTaskId = async (taskId: string) => {
             Authorization: `Bearer ${token}`,
         },
     });
-    console.log(response.data);
+ 
     return response.data;
 };

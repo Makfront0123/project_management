@@ -108,6 +108,7 @@ const TeamChatPage = () => {
                                     id: member.userId._id,
                                     name: member.userId.name,
                                     email: member.userId.email
+                                    
                                 };
                                 setSelectedMember(selected);
                                 getPrivateMessages(user.id, selected.id);

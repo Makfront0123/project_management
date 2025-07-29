@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Table = ({ member, onDelete }: Props) => {
-    const currentUserId = useAuthStore(state => state.user?.id);
+    const currentUserId = useAuthStore(state => state.user?._id);
 
     const isSelfAdmin = member.role === 'admin' && member.userId._id === currentUserId;
 

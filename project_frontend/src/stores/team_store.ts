@@ -61,12 +61,12 @@ export const useTeamStore = create<TeamStore>((set) => ({
     set({ isLoading: true, teams: [] })
     try {
       const response = await getAllTeams(page, limit)
-      console.log('response', response)
-       set({
-        teams: response.teams,         
+    
+      set({
+        teams: response.teams,
         totalPages: response.totalPages,
         totalTeams: response.totalTeams,
-        page,                          
+        page,
         isLoading: false,
       });
     } catch (error) {
@@ -75,7 +75,7 @@ export const useTeamStore = create<TeamStore>((set) => ({
     }
   },
   updateTeam: async (data: Partial<Team>, teamId: string) => {
-    console.log('state', teamId)
+   
     set({ isLoading: true })
     try {
       const { team, message } = await updateTeam(teamId, data)
@@ -101,6 +101,7 @@ export const useTeamStore = create<TeamStore>((set) => ({
         teams: state.teams.filter((t) => t._id !== id),
         isLoading: false,
       }))
+      toast.success(message)
       return message
     } catch (error) {
       console.error("Error deleting team:", error)

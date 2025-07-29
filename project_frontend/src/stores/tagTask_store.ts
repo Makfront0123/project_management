@@ -19,10 +19,10 @@ const useTagTaskStore = create<TagTaskStore>((set) => ({
     addTagToTask: async (taskId: string, tagId: string) => {
         set({ isLoading: true });
         try {
-            console.log("store:", taskId, tagId);
+       
             const response = await addTagToTask(taskId, tagId);
             const updateTags = await getAllTagsOfTask(taskId);
-            console.log("store:", updateTags);
+    
             set({ tags: updateTags, isLoading: false });
             toast.success(response.message);
         } catch (error) {

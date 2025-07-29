@@ -13,7 +13,7 @@ export const createNotification = async (message: string, recipientId: string) =
             Authorization: `Bearer ${token}`
         }
     });
-    console.log("api response:", response.data);
+ 
 
     return response.data;
 };

@@ -64,7 +64,7 @@ const MainLayout = () => {
 
 
             <footer className="w-full py-2 fixed bottom-0 flex items-center justify-center text-white bg-gray-900 -z-0">
-                Derechos de autor © 2023 by <a href="https://github.com/scm0" target="_blank" className="text-blue-600">scm0</a>
+                Derechos de autor © 2025-<a href="https://github.com/Makfront0123" target="_blank" className="text-blue-600">Makfront0123</a>
             </footer>
         </div>
     );

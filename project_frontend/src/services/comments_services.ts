@@ -15,7 +15,7 @@ export const getCommentsByTask = async (taskId: string) => {
 };
 
 export const createComment = async (taskId: string, comment: string) => {
-    console.log("createComment", taskId, comment);
+ 
     const token = useAuthStore.getState().token;
     const response = await axios.post(`${baseUrl}/task/${taskId}/comment`, {
         comment,

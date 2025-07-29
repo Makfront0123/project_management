@@ -29,7 +29,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
 
     return (
         <div className="mt-4 bg-white border-t pt-4">
-            <h4 className="text-md font-semibold mb-2">Comentarios</h4>
+            <h4 className="text-md font-semibold mb-2">Comments</h4>
 
             <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                 {comments.map((c: TaskComment) => (
@@ -47,7 +47,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
                             onClick={() => handleDeleteComment(c._id)}
                             className="text-red-500 text-xs hover:underline"
                         >
-                            Eliminar
+                            Delete
                         </button>
                     </div>
                 ))}
@@ -64,7 +64,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
                     onClick={handleAddComment}
                     className="bg-blue-600 text-white px-3 py-1 text-sm rounded"
                 >
-                    Comentar
+                    Add comment
                 </button>
             </div>
         </div>

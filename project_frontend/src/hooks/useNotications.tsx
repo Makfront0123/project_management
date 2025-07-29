@@ -17,18 +17,18 @@ export const useNotifications = () => {
                 withCredentials: true,
             });
             socketRef.current = socket;
-            socket.emit("joinUserRoom", user.id);
+            socket.emit("joinUserRoom", user._id);
 
-            fetchNotifications(user.id);
+            fetchNotifications(user._id);
 
          
             socket.on("newNotification", (notification: NotificationType) => {
-                console.log("📩 Notificación general recibida:", notification);
+              
                 addNotification(notification);
             });
 
             socket.on("taskCompletedNotification", (notification: NotificationType) => {
-                console.log("✅ Notificación de tarea completada:", notification);
+             
                 addNotification(notification);
             });
         }
