@@ -142,7 +142,7 @@ export const useProjectDetails = () => {
 
         const completedTeamMember = teamMembers.find(member => member.userId._id === userId);
 
-    
+
         const adminTeamMember = teamMembers.find(member => member.role === "admin");
 
 
@@ -272,7 +272,7 @@ export const useProjectDetails = () => {
                 }
 
                 const uniqueAssignments = Array.from(
-                    new Map(useTaskAssignamentStore.getState().taskAssignments.map(a => [a._id, a])).values()
+                    new Map(useTaskAssignamentStore.getState().taskAssignments.map(a => [a.id, a])).values()
                 );
                 useTaskAssignamentStore.setState({ taskAssignments: uniqueAssignments });
             } else {

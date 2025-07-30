@@ -1,23 +1,23 @@
 import teamMemberService from "../services/team_member_service.js";
 import teamService from "../services/team_service.js";
-import TeamMember from "../models/TeamMember.js";
+ 
 export const addMemberToTeam = async (req, res) => {
     try {
         const { teamId } = req.params;
         const { userId } = req.body;
 
         if (!userId) {
-            return res.status(400).json({ message: "userId es requerido" });
+            return res.status(400).json({ message: "userId is required" });
         }
 
         const existing = await teamMemberService.getMemberOfTeam(teamId, userId);
 
         if (existing) {
             if (existing.status === "accepted") {
-                return res.status(400).json({ message: "El usuario ya es miembro del equipo." });
+                return res.status(400).json({ message: "User is already a member of the team." });
             } else {
                 const updated = await teamMemberService.updateMemberStatus(teamId, userId, { status: "accepted" });
-                return res.status(200).json({ message: "Solicitud aprobada", member: updated });
+                return res.status(200).json({ message: "Member Added", member: updated });
             }
         }
 
@@ -28,7 +28,7 @@ export const addMemberToTeam = async (req, res) => {
             status: "accepted",
         });
 
-        res.status(201).json({ message: "Miembro agregado", teamMember });
+        res.status(201).json({ message: "Member Added", member: teamMember });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -44,15 +44,15 @@ export const requestToJoinTeam = async (req, res) => {
 
         if (existingMember) {
             if (existingMember.status === "accepted") {
-                return res.status(400).json({ message: "Ya eres miembro de este equipo." });
+                return res.status(400).json({ message: "You are already a member of this team." });
             }
 
             if (existingMember.status === "pending") {
-                return res.status(400).json({ message: "Ya has solicitado unirte a este equipo." });
+                return res.status(400).json({ message: "You have already requested to join this team." });
             }
 
 
-            return res.status(400).json({ message: "No puedes volver a enviar la solicitud." });
+            return res.status(400).json({ message: "You cannot resend the request." });
         }
 
         const teamMember = await teamMemberService.addMember({
@@ -62,7 +62,7 @@ export const requestToJoinTeam = async (req, res) => {
             status: "pending",
         });
 
-        res.status(201).json({ message: "Solicitud enviada", teamMember });
+        res.status(201).json({ message: "Request sent", member: teamMember });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -75,20 +75,20 @@ export const rejectRequestToJoinTeam = async (req, res) => {
 
         const existingMember = await teamMemberService.getMemberOfTeam(teamId, userId);
         if (!existingMember) {
-            return res.status(404).json({ message: "La solicitud no existe." });
+            return res.status(404).json({ message: "Request not found." });
         }
 
         if (existingMember.status !== "pending") {
-            return res.status(400).json({ message: "Solo se pueden rechazar solicitudes pendientes." });
+            return res.status(400).json({ message: "Only pending requests can be rejected." });
         }
 
         await teamMemberService.removeMember({ teamId, userId });
 
         res.status(200).json({
-            message: "Solicitud rechazada y eliminada correctamente",
+            message: "Request rejected and deleted successfully",
         });
     } catch (error) {
-        res.status(500).json({ message: "Error del servidor" });
+        res.status(500).json({ message: "Error on server" });
     }
 };
 
@@ -108,7 +108,7 @@ export const getMemberOfTeam = async (req, res) => {
         const teamMember = await teamMemberService.getMemberOfTeam(teamId, userId);
 
         if (!teamMember) {
-            return res.status(404).json({ message: "Miembro no encontrado" });
+            return res.status(404).json({ message: "Member not found" });
         }
 
         res.status(200).json(teamMember);
@@ -121,7 +121,7 @@ export const deleteMembersOfTeam = async (req, res) => {
     try {
         const { teamId } = req.params;
         await teamMemberService.deleteMembersByTeamId(teamId);
-        res.status(200).json({ message: "Miembros eliminados del equipo" });
+        res.status(200).json({ message: "Members deleted from the team" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -132,22 +132,22 @@ export const deleteMemberOfTeam = async (req, res) => {
         const requesterId = req.user.id;
 
         if (!userId || !teamId) {
-            return res.status(400).json({ message: "Faltan datos" });
+            return res.status(400).json({ message: "Missing data" });
         }
 
         const member = await teamMemberService.getMemberOfTeam(teamId, userId);
         if (!member) {
-            return res.status(404).json({ message: "El usuario no pertenece al equipo" });
+            return res.status(404).json({ message: "The user does not belong to the team" });
         }
 
 
         if (member.role === "admin" && userId === requesterId) {
-            return res.status(403).json({ message: "No puedes eliminarte a ti mismo si eres administrador" });
+            return res.status(403).json({ message: "You cannot delete yourself if you are an administrator" });
         }
 
         await teamMemberService.removeMember({ teamId, userId });
 
-        res.status(200).json({ message: "Miembro eliminado correctamente" });
+        res.status(200).json({ message: "Member deleted successfully" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -6,8 +6,7 @@ import { useNotifications } from "../hooks/useNotications";
 const MainLayout = () => {
     const { logout, user } = useAuthStore();
     useNotifications();
-    const baseUrl = "http://localhost:3000";
-
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
     const getImageUrl = (imagePath: string) => {
         if (!imagePath) return '';
@@ -33,7 +32,17 @@ const MainLayout = () => {
                     <div className="flex flex-col items-center justify-between py-2 w-full">
 
                         <span className="flex flex-col items-center gap-x-2 font-medium text-white">
-                            <Link to="/" className="flex flex-col  items-start gap-x-2 font-medium text-white mb-10">Logo</Link>
+                            <Link
+                                to="/"
+                                className="relative inline-block text-white font-medium mb-10
+                                           after:content-[''] after:absolute after:left-0 after:bottom-0
+                                           after:h-[2px] after:w-full after:bg-blue-500
+                                           after:scale-x-0 after:origin-left after:transition-transform after:duration-300
+                                           hover:after:scale-x-100"
+                            >
+                                Home
+                            </Link>
+
                             <img
                                 src={user?.image ? getImageUrl(user.image) : ''}
                                 className="size-36 rounded-full object-cover"
@@ -71,4 +80,3 @@ const MainLayout = () => {
 };
 
 export default MainLayout;
- 

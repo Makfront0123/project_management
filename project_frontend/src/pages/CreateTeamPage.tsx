@@ -9,10 +9,6 @@ import type { CreateTeamFormValue, TeamResponse } from "../types/team"
 import { images } from "../core/images"
 import { useNavigate } from "react-router"
 
-
-
-
-
 const CreateTeamPage = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const [createdCode, setCreatedCode] = useState("")
@@ -24,8 +20,8 @@ const CreateTeamPage = () => {
         },
         validate: (values) => {
             const errors: Partial<Record<keyof CreateTeamFormValue, string>> = {}
-            if (!values.name.trim()) errors.name = "El nombre del equipo es obligatorio"
-            if (!values.description.trim()) errors.description = "La descripción del equipo es obligatoria"
+            if (!values.name.trim()) errors.name = "Name is required"
+            if (!values.description.trim()) errors.description = "Description is required"
             return errors
         },
         onSubmit: async (values) => {
@@ -50,26 +46,26 @@ const CreateTeamPage = () => {
     return (
         <section className="w-full h-full flex items-center justify-center">
             <div className="max-w-xl mx-auto mt-20 p-6 min-h-[50vh] shadow rounded">
-                <h2 className="text-2xl font-semibold mb-4 text-center text-white">Crear nuevo equipo</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-center text-white">Create Team</h2>
                 <CreateTeamForm form={form} />
 
                 <Modal
                     isOpen={modalOpen}
                     onClose={() => setModalOpen(false)}
-                    title="Código del equipo"
+                    title="Enter the code of your team"
                     footer={
                         <div className="text-right mt-4">
                             <button
                                 onClick={() => setModalOpen(false)}
                                 className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
                             >
-                                Cerrar
+                                Close
                             </button>
                         </div>
                     }
                 >
                     <p className="text-gray-700 mb-4">
-                        Comparte este código con otros para que se unan a tu equipo:
+                        Share this code with your team members to join the team.
                     </p>
                     <div className="flex items-center justify-between bg-gray-100 p-3 rounded-lg">
                         <span className="text-lg font-mono">{createdCode}</span>
@@ -77,7 +73,7 @@ const CreateTeamPage = () => {
                             onClick={handleCopy}
                             className="ml-4 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                         >
-                            Copiar
+                            Copy
                         </button>
                     </div>
                 </Modal>

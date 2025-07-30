@@ -14,11 +14,11 @@ const TeamMemberTable = ({ members, onDelete, onAccept, onReject }: Props) => {
       <table className="min-w-full text-sm text-left bg-white">
         <thead className="bg-gray-100 text-gray-600">
           <tr>
-            <th className="py-2 px-4">Nombre</th>
+            <th className="py-2 px-4">Name</th>
             <th className="py-2 px-4">Email</th>
-            <th className="py-2 px-4">Rol</th>
-            <th className="py-2 px-4">Estado</th>
-            <th className="py-2 px-4">Acciones</th>
+            <th className="py-2 px-4">Role</th>
+            <th className="py-2 px-4">Status</th>
+            <th className="py-2 px-4">Actions</th>
           </tr>
         </thead>
         <tbody>

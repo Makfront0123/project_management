@@ -93,8 +93,8 @@ const TeamPage = () => {
     initialValues: { name: "", description: "" },
     validate: (values) => {
       const errors: Partial<Record<keyof ProjectForm, string>> = {};
-      if (!values.name.trim()) errors.name = "El nombre es obligatorio";
-      if (!values.description.trim()) errors.description = "La descripción es obligatoria";
+      if (!values.name.trim()) errors.name = "Name is required";
+      if (!values.description.trim()) errors.description = "Description is required";
       return errors;
     },
     onSubmit: async (formValues) => {
@@ -133,7 +133,7 @@ const TeamPage = () => {
   if (teamsLoading) {
     return (
       <div className="w-full h-full flex items-center justify-center mt-40">
-        <p className="text-gray-500 text-xl">Cargando equipo...</p>
+        <p className="text-gray-500 text-xl">Loading team...</p>
       </div>
     );
   }
@@ -141,14 +141,14 @@ const TeamPage = () => {
   if (!team) {
     return (
       <div className="w-full h-full flex items-center justify-center mt-40">
-        <p className="text-gray-500 text-xl">Equipo no encontrado</p>
+        <p className="text-gray-500 text-xl">Team not found</p>
       </div>
     );
   }
 
   return (
     <div className="flex w-full h-screen">
-      <div className="w-2/3 overflow-y-auto mt-0 px-4">
+      <div className="w-full overflow-y-auto mt-0 px-4">
         <div className="flex items-center justify-between px-20">
           <h2 className="text-3xl mb-13 text-white font-light">{team.name}</h2>
           <div className="flex item-center gap-2">
@@ -157,14 +157,14 @@ const TeamPage = () => {
                 to={`/team/${team.teamId}/requests`}
                 className="px-4 py-2 bg-blue-600 mx-auto text-white rounded-md mb-12"
               >
-                Ver Solicitudes
+                View requests
               </Link>
             )}
             <Link
               to={`/team/${team.teamId}/chat`}
               className="px-4 py-2 bg-green-600 mx-auto text-white rounded-md mb-12"
             >
-              Entrar al Chat del Equipo
+              Enter the team chat
             </Link>
             {isAdmin && (
               <TeamMenuButton onDelete={() => handleDeleteTeam(teamId ?? '')} onEdit={() => setIsEditTeamModalOpen(true)} />
@@ -172,7 +172,7 @@ const TeamPage = () => {
           </div>
         </div>
         {teamMembers.length === 0 ? (
-          <p className="text-gray-500">Este equipo aún no tiene miembros.</p>
+          <p className="text-gray-500">This team has no members yet.</p>
         ) : (
           <ul className="space-y-2 w-full px-0 min-h-[130vh] block text-white">
             {teamMembers
@@ -189,9 +189,9 @@ const TeamPage = () => {
       </div>
       <div className="w-1/3 h-screen px-4 py-8">
         <div className="flex flex-col items-center justify-center">
-          <h2 className="text-3xl font-bold mb-6 mt-14 text-white">Proyectos</h2>
+          <h2 className="text-3xl font-bold mb-6 mt-14 text-white">Proyects</h2>
           {isLoading ? (
-            <p className="text-gray-500">Cargando proyectos...</p>
+            <p className="text-gray-500">Loading projects...</p>
           ) : (
             <>
               <ul className="space-y-2 w-full px-20">
@@ -217,14 +217,14 @@ const TeamPage = () => {
           )}
           {!projects.length && (
             <div className="flex flex-col items-center justify-center mt-40">
-              <p className="text-gray-500">No hay proyectos en este equipo.</p>
+              <p className="text-gray-500">No projects in this team.</p>
               {isAdmin && (
                 <div className="flex items-center mt-20 gap-x-10">
                   <button
                     onClick={() => setIsModalOpen(true)}
                     className="px-4 py-3 border-2 border-gray-600 text-white rounded-lg cursor-pointer hover:scale-105 transition"
                   >
-                    Crear Proyecto
+                    Create project
                   </button>
                 </div>
               )}
@@ -236,7 +236,7 @@ const TeamPage = () => {
                 onClick={() => setIsModalOpen(true)}
                 className="px-4 py-3 border-2 border-gray-600 text-white rounded-lg cursor-pointer hover:scale-105 transition"
               >
-                Crear Proyecto
+                Create project
               </button>
             </div>
           )}
@@ -250,7 +250,7 @@ const TeamPage = () => {
         >
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium">Nombre del proyecto</label>
+              <label className="block text-sm font-medium">Project name</label>
               <input
                 name="name"
                 value={values.name}
@@ -260,7 +260,7 @@ const TeamPage = () => {
               {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium">Descripción</label>
+              <label className="block text-sm font-medium">Description</label>
               <textarea
                 name="description"
                 value={values.description}
@@ -274,7 +274,7 @@ const TeamPage = () => {
               disabled={isSubmitting}
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
             >
-              {isSubmitting ? "Creando..." : "Crear Proyecto"}
+              {isSubmitting ? "Create..." : "Create project"}
             </button>
           </form>
         </Modal>
@@ -283,11 +283,11 @@ const TeamPage = () => {
         <Modal
           isOpen={isEditTeamModalOpen}
           onClose={() => setIsEditTeamModalOpen(false)}
-          title="Editar equipo"
+          title="Edit team"
         >
           <form onSubmit={handleEditTeamSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium">Nombre del equipo</label>
+              <label className="block text-sm font-medium">Team name</label>
               <input
                 name="name"
                 value={editTeamValues.name}
@@ -297,7 +297,7 @@ const TeamPage = () => {
               {editTeamErrors.name && <p className="text-red-500 text-sm">{editTeamErrors.name}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium">Descripción</label>
+              <label className="block text-sm font-medium">Description</label>
               <textarea
                 name="description"
                 value={editTeamValues.description}
@@ -311,7 +311,7 @@ const TeamPage = () => {
               disabled={isEditingTeam}
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
             >
-              {isEditingTeam ? "Guardando..." : "Guardar cambios"}
+              {isEditingTeam ? "Saving..." : "Save changes"}
             </button>
           </form>
         </Modal>

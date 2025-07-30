@@ -60,14 +60,14 @@ const DashboardPage = () => {
 
   const handleConfirmCode = async () => {
     if (!inputCode.trim()) {
-      return setCodeError("El código es obligatorio.")
+      return setCodeError("Code is required")
     }
 
     try {
       await confirmJoinWithCode(pendingTeamId!, inputCode)
       navigate(`/team/${pendingTeamId}`)
     } catch {
-      setCodeError("Código incorrecto. Intenta nuevamente.")
+      setCodeError("Code is incorrect. Please try again.")
     }
 
   }
@@ -84,22 +84,22 @@ const DashboardPage = () => {
       </h4>
 
       {isLoading ? (
-        <p className="mt-36 text-gray-500 font-light text-2xl">Cargando equipos...</p>
+        <p className="mt-36 text-gray-500 font-light text-2xl">Loading teams...</p>
       ) : teamMemberships.length === 0 ? (
         <>
-          <h3 className="mt-36 text-gray-500 font-light text-3xl">Aún no perteneces a ningún equipo.</h3>
+          <h3 className="mt-36 text-gray-500 font-light text-3xl">You are not a member of any team yet.</h3>
           <div className="flex items-center mt-20 gap-x-10">
             <button onClick={handleTeam} className="px-4 py-3 border-2 text-white border-gray-600 rounded-lg cursor-pointer hover:scale-105 transition">
-              Crear equipo
+              Create team
             </button>
             <button onClick={handleJoinTeam} className="px-4 py-3 bg-blue-600 text-white rounded-lg cursor-pointer hover:scale-105 transition">
-              Unirse a un equipo
+              Join a team
             </button>
           </div>
         </>
       ) : (
         <div className="mt-20 w-full max-w-xl ">
-          <h3 className="text-2xl mb-4 text-gray-700 font-semibold">Tus Equipos</h3>
+          <h3 className="text-2xl mb-4 text-gray-700 font-semibold">Your teams</h3>
           <ul className="space-y-4">
             {teamMemberships.map((team) => (
               <button
@@ -114,10 +114,10 @@ const DashboardPage = () => {
           </ul>
           <div className="flex items-center mt-10 gap-x-10">
             <button onClick={handleTeam} className="px-4 py-3 border-2 border-gray-600 text-white rounded-lg cursor-pointer hover:scale-105 transition">
-              Crear equipo
+              Create team
             </button>
             <button onClick={handleJoinTeam} className="px-4 py-3 bg-blue-600 text-white rounded-lg cursor-pointer hover:scale-105 transition">
-              Unirse a un equipo
+              Join a team
             </button>
           </div>
         </div>
@@ -127,9 +127,9 @@ const DashboardPage = () => {
       <Modal
         isOpen={showWelcomeModal}
         onClose={() => setShowWelcomeModal(false)}
-        title="Código de equipo"
+        title="Team code"
       >
-        <p className="text-center text-lg font-medium">Tu código de equipo es:</p>
+        <p className="text-center text-lg font-medium">Your team code is:</p>
         <p className="text-center text-2xl font-bold text-blue-600 mt-2">{teamCode}</p>
       </Modal>
 
@@ -143,7 +143,7 @@ const DashboardPage = () => {
           <input
             type="text"
             className="border px-3 py-2 rounded"
-            placeholder="Código del equipo"
+            placeholder="Team code"
             value={inputCode}
             onChange={(e) => setInputCode(e.target.value)}
           />
@@ -152,7 +152,7 @@ const DashboardPage = () => {
             onClick={handleConfirmCode}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
-            Confirmar
+            Confirm
           </button>
         </div>
       </Modal>

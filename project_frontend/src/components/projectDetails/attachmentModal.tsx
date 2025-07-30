@@ -26,7 +26,7 @@ const AttachmentModal = ({
     return (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
             <div className="bg-white p-10 rounded shadow-lg min-w-3xl space-y-4">
-                <h2 className="text-lg font-semibold">📎 Subir adjunto</h2>
+                <h2 className="text-lg font-semibold">📎Upload Attachment</h2>
                 <input
                     type="file"
 
@@ -35,7 +35,7 @@ const AttachmentModal = ({
                 />
                 <div className="flex justify-end gap-2">
                     <button onClick={onClose} className="px-3 py-1 bg-gray-300 rounded">
-                        Cancelar
+                        Cancel
                     </button>
                     <button
                         onClick={handleUpload}

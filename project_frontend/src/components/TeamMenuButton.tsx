@@ -45,7 +45,7 @@ const TeamMenuButton: React.FC<TeamMenuButtonProps> = ({ onEdit, onDelete }) => 
               setIsOpen(false);
             }}
           >
-            ✏️ Editar Equipo
+            ✏️ Edit Team
           </button>
           <button
             className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 text-sm"
@@ -54,7 +54,7 @@ const TeamMenuButton: React.FC<TeamMenuButtonProps> = ({ onEdit, onDelete }) => 
               setIsOpen(false);
             }}
           >
-            🗑️ Eliminar Equipo
+            🗑️ Delete Team
           </button>
         </div>
       )}

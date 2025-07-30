@@ -8,10 +8,10 @@ import useMessageSound from "./useMessageSound"
 const useTeamChat = (teamId: string) => {
     const addMessage = useMessageStore((state) => state.addMessage);
     const socketRef = useRef<Socket | null>(null)
-      const { playReceivedSound } = useMessageSound();
+    const { playReceivedSound } = useMessageSound();
 
     useEffect(() => {
-        const socket = io("http://localhost:3000", {
+        const socket = io(import.meta.env.VITE_API_BASE_URL, {
             withCredentials: true,
             reconnection: true,
             reconnectionAttempts: 5,

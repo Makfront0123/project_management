@@ -21,13 +21,13 @@ const AssignTaskModal: React.FC<Props> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Asignar tarea a un miembro">
       <div className="space-y-4">
-        <label className="block font-semibold">Miembro del equipo:</label>
+        <label className="block font-semibold">Member of the team</label>
         <select
           className="w-full border p-2 rounded"
           value={selectedUserId}
           onChange={(e) => setSelectedUserId(e.target.value)}
         >
-          <option value="">Selecciona un miembro</option>
+          <option value="">Select a member</option>
           {acceptedMembers.map((member) => (
             <option key={member._id} value={member.userId._id}>
               {member.userId.name} ({member.userId.email})
@@ -40,7 +40,7 @@ const AssignTaskModal: React.FC<Props> = ({
           disabled={!selectedUserId}
           onClick={onAssign}
         >
-          Asignar tarea
+          Assign Task
         </button>
       </div>
     </Modal>

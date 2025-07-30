@@ -58,11 +58,11 @@ const TaskModal: React.FC<Props> = ({
         >
           {isSubmitting
             ? isEditing
-              ? "Actualizando..."
-              : "Creando..."
+              ? "Updating..."
+              : "Create..."
             : isEditing
-            ? "Actualizar tarea"
-            : "Guardar tarea"}
+            ? "Update Task"
+            : "Save Task"}
         </button>
       </form>
     </Modal>

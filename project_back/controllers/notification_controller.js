@@ -3,15 +3,14 @@ import { NotificationRepository } from "../repositories/notification_repository.
 export const createNotification = async (req, res) => {
     const { message, recipient } = req.body;
     try {
-        console.log(message, recipient);
         if (!message || !recipient) {
-            return res.status(400).json({ message: "Faltan datos" });
+            return res.status(400).json({ message: "Missing parameters" });
         }
 
         const notification = await NotificationRepository.create({ message, recipient });
         res.status(201).json(notification);
     } catch (err) {
-        res.status(500).json({ error: "Error al crear notificación" });
+        res.status(500).json({ error: "Error to create notification" });
     }
 };
 
@@ -21,7 +20,7 @@ export const getNotificationsForUser = async (req, res) => {
         const notifications = await NotificationRepository.getAllByUser(userId);
         res.json(notifications);
     } catch (err) {
-        res.status(500).json({ error: "Error al obtener notificaciones" });
+        res.status(500).json({ error: "Error to get notifications" });
     }
 };
 
@@ -31,7 +30,7 @@ export const markNotificationAsRead = async (req, res) => {
         const updated = await NotificationRepository.markAsRead(id);
         res.json(updated);
     } catch (err) {
-        res.status(500).json({ error: "Error al marcar como leída" });
+        res.status(500).json({ error: "Error to mark notification as read" });
     }
 };
 
@@ -39,8 +38,8 @@ export const deleteNotificationsByTeamId = async (req, res) => {
     const { teamId } = req.params;
     try {
         await NotificationRepository.deleteByTeamId(teamId);
-        res.status(200).json({ message: "Notificaciones eliminadas" });
+        res.status(200).json({ message: "Notifications deleted" });
     } catch (err) {
-        res.status(500).json({ error: "Error al eliminar notificaciones" });
+        res.status(500).json({ error: "Error to delete notifications" });
     }
 };
