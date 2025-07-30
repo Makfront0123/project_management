@@ -17,7 +17,7 @@ const RenameAttachmentModal: React.FC<RenameAttachmentModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="p-4">
-        <h2 className="text-lg font-bold mb-2">Renombrar archivo</h2>
+        <h2 className="text-lg font-bold mb-2">Rename Attachment</h2>
         <input
           className="w-full border rounded px-3 py-2"
           value={newName}
@@ -25,13 +25,13 @@ const RenameAttachmentModal: React.FC<RenameAttachmentModalProps> = ({
         />
         <div className="flex justify-end gap-2 mt-4">
           <button onClick={onClose} className="bg-gray-400 text-white px-4 py-2 rounded">
-            Cancelar
+            Cancels
           </button>
           <button
             onClick={() => onSubmit(newName)}
             className="bg-blue-600 text-white px-4 py-2 rounded"
           >
-            Guardar
+            Save
           </button>
         </div>
       </div>

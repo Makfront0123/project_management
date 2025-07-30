@@ -22,7 +22,7 @@ const CreateTag = () => {
         validate: (values: TagFormValues) => {
             const errors: Partial<Record<keyof TagFormValues, string>> = {};
             if (!values.name.trim()) {
-                errors.name = "El nombre es obligatorio";
+                errors.name = "Name is required";
             }
             return errors;
         },
@@ -37,11 +37,11 @@ const CreateTag = () => {
             onSubmit={handleSubmit}
             className="bg-white shadow-md rounded-lg p-4 flex flex-col gap-3 w-72"
         >
-            <h3 className="text-lg font-semibold">Crear nueva etiqueta</h3>
+            <h3 className="text-lg font-semibold">Create Tag</h3>
             <input
                 type="text"
                 name="name"
-                placeholder="Nombre de la etiqueta"
+                placeholder="Name of the tag"
                 value={values.name}
                 onChange={handleChange}
                 className="border border-gray-300 rounded px-3 py-1"
@@ -52,7 +52,7 @@ const CreateTag = () => {
                 disabled={isSubmitting}
                 className="bg-green-600 text-white py-1 rounded hover:bg-green-700 transition"
             >
-                {isSubmitting ? "Creando..." : "Crear etiqueta"}
+                {isSubmitting ? "Create..." : "Create Tag"}
             </button>
         </form>
     );

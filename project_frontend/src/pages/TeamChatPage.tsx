@@ -72,13 +72,13 @@ const TeamChatPage = () => {
         validate: (values) => {
             const errors: Partial<Record<keyof MessageFormValues, string>> = {};
             if (!values.message.trim()) {
-                errors.message = "El mensaje no puede estar vacío.";
+                errors.message = "Message is required";
             }
             return errors;
         },
     });
 
-    if (!user) return <div className="p-10 text-center">Cargando usuario...</div>;
+    if (!user) return <div className="p-10 text-center">Loading user...</div>;
 
     const membersToDisplay = teamMembers.filter(
         (member) => member.userId._id !== user.id
@@ -127,7 +127,7 @@ const TeamChatPage = () => {
                 <div className="flex flex-col min-h-[72vh] overflow-y-auto bg-gray-900 p-4 rounded">
                     <div className="mt-4 space-y-2">
                         {isLoading ? (
-                            <p>Cargando mensajes...</p>
+                            <p>Loading messages...</p>
                         ) : (
                             messages.map((msg) => (
                                 <div key={msg._id} className="p-2 rounded bg-gray-100">
@@ -161,7 +161,7 @@ const TeamChatPage = () => {
                             className="bg-red-600 text-white px-4 rounded-r"
                             disabled={isSubmitting}
                         >
-                            Enviar
+                            Send
                         </button>
                     </div>
                     {errors.message && (

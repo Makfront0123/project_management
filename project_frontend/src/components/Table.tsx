@@ -9,19 +9,19 @@ type Props = {
 };
 
 const Table = ({ member, onDelete }: Props) => {
-    const currentUserId = useAuthStore(state => state.user?._id);
+    const currentUserId = useAuthStore(state => state.user?.id);
 
     const isSelfAdmin = member.role === 'admin' && member.userId._id === currentUserId;
 
     return (
-        <table className="flex flex-col w-full border-collapse border p-10 border-gray-300 rounded-lg shadow-md mb-4">
+        <table className="flex flex-col w-full border-collapse border p-5 border-gray-300 rounded-lg shadow-md mb-4">
             <thead className="border-b border-gray-300 p-4">
                 <tr className="flex justify-between font-semibold">
-                    <th className="w-1/5 text-left">Nombre</th>
+                    <th className="w-1/5 text-left">Name</th>
                     <th className="w-1/5 text-left">Email</th>
-                    <th className="w-1/5 text-left">Rol</th>
-                    <th className="w-1/5 text-left">Estado</th>
-                    <th className="w-1/5 text-left">Acciones</th>
+                    <th className="w-1/5 text-left">Role</th>
+                    <th className="w-1/5 text-left">Status</th>
+                    <th className="w-1/5 text-left">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,7 +37,7 @@ const Table = ({ member, onDelete }: Props) => {
                                 className={`text-white px-3 py-1 rounded ${isSelfAdmin ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'}`}
                                 onClick={() => onDelete(member?.userId?._id, member.teamId)}
                             >
-                                Eliminar
+                                Delete
                             </button>
                         )}
                     </td>

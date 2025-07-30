@@ -15,7 +15,7 @@ const TagModal = ({ isOpen, onClose, onSubmit, initialName }: TagModalProps) => 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg w-96 shadow-lg space-y-4">
-        <h2 className="text-xl font-bold">Editar Tag</h2>
+        <h2 className="text-xl font-bold">Edit Tag</h2>
         <input
           type="text"
           className="w-full border p-2 rounded"
@@ -27,13 +27,13 @@ const TagModal = ({ isOpen, onClose, onSubmit, initialName }: TagModalProps) => 
             className="bg-gray-300 px-4 py-2 rounded"
             onClick={onClose}
           >
-            Cancelar
+            Cancel
           </button>
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded"
             onClick={() => onSubmit(name)}
           >
-            Guardar
+            Save
           </button>
         </div>
       </div>

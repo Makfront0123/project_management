@@ -31,7 +31,7 @@ const TagList = ({ tags, onRemoveTag, onEditTag }: TagListProps) => {
                             }}
                             className="text-blue-500 font-bold"
                         >
-                            Editar
+                            Edit
                         </button>
                     )}
                 </span>

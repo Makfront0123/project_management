@@ -25,13 +25,13 @@ const TeamMemberRow = ({ member, onDelete, onAccept, onReject }: Props) => {
               onClick={() => onAccept?.(member?.userId._id, member.teamId)}
               className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
             >
-              Aceptar
+              Accept
             </button>
             <button
               onClick={() => onReject?.(member?.userId._id, member.teamId)}
               className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
             >
-              Rechazar
+              Reject
             </button>
           </>
         )}
@@ -41,7 +41,7 @@ const TeamMemberRow = ({ member, onDelete, onAccept, onReject }: Props) => {
             onClick={() => onDelete(member._id, member.teamId)}
             className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
           >
-            Eliminar
+            Delete
           </button>
         )}
       </td>
