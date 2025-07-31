@@ -2,7 +2,8 @@ import axios from "axios";
 import type { NewProject, Project } from "../types/projects";
 import type { Team } from "../types/team";
 import { useAuthStore } from "../stores/auth_store";
-const baseUrl = "/api/v1";
+
+const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
 
 export const createProject = async (

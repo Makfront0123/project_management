@@ -2,7 +2,7 @@ import axios from "axios";
 import type { TaskInput } from "../types/task";
 import { useAuthStore } from "../stores/auth_store";
 
-const baseUrl = '/api/v1'
+const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 export const createTask = async (projectId: string, data: TaskInput) => {
     const token = useAuthStore.getState().token
     const response = await axios.post(`${baseUrl}/projects/${projectId}/tasks`, data,

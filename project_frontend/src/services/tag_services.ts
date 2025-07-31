@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "../stores/auth_store";
 import type { Tag } from "../types/tag";
 
-const baseUrl = "/api/v1";
+const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
 export const createTag = async (name: string, teamId: string) => {
     const token = useAuthStore.getState().token;
