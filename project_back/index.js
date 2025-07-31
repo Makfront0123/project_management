@@ -7,7 +7,7 @@ import { dbConnect } from "./config/dbConntect.js";
 import dotenv from "dotenv";
 import { Server } from "socket.io";
 import MessageModel from "./models/Message.js";
-import path from "path"; 
+import path from "path";
 import { fileURLToPath } from 'url';
 
 dotenv.config();
@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: `${process.env.CLIENT_URL}`,
   credentials: true
 }));
 
