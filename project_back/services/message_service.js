@@ -9,7 +9,7 @@ export const getGlobalMessages = (teamId) => {
 };
 
 export const deleteGlobalMessages = (teamId) => {
-  return messageRepository.deleteMessagesByTeam(teamId);
+  return messageRepository.deleteGlobalMessages(teamId);
 };
 
 export const deletePrivateMessages = (fromId, toId) => {

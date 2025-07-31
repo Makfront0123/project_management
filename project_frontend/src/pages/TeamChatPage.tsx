@@ -19,7 +19,7 @@ const TeamChatPage = () => {
     const { teamMembers, fetchTeamMembers } = useTeamMemberStore();
     const [selectedMember, setSelectedMember] = useState<User | null>(null);
 
-    const { messages, isLoading, getPrivateMessages, getGlobalMessages } = useMessageStore();
+    const { messages, isLoading, getPrivateMessages, getGlobalMessages, deleteGlobalMessages } = useMessageStore();
 
 
     const { sendMessage: sendGlobalMessage } = useTeamChat(teamId ?? "");
@@ -108,7 +108,7 @@ const TeamChatPage = () => {
                                     id: member.userId._id,
                                     name: member.userId.name,
                                     email: member.userId.email
-                                    
+
                                 };
                                 setSelectedMember(selected);
                                 getPrivateMessages(user.id, selected.id);
@@ -125,23 +125,32 @@ const TeamChatPage = () => {
             </div>
             <div className="flex flex-col w-full">
                 <div className="flex-1 max-h-[72vh] overflow-y-scroll bg-gray-900 p-4 rounded">
-                    <div className="mt-4 space-y-2">
+                    <div>
                         {isLoading ? (
                             <p>Loading messages...</p>
                         ) : (
-                            messages.map((msg) => (
-                                <div key={msg._id} className="p-2 rounded bg-gray-100">
-                                    <p className="text-sm text-gray-600">
-                                        <strong>
-                                            {msg.sender?.name || 'Usuario desconocido'}
-                                            <span className="text-[12px] text-gray-400 font-light ml-2">
-                                                {formatDate(msg.createdAt)}
-                                            </span>
-                                        </strong>
-                                        <span>{msg.text}</span>
-                                    </p>
+                            <div>
+                                <button className="p-2 mb-5 rounded bg-blue-600 text-white" onClick={() => deleteGlobalMessages(teamId ?? '')}>
+                                    Clean Chat
+                                </button>
+                                <div className="flex flex-col gap-5">
+                                    {
+                                        messages.map((msg) => (
+                                            <div key={msg._id} className="p-2 rounded bg-gray-100">
+                                                <p className="text-sm text-gray-600">
+                                                    <strong>
+                                                        {msg.sender?.name || 'Usuario desconocido'}
+                                                        <span className="text-[12px] text-gray-400 font-light ml-2">
+                                                            {formatDate(msg.createdAt)}
+                                                        </span>
+                                                    </strong>
+                                                    <span>{msg.text}</span>
+                                                </p>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
-                            ))
+                            </div>
                         )}
                     </div>
                 </div>
@@ -152,7 +161,7 @@ const TeamChatPage = () => {
                             name="message"
                             value={values.message}
                             onChange={handleChange}
-                            className="flex-1 border p-2 rounded-l bg-gray-900"
+                            className="flex-1 border p-2 rounded-l bg-gray-900 text-white"
                             placeholder="Mensaje para el equipo..."
                             disabled={isSubmitting}
                         />

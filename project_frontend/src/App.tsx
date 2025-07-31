@@ -21,7 +21,6 @@ import TasksPage from './pages/TasksPage';
 
 function App() {
   const { token, loading, checkTokenExpiration, } = useAuthStore()
-
   useEffect(() => {
     checkTokenExpiration()
   }, [checkTokenExpiration])
