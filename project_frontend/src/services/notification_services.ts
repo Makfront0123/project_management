@@ -20,7 +20,7 @@ export const createNotification = async (message: string, recipientId: string) =
 
 export const getNotificationsForUser = async ( ) => {
     const token = useAuthStore.getState().token;
-    const response = await axios.get(`${baseUrl}notifications`,
+    const response = await axios.get(`${baseUrl}/notifications`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -33,7 +33,7 @@ export const getNotificationsForUser = async ( ) => {
 export const markNotificationAsRead = async (id: string) => {
     const token = useAuthStore.getState().token;
     const response = await axios.patch(
-        `${baseUrl}notifications/${id}/read`,
+        `${baseUrl}/notifications/${id}/read`,
         {},
         {
             headers: {
