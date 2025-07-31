@@ -124,7 +124,7 @@ const TeamChatPage = () => {
                 </div>
             </div>
             <div className="flex flex-col w-full">
-                <div className="flex flex-col min-h-[72vh] overflow-y-auto bg-gray-900 p-4 rounded">
+                <div className="flex-1 max-h-[72vh] overflow-y-scroll bg-gray-900 p-4 rounded">
                     <div className="mt-4 space-y-2">
                         {isLoading ? (
                             <p>Loading messages...</p>
@@ -138,7 +138,7 @@ const TeamChatPage = () => {
                                                 {formatDate(msg.createdAt)}
                                             </span>
                                         </strong>
-                                        <p>{msg.text}</p>
+                                        <span>{msg.text}</span>
                                     </p>
                                 </div>
                             ))
