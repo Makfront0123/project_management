@@ -125,10 +125,10 @@ io.on("connection", (socket) => {
 const startServer = async () => {
   try {
     await dbConnect();
-    const PORT = process.env.PORT || 3000;
-    httpServer.listen(PORT, () => {
-      console.log(`Servidor corriendo en el puerto ${PORT}`);
+    httpServer.listen(process.env.PORT, () => {
+      console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);
     });
+
   } catch (error) {
     console.error("Error al iniciar el servidor:", error);
   }
