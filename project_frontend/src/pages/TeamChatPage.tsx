@@ -138,7 +138,7 @@ const TeamChatPage = () => {
                                                 {formatDate(msg.createdAt)}
                                             </span>
                                         </strong>
-                                        <p>{msg.text}</p>
+                                        <span>{msg.text}</span>
                                     </p>
                                 </div>
                             ))
