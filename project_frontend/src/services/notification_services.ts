@@ -5,7 +5,7 @@ const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
 export const createNotification = async (message: string, recipientId: string) => {
     const token = useAuthStore.getState().token;
-    const response = await axios.post(`${baseUrl}notifications`, {
+    const response = await axios.post(`${baseUrl}/notifications`, {
         message,
         recipient: recipientId,
     }, {
