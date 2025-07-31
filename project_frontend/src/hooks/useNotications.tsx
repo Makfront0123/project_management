@@ -13,13 +13,13 @@ export const useNotifications = () => {
     useEffect(() => {
         if (user && !socketRef.current) {
            
-            const socket = io("http://localhost:3000", {
+            const socket = io(import.meta.env.VITE_API_BASE_URL, {
                 withCredentials: true,
             });
             socketRef.current = socket;
-            socket.emit("joinUserRoom", user._id);
+            socket.emit("joinUserRoom", user.id);
 
-            fetchNotifications(user._id);
+            fetchNotifications(user.id);
 
          
             socket.on("newNotification", (notification: NotificationType) => {
