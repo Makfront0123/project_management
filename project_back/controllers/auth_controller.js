@@ -45,13 +45,18 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
     try {
-        const user = await authService.logout(req.body);
-        res.clearCookie('token', { httpOnly: true, secure: true, sameSite: 'None', });
-        res.status(200).json(user);
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None',
+        });
+
+        res.status(200).json({ message: "User logged out" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+};
+
 
 
 

@@ -50,16 +50,6 @@ class AuthService {
             token,
         };
     }
-    async logout(data) {
-        console.log(data.email)
-        const user = await authRepo.findUserByEmail(data.email)
-        if (!user) throw new Error("User does not exist")
-
-
-        await authRepo.setLoginStatus(user, false);
-        return { message: "User logged out" }
-    }
-
 }
 
 export default new AuthService();

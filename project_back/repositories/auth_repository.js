@@ -8,10 +8,6 @@ class AuthRepository {
   async findUserByEmail(email) {
     return await User.findOne({ email });
   }
-
-  async setLoginStatus(user,isLoggedIn) {
-    return await User.findOneAndUpdate({ email: user.email }, { $set: { isLoggedIn: isLoggedIn } });
-  }
 }
 
 const authRepository = new AuthRepository();
