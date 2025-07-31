@@ -126,9 +126,11 @@ const startServer = async () => {
   try {
     await dbConnect();
     const PORT = process.env.PORT || 10000;
+    console.log("Antes de iniciar el servidor...");
     httpServer.listen(PORT, () => {
       console.log(`Servidor corriendo en el puerto ${PORT}`);
     });
+
 
   } catch (error) {
     console.error("Error al iniciar el servidor:", error);
