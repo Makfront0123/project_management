@@ -26,6 +26,8 @@ const TeamChatPage = () => {
     const { sendPrivateMessage } = usePrivateChat(user?.id ?? "", selectedMember?.id ?? "");
     const { playSentSound } = useMessageSound();
 
+    const isAdmin = teamMembers.some((member) => member.userId._id === user?.id);
+
 
 
     useEffect(() => {
@@ -130,9 +132,13 @@ const TeamChatPage = () => {
                             <p>Loading messages...</p>
                         ) : (
                             <div>
-                                <button className="p-2 mb-5 rounded bg-blue-600 text-white" onClick={() => deleteGlobalMessages(teamId ?? '')}>
-                                    Clean Chat
-                                </button>
+                                {
+                                    isAdmin && (
+                                        <button className="p-2 mb-5 rounded bg-blue-600 text-white" onClick={() => deleteGlobalMessages(teamId ?? '')}>
+                                            Clean Chat
+                                        </button>
+                                    )
+                                }
                                 <div className="flex flex-col gap-5">
                                     {
                                         messages.map((msg) => (
