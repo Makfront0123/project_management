@@ -26,9 +26,9 @@ const TeamChatPage = () => {
     const { sendPrivateMessage } = usePrivateChat(user?.id ?? "", selectedMember?.id ?? "");
     const { playSentSound } = useMessageSound();
 
-    const isAdmin = teamMembers.some((member) => member.userId._id === user?.id);
-
-
+    const isAdmin = teamMembers.some(
+        (member) => member.userId._id === user?.id && member.role === "admin"
+    );
 
     useEffect(() => {
         if (teamId && !selectedMember) {
