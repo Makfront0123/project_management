@@ -14,6 +14,7 @@ export const useNotifications = () => {
         if (user && !socketRef.current) {
            
             const socket = io(import.meta.env.VITE_API_BASE_URL, {
+                transports: ['websocket'],
                 withCredentials: true,
             });
             socketRef.current = socket;
