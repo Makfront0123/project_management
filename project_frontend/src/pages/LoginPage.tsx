@@ -56,6 +56,11 @@ const LoginPage = () => {
                     <p className="text-gray-600 font-light">Welcome back, Please enter your details</p>
                 </div>
                 <LoginForm form={form} />
+                <div className="w-full text-end px-2 py-3">
+                    <Link to="/forgot" className="text-sm text-blue-600 hover:underline">
+                        Forgot password?
+                    </Link>
+                </div>
                 <span className="mt-7 text-gray-700 font-light">Don’t have an account? <Link to="/register" className="text-red-600 ml-1 font-regular">Register Here</Link></span>
             </div>
             <div className="relative w-full h-full">

@@ -17,6 +17,10 @@ import ProjectDetails from './pages/ProjectDetails';
 import TeamRequestPage from './pages/TeamRequestPage';
 import TeamChatPage from './pages/TeamChatPage';
 import TasksPage from './pages/TasksPage';
+import VerifyOtpPage from './pages/VerifyOtpPage';
+import ForgotPage from './pages/ForgotPage';
+import VerifyForgotPage from './pages/VerifyForgotPage';
+import { ResetPasswordPage } from './pages/ResetPassword';
 
 
 function App() {
@@ -36,6 +40,10 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="*" element={<Navigate to="/login" />} />
+            <Route path="/verify" element={<VerifyOtpPage />} />
+            <Route path="/forgot" element={<ForgotPage />} />
+            <Route path="/verify-forgot-otp" element={<VerifyForgotPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
           </>
         ) : (
           <Route path="/*" element={<MainLayout />}>

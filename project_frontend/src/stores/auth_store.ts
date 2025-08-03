@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 import toast from 'react-hot-toast'
 import { jwtDecode } from 'jwt-decode'
 
-import { loginUser, logoutUser, registerUser } from '../services/auth_services'
+import { forgotPassword, loginUser, logoutUser, registerUser, resendForgotPasswordOtp, resendOtp, resetPassword, verifyForgotPasswordOtp, verifyOtp } from '../services/auth_services'
 import { getErrorMessage } from '../utils/getErrorMessage'
 import type { JwtPayload, User } from '../types/auth'
 
@@ -16,6 +16,12 @@ type AuthStore = {
     login: (email: string, password: string) => Promise<string>
     register: (formData: FormData) => Promise<void>;
     logout: () => void
+    verifyOtp: (email: string, otp: string) => Promise<string>
+    resendOtp: (email: string) => Promise<string>
+    forgotPassword: (email: string) => Promise<string>
+    resetPassword: (email: string, password: string, confirmPassword: string) => Promise<string>
+    verifyForgotPasswordOtp: (email: string, otp: string) => Promise<string>
+    resendForgotPasswordOtp: (email: string) => Promise<string>
     checkTokenExpiration: () => void
 }
 
@@ -101,6 +107,82 @@ export const useAuthStore = create<AuthStore>()(
                         get().logout()
                         console.log(e)
                     }
+                }
+            },
+            verifyOtp: async (email, otp) => {
+                set({ loading: true });
+                try {
+                    const data = await verifyOtp(email, otp);
+                    set({ loading: false });
+                    toast.success(data.message)
+                    return data.message;
+                } catch (error: unknown) {
+                    set({ loading: false });
+                    toast.error(getErrorMessage(error));
+                    throw new Error(getErrorMessage(error));
+                }
+            },
+            resendOtp: async (email) => {
+                set({ loading: true });
+                try {
+                    const data = await resendOtp(email);
+                    set({ loading: false });
+                    toast.success(data.message)
+                    return data.message;
+                } catch (error: unknown) {
+                    set({ loading: false });
+                    toast.error(getErrorMessage(error));
+                    throw new Error(getErrorMessage(error));
+                }
+            },
+            forgotPassword: async (email) => {
+                set({ loading: true });
+                try {
+                    const data = await forgotPassword(email);
+                    set({ loading: false });
+                    toast.success(data.message)
+                    return data.message;
+                } catch (error: unknown) {
+                    set({ loading: false });
+                    toast.error(getErrorMessage(error));
+                    throw new Error(getErrorMessage(error));
+                }
+            },
+            resetPassword: async (email, password, confirmPassword) => {
+                set({ loading: true });
+                try {
+                    const data = await resetPassword(email, password, confirmPassword);
+                    set({ loading: false });
+                    toast.success(data.message)
+                    return data.message;
+                }
+                catch (error: unknown) {
+                    set({ loading: false });
+                    throw new Error(getErrorMessage(error));
+                }
+            },
+            verifyForgotPasswordOtp: async (email, otp) => {
+                set({ loading: true });
+                try {
+                    const data = await verifyForgotPasswordOtp(email, otp);
+                    set({ loading: false });
+                    toast.success(data.message)
+                    return data.message;
+                } catch (error: unknown) {
+                    set({ loading: false });
+                    throw new Error(getErrorMessage(error));
+                }
+            },
+            resendForgotPasswordOtp: async (email) => {
+                set({ loading: true });
+                try {
+                    const data = await resendForgotPasswordOtp(email);
+                    set({ loading: false });
+                    toast.success(data.message)
+                    return data.message;
+                } catch (error: unknown) {
+                    set({ loading: false });
+                    throw new Error(getErrorMessage(error));
                 }
             }
         }),

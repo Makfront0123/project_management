@@ -13,9 +13,9 @@ class AuthService {
 
         const hashedPassword = await bcrypt.hash(data.password, 10);
 
-       
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();  
-        const otpExpires = new Date(Date.now() + 10 * 60 * 1000);  
+
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
         const user = await authRepo.register({
             ...data,
             password: hashedPassword,
@@ -114,11 +114,11 @@ class AuthService {
         });
         return user;
     }
-    async resetPassword(email, otp, password) {
+    async resetPassword(email, password, confirmPassword) {
+        if (password !== confirmPassword) throw new Error("Passwords do not match");
+        if (password.length < 6) throw new Error("Password must be at least 6 characters");
         const user = await authRepo.findUserByEmail(email);
         if (!user) throw new Error("User not found");
-        if (user.otp !== otp) throw new Error("Invalid OTP");
-        if (user.otpExpires < Date.now()) throw new Error("OTP expired");
         const hashedPassword = await bcrypt.hash(password, 10);
         user.password = hashedPassword;
         user.otp = undefined;
@@ -145,7 +145,6 @@ class AuthService {
     async resendOtpForgotPassword(email) {
         const user = await authRepo.findUserByEmail(email);
         if (!user) throw new Error("User not found");
-        if (user.isVerified) throw new Error("User already verified");
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const otpExpires = new Date(Date.now() + 10 * 60 * 1000);

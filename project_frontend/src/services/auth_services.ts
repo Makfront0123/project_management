@@ -38,3 +38,49 @@ export const getUserTeamStatus = async () => {
 
     return response.data
 }
+
+export const verifyOtp = async (email: string, otp: string) => {
+    const response = await axios.post(`${baseUrl}/verify`, {
+        email,
+        otp,
+    })
+    return response.data
+}
+
+export const resendOtp = async (email: string) => {
+    const response = await axios.post(`${baseUrl}/resend`, {
+        email,
+    })
+    return response.data
+}
+
+export const forgotPassword = async (email: string) => {
+    const response = await axios.post(`${baseUrl}/forgot-password`, {
+        email,
+    })
+    return response.data
+}
+
+export const resetPassword = async (email: string, password: string, confirmPassword: string) => {
+    const response = await axios.post(`${baseUrl}/reset-password`, {
+        email,
+        password,
+        confirmPassword,
+    })
+    return response.data
+}
+
+export const verifyForgotPasswordOtp = async (email: string, otp: string) => {
+    const response = await axios.post(`${baseUrl}/verify-forgot`, {
+        email,
+        otp,
+    })
+    return response.data
+}
+
+export const resendForgotPasswordOtp = async (email: string) => {
+    const response = await axios.post(`${baseUrl}/resend-forgot-otp`, {
+        email,
+    })
+    return response.data
+}

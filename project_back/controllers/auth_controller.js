@@ -122,8 +122,8 @@ export const forgotPassword = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
     try {
-        const { email, otp, password } = req.body;
-        const user = await authService.resetPassword(email, otp, password);
+        const { email, password,confirmPassword } = req.body;
+        const user = await authService.resetPassword(email, password,confirmPassword);
         res.status(200).json({
             message: "Password reset successfully",
             user: {
@@ -135,8 +135,6 @@ export const resetPassword = async (req, res) => {
         });
     } catch (error) {
         const msg = error.message || "Internal Server Error";
-        if (msg === "OTP expired") return res.status(401).json({ message: msg });
-        if (msg === "Invalid OTP") return res.status(401).json({ message: msg });
         if (msg === "Invalid password") return res.status(401).json({ message: msg });
         return res.status(500).json({ message: msg });
     }

@@ -42,7 +42,10 @@ const RegisterPage = () => {
 
 
                 await register(formData)
-                navigate("/login")
+                navigate("/verify", {
+                    state: { email: values.email }
+                });
+
             }
             catch (err: unknown) {
                 const msg = getErrorMessage(err);
