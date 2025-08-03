@@ -10,7 +10,7 @@ export const register = async (req, res) => {
 
 
         res.status(200).json({
-            message: "User registered successfully",
+            message: "User created successfully. OTP sent to email.",
             user: {
                 id: user._id,
                 name: user.name,
@@ -57,6 +57,129 @@ export const logout = async (req, res) => {
     }
 };
 
+export const authVerify = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        const user = await authService.verifyOtp(email, otp);
+        res.status(200).json({
+            message: "OTP verified successfully",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                image: user.image || null,
+            },
+        });
+    } catch (error) {
+        const msg = error.message || "Internal Server Error";
+        if (msg === "OTP expired") return res.status(401).json({ message: msg });
+        if (msg === "Invalid OTP") return res.status(401).json({ message: msg });
+        return res.status(500).json({ message: msg });
+    }
+};
 
 
+export const resendOtp = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await authService.resendOtp(email);
+        res.status(200).json({
+            message: "OTP sent to email",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                image: user.image || null,
+            },
+        });
+    } catch (error) {
+        const msg = error.message || "Internal Server Error";
+        if (msg === "User not found") return res.status(404).json({ message: msg });
+        if (msg === "User already verified") return res.status(400).json({ message: msg });
+        return res.status(500).json({ message: msg });
+    }
+};
 
+export const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await authService.forgotPassword(email);
+        res.status(200).json({
+            message: "OTP sent to email",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                image: user.image || null,
+            },
+        });
+    } catch (error) {
+        const msg = error.message || "Internal Server Error";
+        if (msg === "User not found") return res.status(404).json({ message: msg });
+        return res.status(500).json({ message: msg });
+    }
+};
+
+export const resetPassword = async (req, res) => {
+    try {
+        const { email, otp, password } = req.body;
+        const user = await authService.resetPassword(email, otp, password);
+        res.status(200).json({
+            message: "Password reset successfully",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                image: user.image || null,
+            },
+        });
+    } catch (error) {
+        const msg = error.message || "Internal Server Error";
+        if (msg === "OTP expired") return res.status(401).json({ message: msg });
+        if (msg === "Invalid OTP") return res.status(401).json({ message: msg });
+        if (msg === "Invalid password") return res.status(401).json({ message: msg });
+        return res.status(500).json({ message: msg });
+    }
+};
+
+export const verifyForgotOtp = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        const user = await authService.verifyOtpForgotPassword(email, otp);
+        res.status(200).json({
+            message: "OTP verified successfully",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                image: user.image || null,
+            },
+        });
+    } catch (error) {
+        const msg = error.message || "Internal Server Error";
+        if (msg === "OTP expired") return res.status(401).json({ message: msg });
+        if (msg === "Invalid OTP") return res.status(401).json({ message: msg });
+        return res.status(500).json({ message: msg });
+    }
+};
+
+export const resendForgotPasswordOtp = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await authService.resendOtpForgotPassword(email);
+        res.status(200).json({
+            message: "OTP sent to email",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                image: user.image || null,
+            },
+        });
+    } catch (error) {
+        const msg = error.message || "Internal Server Error";
+        if (msg === "User not found") return res.status(404).json({ message: msg });
+        if (msg === "User already verified") return res.status(400).json({ message: msg });
+        return res.status(500).json({ message: msg });
+    }
+};

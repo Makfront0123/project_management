@@ -36,7 +36,7 @@ const LoginPage = () => {
     });
 
     return (
-        <section className="min-h-screen w-full bg-[#faf9f6] relative  flex items-start justify-center">
+        <section className="min-h-screen w-full bg-[#faf9f6] relative  flex md:flex-row flex-col items-start justify-center">
 
             <div
                 className="absolute inset-0 z-0"
@@ -50,7 +50,7 @@ const LoginPage = () => {
                 }}
             />
 
-            <div className="flex flex-col items-center  gap-y-2 px-28 z-40">
+            <div className="flex flex-col items-center  gap-y-2 md:px-28 px-0  z-40">
                 <div className="flex flex-col items-center justify-center mt-24 gap-2">
                     <h1 className="text-4xl">Welcome Back</h1>
                     <p className="text-gray-600 font-light">Welcome back, Please enter your details</p>
