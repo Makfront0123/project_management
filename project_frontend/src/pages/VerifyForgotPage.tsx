@@ -13,7 +13,8 @@ const VerifyForgotPage = () => {
         e.preventDefault();
         try {
             await verifyForgotPasswordOtp(email, otp);
-            navigate("/reset-password", { state: { email } });
+            navigate(`/reset-password?email=${email}`);
+
         } catch {
             // Error ya manejado con toast en el store
         }
