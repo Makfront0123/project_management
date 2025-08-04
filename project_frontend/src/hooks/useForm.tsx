@@ -14,7 +14,7 @@ export function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-        
+
         const target = e.target as HTMLInputElement;
         const { name, value } = target;
 
@@ -43,8 +43,6 @@ export function useForm<T>({ initialValues, onSubmit, validate }: UseFormProps<T
         setErrors({});
         try {
             await onSubmit(values);
-        } catch (err) {
-            console.error(err);
         } finally {
             setIsSubmitting(false);
         }

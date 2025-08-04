@@ -28,10 +28,12 @@ const ForgotPage = () => {
             return errors;
         },
         onSubmit: async (values) => {
-            await forgotPassword(values.email);
-            navigate("/verify-forgot-otp", {
-                state: { email: values.email },
-            });
+            try {
+                await forgotPassword(values.email);
+                navigate("/verify");
+            } catch {
+                // Error ya manejado con toast en el store
+            }
         },
     });
 

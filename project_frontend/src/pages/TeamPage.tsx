@@ -31,8 +31,8 @@ const TeamPage = () => {
     isLoading,
     getProjects,
     createProject,
-    page, 
-    totalPages,  
+    page,
+    totalPages,
   } = useProjectStore();
 
   const { updateTeam, deleteTeam } = useTeamStore();
@@ -41,7 +41,7 @@ const TeamPage = () => {
   const [teamsLoading, setTeamsLoading] = useState(true);
   const [isEditTeamModalOpen, setIsEditTeamModalOpen] = useState(false);
 
- 
+
   const handlePageChange = (newPage: number) => {
     if (teamId) {
       getProjects(teamId, newPage);
@@ -55,8 +55,8 @@ const TeamPage = () => {
       try {
         await deleteTeam(teamId);
         navigate('/dashboard');
-      } catch (error) {
-        console.error("Error al eliminar el equipo:", error);
+      } catch {
+        // Error ya manejado con toast en el store
       }
     }
   };
@@ -77,8 +77,8 @@ const TeamPage = () => {
 
   useEffect(() => {
     if (teamId) {
-       
-      getProjects(teamId); 
+
+      getProjects(teamId);
       fetchTeamMembers(teamId);
     }
   }, [teamId, getProjects, fetchTeamMembers]);
@@ -210,7 +210,7 @@ const TeamPage = () => {
                 <Paginator
                   page={page}
                   totalPages={totalPages}
-                  onPageChange={handlePageChange}  
+                  onPageChange={handlePageChange}
                 />
               )}
             </>

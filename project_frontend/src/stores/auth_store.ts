@@ -49,13 +49,15 @@ export const useAuthStore = create<AuthStore>()(
                         token: data.user.token,
                         loading: false,
                     });
-
+                    toast.success(data.message);
                     return data.message;
                 } catch (error: unknown) {
                     set({ user: null, token: null, loading: false });
+                    toast.error(getErrorMessage(error));
                     throw new Error(getErrorMessage(error));
                 }
             },
+
 
             register: async (formData) => {
                 set({ loading: true })
@@ -140,14 +142,16 @@ export const useAuthStore = create<AuthStore>()(
                 try {
                     const data = await forgotPassword(email);
                     set({ loading: false });
-                    toast.success(data.message)
+                    toast.success(data.message);
                     return data.message;
                 } catch (error: unknown) {
                     set({ loading: false });
-                    toast.error(getErrorMessage(error));
-                    throw new Error(getErrorMessage(error));
+                    const message = getErrorMessage(error);
+                    toast.error(message);
+                    throw new Error(message); 
                 }
             },
+
             resetPassword: async (email, password, confirmPassword) => {
                 set({ loading: true });
                 try {

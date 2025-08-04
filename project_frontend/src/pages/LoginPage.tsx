@@ -4,8 +4,6 @@ import { useForm } from "../hooks/useForm"
 import { images } from "../core/images"
 import { LoginForm } from "../components/LoginForm"
 
-import { getErrorMessage } from "../utils/getErrorMessage"
-import toast from "react-hot-toast"
 
 const LoginPage = () => {
     const { login } = useAuthStore()
@@ -24,14 +22,7 @@ const LoginPage = () => {
             return errors
         },
         onSubmit: async (values) => {
-            try {
-                const message = await login(values.email, values.password)
-                toast.success(message)
-
-            } catch (err: unknown) {
-                const msg = getErrorMessage(err)
-                toast.error(msg)
-            }
+            await login(values.email, values.password)
         }
     });
 

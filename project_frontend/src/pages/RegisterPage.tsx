@@ -1,12 +1,8 @@
-import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router";
 import { RegisterForm } from "../components/RegisterForm";
 import { images } from "../core/images";
 import { useForm } from "../hooks/useForm";
 import { useAuthStore } from "../stores/auth_store";
-import { getErrorMessage } from "../utils/getErrorMessage";
-
-
 
 const RegisterPage = () => {
     const { register } = useAuthStore();
@@ -47,10 +43,9 @@ const RegisterPage = () => {
                 });
 
             }
-            catch (err: unknown) {
-                const msg = getErrorMessage(err);
-                toast.error(msg);
-            }
+            catch {
+            // Error ya manejado con toast en el store
+        }
         }
     });
 

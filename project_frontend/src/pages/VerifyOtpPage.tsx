@@ -1,6 +1,4 @@
- 
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { useNavigate, useLocation } from "react-router";
 import { useAuthStore } from "../stores/auth_store";
 
@@ -16,17 +14,16 @@ const VerifyOtpPage = () => {
         try {
             await verifyOtp(email, otp);
             navigate("/login");
-        } catch (error) {
-            console.error(error);
+        } catch {
+            // Error ya manejado con toast en el store
         }
     };
 
     const handleResend = async () => {
         try {
             await resendOtp(email);
-        } catch (error) {
-            toast.error("Failed to resend OTP");
-            console.error(error);
+        } catch {
+            // Error ya manejado con toast en el store
         }
     };
 

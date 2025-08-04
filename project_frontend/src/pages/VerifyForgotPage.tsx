@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import toast from 'react-hot-toast';
 import { useNavigate, useLocation } from 'react-router';
 import { useAuthStore } from '../stores/auth_store';
 
@@ -15,19 +14,18 @@ const VerifyForgotPage = () => {
         try {
             await verifyForgotPasswordOtp(email, otp);
             navigate("/reset-password", { state: { email } });
-        } catch (error) {
-            console.error(error);
-            toast.error("Invalid or expired OTP");
+        } catch {
+            // Error ya manejado con toast en el store
         }
+
     };
 
     const handleResend = async () => {
         try {
             await resendForgotPasswordOtp(email);
 
-        } catch (error) {
-            toast.error("Failed to resend OTP");
-            console.error(error);
+        } catch {
+            // Error ya manejado con toast en el store
         }
     };
 
