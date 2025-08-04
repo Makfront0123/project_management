@@ -79,13 +79,15 @@ export const useProjectStore = create<ProjectStore>((set) => ({
   updateProject: async (id: string, data: Partial<Project>, teamId: string) => {
     set({ isLoading: true });
     try {
-      const { message, project } = await updateProject(id, data, teamId);
+      const { message, } = await updateProject(id, data, teamId);
+      const updatedProject = await getProject(id, teamId);
       set((state) => ({
-        projects: state.projects.map((p) =>
-          p._id === project._id ? project : p
+        projects: state.projects.map((project) =>
+          project._id === id ? updatedProject : project
         ),
         isLoading: false,
       }));
+
       toast.success(message);
     } catch (error) {
       console.error("Error actualizando proyecto:", error);
