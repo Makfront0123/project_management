@@ -9,12 +9,11 @@ const VerifyOtpPage = () => {
     const email = searchParams.get("email");
     const [otp, setOtp] = useState("");
     const { verifyOtp, resendOtp} = useAuthStore();
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             await verifyOtp(email ?? '', otp);
-            navigate("/reset-password?email=" + email);
+            navigate("/login");
         } catch {
             // Error ya manejado con toast en el store
         }

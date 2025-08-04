@@ -38,14 +38,12 @@ const RegisterPage = () => {
 
 
                 await register(formData)
-                navigate("/verify", {
-                    state: { email: values.email }
-                });
+                navigate("/verify?email=" + values.email);
 
             }
             catch {
-            // Error ya manejado con toast en el store
-        }
+                // Error ya manejado con toast en el store
+            }
         }
     });
 
