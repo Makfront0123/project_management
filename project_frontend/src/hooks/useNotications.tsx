@@ -12,30 +12,34 @@ export const useNotifications = () => {
 
     useEffect(() => {
         if (user && !socketRef.current) {
-           
+
             const socket = io(import.meta.env.VITE_API_SOCKET_URL, {
                 withCredentials: true,
+                reconnection: true,
+                reconnectionAttempts: 5,
+                reconnectionDelay: 1000,
+                transports: ['polling', 'websocket'],
             });
             socketRef.current = socket;
             socket.emit("joinUserRoom", user.id);
 
             fetchNotifications(user.id);
 
-         
+
             socket.on("newNotification", (notification: NotificationType) => {
-              
+
                 addNotification(notification);
             });
 
             socket.on("taskCompletedNotification", (notification: NotificationType) => {
-             
+
                 addNotification(notification);
             });
         }
 
         return () => {
             if (socketRef.current) {
-              
+
                 socketRef.current.off("newNotification");
                 socketRef.current.off("taskCompletedNotification");
                 socketRef.current.disconnect();

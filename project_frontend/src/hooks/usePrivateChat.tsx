@@ -17,6 +17,10 @@ const usePrivateChat = (fromUserId: string, toUserId: string) => {
         if (!fromUserId || !toUserId) return;
         const socket = io(import.meta.env.VITE_API_SOCKET_URL, {
             withCredentials: true,
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000,
+            transports: ['polling', 'websocket'],
         });
 
         socketRef.current = socket;
