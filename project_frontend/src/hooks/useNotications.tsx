@@ -13,9 +13,13 @@ export const useNotifications = () => {
     useEffect(() => {
         if (user && !socketRef.current) {
            
-            const socket = io(import.meta.env.VITE_API_BASE_URL, {
-                withCredentials: true,
-            });
+            const socket = io(import.meta.env.VITE_API_SOCKET_URL, {
+            withCredentials: true,
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000,
+            transports: ['polling'],
+        });
             socketRef.current = socket;
             socket.emit("joinUserRoom", user.id);
 

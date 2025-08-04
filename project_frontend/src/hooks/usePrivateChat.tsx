@@ -15,10 +15,13 @@ const usePrivateChat = (fromUserId: string, toUserId: string) => {
 
     useEffect(() => {
         if (!fromUserId || !toUserId) return;
-        const socket = io("http://localhost:3000", {
+        const socket = io(import.meta.env.VITE_API_SOCKET_URL, {
             withCredentials: true,
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000,
+            transports: ['polling'],
         });
-
         socketRef.current = socket;
 
         socket.emit("joinPrivateChat", { fromUserId, toUserId });

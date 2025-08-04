@@ -11,11 +11,12 @@ const useTeamChat = (teamId: string) => {
     const { playReceivedSound } = useMessageSound();
 
     useEffect(() => {
-        const socket = io(import.meta.env.VITE_API_BASE_URL, {
+        const socket = io(import.meta.env.VITE_API_SOCKET_URL, {
             withCredentials: true,
             reconnection: true,
             reconnectionAttempts: 5,
             reconnectionDelay: 1000,
+            transports: ['polling'],
         });
 
         socketRef.current = socket
