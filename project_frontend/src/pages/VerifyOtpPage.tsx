@@ -1,19 +1,20 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { useAuthStore } from "../stores/auth_store";
 
 const VerifyOtpPage = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const email = location.state?.email ?? "";
+
+    const [searchParams] = useSearchParams();
+    const email = searchParams.get("email");
     const [otp, setOtp] = useState("");
-    const { verifyOtp, resendOtp } = useAuthStore();
+    const { verifyForgotPasswordOtp, resendForgotPasswordOtp } = useAuthStore();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await verifyOtp(email, otp);
-            navigate("/login");
+            await verifyForgotPasswordOtp(email ?? '', otp);
+            navigate("/reset-password?email=" + email);
         } catch {
             // Error ya manejado con toast en el store
         }
@@ -21,7 +22,7 @@ const VerifyOtpPage = () => {
 
     const handleResend = async () => {
         try {
-            await resendOtp(email);
+            await resendForgotPasswordOtp(email ?? '');
         } catch {
             // Error ya manejado con toast en el store
         }

@@ -1,14 +1,15 @@
 import toast from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { useForm } from "../hooks/useForm";
 import { useAuthStore } from "../stores/auth_store";
 
 
 
 export const ResetPasswordPage = () => {
-    const location = useLocation();
     const navigate = useNavigate();
-    const email = location.state?.email ?? "";
+
+    const [searchParams] = useSearchParams();
+    const email = searchParams.get("email");
     const { resetPassword } = useAuthStore();
 
     const {
@@ -40,7 +41,7 @@ export const ResetPasswordPage = () => {
         },
         onSubmit: async (values) => {
             try {
-                await resetPassword(email, values.password, values.confirmPassword);
+                await resetPassword(email ?? '', values.password, values.confirmPassword);
                 navigate("/login");
             } catch (error) {
                 console.error(error);

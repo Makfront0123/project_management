@@ -22,7 +22,6 @@ const usePrivateChat = (fromUserId: string, toUserId: string) => {
             reconnectionDelay: 1000,
             transports: ['polling'],
         });
-
         socketRef.current = socket;
 
         socket.emit("joinPrivateChat", { fromUserId, toUserId });

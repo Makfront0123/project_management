@@ -30,7 +30,7 @@ const ForgotPage = () => {
         onSubmit: async (values) => {
             try {
                 await forgotPassword(values.email);
-                navigate("/verify");
+                navigate(`/verify?email=${values.email}`);
             } catch {
                 // Error ya manejado con toast en el store
             }
