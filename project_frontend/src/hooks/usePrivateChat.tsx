@@ -20,7 +20,7 @@ const usePrivateChat = (fromUserId: string, toUserId: string) => {
             reconnection: true,
             reconnectionAttempts: 5,
             reconnectionDelay: 1000,
-            transports: ['polling', 'websocket'],
+            transports: ['polling'],
         });
 
         socketRef.current = socket;
