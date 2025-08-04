@@ -8,12 +8,12 @@ const VerifyOtpPage = () => {
     const [searchParams] = useSearchParams();
     const email = searchParams.get("email");
     const [otp, setOtp] = useState("");
-    const { verifyForgotPasswordOtp, resendForgotPasswordOtp } = useAuthStore();
+    const { verifyOtp, resendOtp} = useAuthStore();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await verifyForgotPasswordOtp(email ?? '', otp);
+            await verifyOtp(email ?? '', otp);
             navigate("/reset-password?email=" + email);
         } catch {
             // Error ya manejado con toast en el store
@@ -22,7 +22,7 @@ const VerifyOtpPage = () => {
 
     const handleResend = async () => {
         try {
-            await resendForgotPasswordOtp(email ?? '');
+            await resendOtp(email ?? '');
         } catch {
             // Error ya manejado con toast en el store
         }
