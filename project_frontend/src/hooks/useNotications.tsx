@@ -13,7 +13,7 @@ export const useNotifications = () => {
     useEffect(() => {
         if (user && !socketRef.current) {
            
-            const socket = io(import.meta.env.VITE_API_BASE_URL, {
+            const socket = io(import.meta.env.VITE_API_SOCKET_URL, {
                 withCredentials: true,
             });
             socketRef.current = socket;
