@@ -36,10 +36,7 @@ export const useAuthStore = create<AuthStore>()(
             login: async (email, password) => {
                 set({ loading: true });
                 try {
-                    console.time("loginRequest");
                     const data = await loginUser(email, password);
-                    console.timeEnd("loginRequest"); 
-
                     const decoded: JwtPayload = jwtDecode(data.user.token);
 
                     set({
