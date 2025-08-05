@@ -36,7 +36,10 @@ export const useAuthStore = create<AuthStore>()(
             login: async (email, password) => {
                 set({ loading: true });
                 try {
+                    console.time("loginRequest");
                     const data = await loginUser(email, password);
+                    console.timeEnd("loginRequest"); 
+
                     const decoded: JwtPayload = jwtDecode(data.user.token);
 
                     set({
@@ -148,7 +151,7 @@ export const useAuthStore = create<AuthStore>()(
                     set({ loading: false });
                     const message = getErrorMessage(error);
                     toast.error(message);
-                    throw new Error(message); 
+                    throw new Error(message);
                 }
             },
 
