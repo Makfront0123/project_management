@@ -115,15 +115,28 @@ export const useAuthStore = create<AuthStore>()(
                 set({ loading: true });
                 try {
                     const data = await verifyOtp(email, otp);
-                    set({ loading: false });
-                    toast.success(data.message)
+                    const decoded: JwtPayload = jwtDecode(data.user.token);
+
+                    set({
+                        user: {
+                            id: decoded.id,
+                            email: decoded.email,
+                            name: decoded.name,
+                            image: decoded.image,
+                        },
+                        token: data.user.token,
+                        loading: false,
+                    });
+
+                    toast.success(data.message);
                     return data.message;
                 } catch (error: unknown) {
                     set({ loading: false });
                     toast.error(getErrorMessage(error));
                     throw new Error(getErrorMessage(error));
                 }
-            },
+            }
+            ,
             resendOtp: async (email) => {
                 set({ loading: true });
                 try {
