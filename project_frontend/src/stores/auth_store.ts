@@ -75,7 +75,7 @@ export const useAuthStore = create<AuthStore>()(
                         loading: false
                     })
 
-                    toast.success("Usuario registrado correctamente")
+                    toast.success("User registered successfully")
                 } catch (error: unknown) {
                     set({ user: null, token: null, loading: false })
                     throw new Error(getErrorMessage(error))
@@ -115,18 +115,9 @@ export const useAuthStore = create<AuthStore>()(
                 set({ loading: true });
                 try {
                     const data = await verifyOtp(email, otp);
-                    const decoded: JwtPayload = jwtDecode(data.user.token);
 
-                    set({
-                        user: {
-                            id: decoded.id,
-                            email: decoded.email,
-                            name: decoded.name,
-                            image: decoded.image,
-                        },
-                        token: data.user.token,
-                        loading: false,
-                    });
+               
+                    set({ loading: false });
 
                     toast.success(data.message);
                     return data.message;
@@ -135,8 +126,8 @@ export const useAuthStore = create<AuthStore>()(
                     toast.error(getErrorMessage(error));
                     throw new Error(getErrorMessage(error));
                 }
-            }
-            ,
+            },
+
             resendOtp: async (email) => {
                 set({ loading: true });
                 try {
