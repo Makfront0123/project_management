@@ -1,6 +1,6 @@
 
 import { create } from 'zustand'
-import { addMember, confirmJoinWithCode, deleteMember,   getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, rejectRequest, requestToJoinTeam } from '../services/team_member'
+import { addMember, confirmJoinWithCode, deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, rejectRequest, requestToJoinTeam } from '../services/team_member'
 import type { TeamMember } from '../types/teamMember'
 import type { UserTeamStatus } from '../types/userTeamStatus'
 import { getUserTeamStatus } from '../services/auth_services'
@@ -13,7 +13,7 @@ type TeamStore = {
     isLoading: boolean
     requestedTeams: string[]
     getUserTeamStatus: () => Promise<void>
-  
+
     fetchTeamMembers: (teamId: string) => Promise<void>
     deleteMember: (memberId: string, teamId: string) => Promise<void>
     requestToJoinTeam: (teamId: string) => Promise<void>
@@ -54,8 +54,6 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
         }
     },
     deleteMember: async (memberId: string, teamId: string) => {
-
-
         set({ isLoading: true });
         try {
             const data = await deleteMember(memberId, teamId);
@@ -69,6 +67,7 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
             set({ isLoading: false });
         }
     },
+
 
     requestToJoinTeam: async (teamId: string) => {
 
@@ -135,6 +134,8 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
 
             const updatedMembers = await getPendingMembersOfTeam(teamId);
             set({ teamMembers: updatedMembers, isLoading: false });
+
+            await getUserTeamStatus();
         } catch (error) {
             const errorMsg = getErrorMessage(error);
             toast.error(errorMsg);
@@ -142,7 +143,6 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
             set({ isLoading: false });
         }
     },
-
     confirmJoinWithCode: async (teamId: string, code: string) => {
         set({ isLoading: true });
         try {
@@ -172,7 +172,7 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
         }
     },
 
-    
+
 
 
 }))

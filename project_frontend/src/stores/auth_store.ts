@@ -82,19 +82,20 @@ export const useAuthStore = create<AuthStore>()(
                 }
             }
             ,
-
             logout: async () => {
-                set({ loading: true })
+                set({ loading: true });
                 try {
-                    const data = await logoutUser()
-                    set({ user: null, token: null, loading: false })
-                    toast.success(data.message)
-                    return data.message
+                    const data = await logoutUser();
+                    set({ user: null, token: null, loading: false });
+                    toast.success(data.message);
+                    localStorage.removeItem('auth-store');
+                    return data.message;
                 } catch (error: unknown) {
-                    set({ user: null, token: null, loading: false })
-                    throw new Error(getErrorMessage(error))
+                    set({ user: null, token: null, loading: false });  
+                    throw new Error(getErrorMessage(error));
                 }
-            },
+            }
+            ,
 
             checkTokenExpiration: () => {
                 const token = get().token
@@ -116,7 +117,7 @@ export const useAuthStore = create<AuthStore>()(
                 try {
                     const data = await verifyOtp(email, otp);
 
-               
+
                     set({ loading: false });
 
                     toast.success(data.message);

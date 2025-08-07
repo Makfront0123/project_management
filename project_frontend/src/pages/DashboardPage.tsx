@@ -25,8 +25,12 @@ const DashboardPage = () => {
 
 
   useEffect(() => {
-    getUserTeamStatus()
-  }, [getUserTeamStatus])
+    const loadTeams = async () => {
+      await getUserTeamStatus();
+    };
+    loadTeams();
+  }, [getUserTeamStatus]);
+
 
   useEffect(() => {
     if (teamMemberships.length > 0) {
@@ -47,6 +51,18 @@ const DashboardPage = () => {
       }
     }
   }, [teamMemberships, getTeamCode])
+
+  useEffect(() => {
+    const keys = Object.keys(localStorage).filter(key => key.startsWith('shown_code_'))
+    const currentTeamIds = teamMemberships.map(team => team.teamId)
+    keys.forEach(key => {
+      const teamId = key.replace('shown_code_', '')
+      if (!currentTeamIds.includes(teamId)) {
+        localStorage.removeItem(key)
+      }
+    })
+  }, [teamMemberships])
+
 
   const handleTeamClick = (teamId: string, role: string) => {
     if (role === "member") {
