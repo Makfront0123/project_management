@@ -1,6 +1,6 @@
 import express from "express";
 import { register, login, logout, authVerify, resendOtp,forgotPassword, resetPassword, verifyForgotOtp, resendForgotPasswordOtp } from "../controllers/auth_controller.js";
-import upload from "../middlewares/upload_middleware.js";
+import { upload } from "../middlewares/upload_middleware.js"
 const router = express.Router();
 router.post("/register", upload.single('image'), register);
 router.post("/login", login);

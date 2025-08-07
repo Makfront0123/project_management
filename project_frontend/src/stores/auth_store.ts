@@ -41,6 +41,8 @@ export const useAuthStore = create<AuthStore>()(
                     const data = await loginUser(email, password);
 
                     const decoded: JwtPayload = jwtDecode(data.user.token);
+                    console.log(decoded);
+
                     set({
                         user: {
                             id: decoded.id,

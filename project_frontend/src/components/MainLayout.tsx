@@ -44,7 +44,7 @@ const MainLayout = () => {
                             </Link>
 
                             <img
-                                src={user?.image ? getImageUrl(user.image) : ''}
+                                src={user?.image ? getImageUrl(user?.image) : ''}
                                 className="size-36 rounded-full object-cover"
 
                             />
