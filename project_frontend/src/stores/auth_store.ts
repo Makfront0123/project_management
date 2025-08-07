@@ -36,21 +36,11 @@ export const useAuthStore = create<AuthStore>()(
 
             login: async (email, password) => {
                 set({ loading: true });
-                const start = performance.now();
 
                 try {
-                    console.log("🔵 Login request started");
-
                     const data = await loginUser(email, password);
 
-                    const afterLoginRequest = performance.now();
-                    console.log(`🟢 loginUser took ${afterLoginRequest - start} ms`);
-
                     const decoded: JwtPayload = jwtDecode(data.user.token);
-
-                    const afterDecode = performance.now();
-                    console.log(`🟡 jwtDecode took ${afterDecode - afterLoginRequest} ms`);
-
                     set({
                         user: {
                             id: decoded.id,
@@ -62,7 +52,6 @@ export const useAuthStore = create<AuthStore>()(
                         loading: false,
                     });
 
-                    console.log(`✅ Total login time: ${performance.now() - start} ms`);
                     toast.success(data.message);
                     return data.message;
                 } catch (error: unknown) {
