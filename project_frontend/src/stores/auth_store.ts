@@ -15,6 +15,7 @@ type AuthStore = {
     loading: boolean
     login: (email: string, password: string) => Promise<string>
     register: (formData: FormData) => Promise<void>;
+    restoreSession: () => void
     logout: () => void
     verifyOtp: (email: string, otp: string) => Promise<string>
     resendOtp: (email: string) => Promise<string>
@@ -68,6 +69,29 @@ export const useAuthStore = create<AuthStore>()(
                     set({ user: null, token: null, loading: false });
                     toast.error(getErrorMessage(error));
                     throw new Error(getErrorMessage(error));
+                }
+            },
+            restoreSession: () => {
+                const token = get().token;
+                if (token) {
+                    try {
+                        const decoded: JwtPayload = jwtDecode(token);
+                        set({
+                            user: {
+                                id: decoded.id,
+                                email: decoded.email,
+                                name: decoded.name,
+                                image: decoded.image,
+                            },
+                            token,
+                            loading: false,
+                        });
+                    } catch (e) {
+                        console.error("Token inválido:", e);
+                        get().logout();
+                    }
+                } else {
+                    set({ loading: false });
                 }
             }
             ,

@@ -32,8 +32,13 @@ function App() {
 
     return () => clearInterval(interval);
   }, [checkTokenExpiration]);
+  useEffect(() => {
+    useAuthStore.getState().restoreSession();
+  }, []);
 
-  if (loading) return <Loading />
+
+  if (loading && token === null) return <Loading />;
+
 
 
 
