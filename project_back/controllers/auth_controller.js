@@ -1,13 +1,9 @@
 import authService from "../services/auth_service.js";
-
 export const register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const imagePath = req.file ? req.file.path : null;
-
-
         const user = await authService.register({ name, email, password, image: imagePath });
-
 
         res.status(200).json({
             message: "User created successfully. OTP sent to email.",
@@ -20,12 +16,16 @@ export const register = async (req, res) => {
             },
         });
 
-
     } catch (error) {
-        console.error("Registration error:", error.message);
-        res.status(500).json({ message: error.message || "An unexpected error occurred" });
+        console.error("❌ Registration error: ", error.stack || error.message || error);
+        res.status(500).json({
+            message: error.message,
+            stack: error.stack
+        });
+
     }
 };
+
 export const login = async (req, res) => {
     try {
         const user = await authService.login(req.body);
@@ -122,8 +122,8 @@ export const forgotPassword = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
     try {
-        const { email, password,confirmPassword } = req.body;
-        const user = await authService.resetPassword(email, password,confirmPassword);
+        const { email, password, confirmPassword } = req.body;
+        const user = await authService.resetPassword(email, password, confirmPassword);
         res.status(200).json({
             message: "Password reset successfully",
             user: {
