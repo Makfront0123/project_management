@@ -22,3 +22,13 @@ export const deleteGlobalMessages = async (teamId: string) => {
     });
     return response.data;
 };
+
+export const deletePrivateMessages = async(teamId: string, fromId: string, toId: string) => {
+   const token = useAuthStore.getState().token;
+    const response = await axios.delete(`${baseUrl}/private-messages/${teamId}/${fromId}/${toId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+    return response.data;
+};

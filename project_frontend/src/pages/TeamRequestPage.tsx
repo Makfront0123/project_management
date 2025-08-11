@@ -5,7 +5,7 @@ import { useTeamMemberStore } from "../stores/team_member_store";
 
 const TeamRequestPage = () => {
     const { teamId } = useParams<{ teamId: string }>();
-    const { teamMembers, getPendingMembersOfTeam, rejectRequest, addMember } = useTeamMemberStore();
+    const { teamMembers, getPendingMembersOfTeam, rejectRequest, acceptRequest } = useTeamMemberStore();
 
     useEffect(() => {
         if (teamId) getPendingMembersOfTeam(teamId);
@@ -18,7 +18,7 @@ const TeamRequestPage = () => {
             {teamMembers.length === 0 ? (
                 <p className="text-gray-500">No pending requests</p>
             ) : (
-                <TeamMemberTable members={teamMembers ?? []} onReject={rejectRequest} onAccept={addMember} />
+                <TeamMemberTable members={teamMembers ?? []} onReject={rejectRequest} onAccept={acceptRequest} />
             )}
         </div>
     );

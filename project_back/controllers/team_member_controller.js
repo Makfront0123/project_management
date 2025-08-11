@@ -34,6 +34,54 @@ export const addMemberToTeam = async (req, res) => {
     }
 };
 
+export const acceptRequestToJoinTeam = async (req, res) => {
+    try {
+        const { teamId, userId } = req.params;
+
+        const existingMember = await teamMemberService.getMemberOfTeam(teamId, userId);
+
+        if (!existingMember) {
+            return res.status(404).json({ message: "Request not found." });
+        }
+
+        if (existingMember.status === "accepted") {
+            return res.status(400).json({ message: "User is already a member of this team." });
+        }
+
+        if (existingMember.status !== "pending") {
+            return res.status(400).json({ message: "Only pending requests can be accepted." });
+        }
+
+        
+        const updated = await teamMemberService.updateMemberStatus(teamId, userId, { status: "accepted" });
+
+        const notificationMessage = `${req.user.name} ha aceptado tu solicitud para unirte al equipo.`;
+
+        const notification = await notificationService.createNotification({
+            recipient: userId,
+            message: notificationMessage,
+            type: "join_request_accepted",
+            read: false,
+            metadata: {
+                teamId,
+                redirectTo: `/team/${teamId}`
+            }
+        });
+
+        req.io.to(`user_${userId}`).emit("newNotification", notification);
+
+        res.status(200).json({
+            message: "Request accepted successfully",
+            member: updated,
+            notification
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: "Error on server" });
+    }
+};
+
+
 export const requestToJoinTeam = async (req, res) => {
     try {
         const userId = req.user.id;

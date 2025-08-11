@@ -35,13 +35,18 @@ export const deleteGlobalMessages = async (req, res) => {
 
 export const deletePrivateMessages = async (req, res) => {
   try {
-    const { fromId, toId } = req.params;
+    const { teamId, fromId, toId } = req.params;
+ 
     const result = await messageService.deletePrivateMessages(fromId, toId);
-    res.json({ data: result });
+    res.json({
+      message: "Messages deleted successfully",
+      data: result.data,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 export const deleteAllMessages = async (req, res) => {

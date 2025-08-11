@@ -10,6 +10,7 @@ import usePrivateChat from "../hooks/usePrivateChat";
 import type { MessageFormValues } from "../types/message";
 import useMessageSound from "../hooks/useMessageSound";
 import { formatDate } from "../utils/formatDate";
+import { deletePrivateMessages } from "../services/message_services";
 
 
 
@@ -134,7 +135,14 @@ const TeamChatPage = () => {
                             <div>
                                 {
                                     isAdmin && (
-                                        <button className="p-2 mb-5 rounded bg-blue-600 text-white" onClick={() => deleteGlobalMessages(teamId ?? '')}>
+                                        <button className="p-2 mb-5 rounded bg-blue-600 text-white"
+                                            onClick={() => {
+                                                if (selectedMember) {
+                                                    deletePrivateMessages(teamId ?? '', selectedMember.id, user?.id ?? '');
+                                                } else {
+                                                    deleteGlobalMessages(teamId ?? '');
+                                                }
+                                            }}>
                                             Clean Chat
                                         </button>
                                     )

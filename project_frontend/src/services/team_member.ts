@@ -14,6 +14,19 @@ export const addMember = async (userId: string, teamId: string) => {
     return response.data;
 };
 
+export const acceptRequest = async (userId: string, teamId: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.put(`${baseUrl}/teams/${teamId}/join-requests/${userId}`, {
+        status: "accepted",
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    return response.data;
+};
+
 export const getTeamMembers = async (teamId: string) => {
     const token = useAuthStore.getState().token
     const response = await axios.get(`${baseUrl}/teams/${teamId}/members`, {
@@ -111,7 +124,7 @@ export const getAllMembersOfTeam = async (teamId: string) => {
             Authorization: `Bearer ${token}`
         }
     });
-    
+
 
     return response.data;
 };

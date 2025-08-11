@@ -15,7 +15,8 @@ const router = express.Router();
 router.get("/private-messages/:fromId/:toId", getPrivateMessages);
 router.get("/global-messages/:teamId", getGlobalMessages);
 router.delete("/global-messages/:teamId", authenticate, isTeamAdmin, deleteGlobalMessages);
-router.delete("/private-messages/:fromId/:toId", authenticate, isTeamMember, deletePrivateMessages);
+router.delete("/private-messages/:teamId/:fromId/:toId", authenticate, isTeamMember, deletePrivateMessages);
+
 router.delete("/all-messages/:teamId", authenticate, isTeamMember, deleteAllMessages);
 
 export default router;

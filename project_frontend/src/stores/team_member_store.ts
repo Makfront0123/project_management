@@ -1,6 +1,6 @@
 
 import { create } from 'zustand'
-import { addMember, confirmJoinWithCode, deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, rejectRequest, requestToJoinTeam } from '../services/team_member'
+import { acceptRequest, addMember, confirmJoinWithCode, deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, rejectRequest, requestToJoinTeam } from '../services/team_member'
 import type { TeamMember } from '../types/teamMember'
 import type { UserTeamStatus } from '../types/userTeamStatus'
 import { getUserTeamStatus } from '../services/auth_services'
@@ -13,7 +13,7 @@ type TeamStore = {
     isLoading: boolean
     requestedTeams: string[]
     getUserTeamStatus: () => Promise<void>
-
+    acceptRequest: (userId: string, teamId: string) => Promise<void>
     fetchTeamMembers: (teamId: string) => Promise<void>
     deleteMember: (memberId: string, teamId: string) => Promise<void>
     requestToJoinTeam: (teamId: string) => Promise<void>
@@ -143,6 +143,24 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
             set({ isLoading: false });
         }
     },
+    acceptRequest: async (userId: string, teamId: string) => {
+        set({ isLoading: true });
+        try {
+            const data = await acceptRequest(userId, teamId);
+            toast.success(data.message);
+
+            const updatedMembers = await getPendingMembersOfTeam(teamId);
+            set({ teamMembers: updatedMembers, isLoading: false });
+
+            await getUserTeamStatus();
+        } catch (error) {
+            const errorMsg = getErrorMessage(error);
+            toast.error(errorMsg);
+            console.error("Error accepting request:", error);
+            set({ isLoading: false });
+        }
+    },
+
     confirmJoinWithCode: async (teamId: string, code: string) => {
         set({ isLoading: true });
         try {
