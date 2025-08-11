@@ -1,5 +1,5 @@
 export type NotificationType = {
-  _id?: string;
+  _id: string;
   message: string;
   read: boolean;
   recipient: {
@@ -7,5 +7,9 @@ export type NotificationType = {
     name: string;
     email: string;
   };
-  teamId: string;
+  metadata?: {
+    teamId?: string;
+    redirectTo?: string;
+  };
+  type: string;
 };

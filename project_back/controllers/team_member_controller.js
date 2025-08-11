@@ -1,6 +1,6 @@
 import teamMemberService from "../services/team_member_service.js";
 import teamService from "../services/team_service.js";
- 
+import notificationService from "../services/notification_service.js";
 export const addMemberToTeam = async (req, res) => {
     try {
         const { teamId } = req.params;
@@ -34,7 +34,6 @@ export const addMemberToTeam = async (req, res) => {
     }
 };
 
-
 export const requestToJoinTeam = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -51,7 +50,6 @@ export const requestToJoinTeam = async (req, res) => {
                 return res.status(400).json({ message: "You have already requested to join this team." });
             }
 
-
             return res.status(400).json({ message: "You cannot resend the request." });
         }
 
@@ -62,7 +60,35 @@ export const requestToJoinTeam = async (req, res) => {
             status: "pending",
         });
 
-        res.status(201).json({ message: "Request sent", member: teamMember });
+        const admins = await teamMemberService.getAdminsOfTeam(teamId);
+        const notificationMessage = `${req.user.name} ha solicitado unirse a tu equipo`;
+
+ 
+        const createdNotifications = [];
+
+        for (const admin of admins) {
+            const notification = await notificationService.createNotification({
+                recipient: admin.userId,
+                message: notificationMessage,
+                type: "join_request",
+                read: false,
+                metadata: {
+                    teamId,
+                    redirectTo: `/team/${teamId}/requests`
+                }
+            });
+
+            createdNotifications.push(notification);
+
+            req.io.to(`user_${admin.userId}`).emit("newNotification", notification);
+        }
+
+        res.status(201).json({
+            message: "Request sent",
+            member: teamMember,
+            notifications: createdNotifications
+        });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -152,17 +178,17 @@ export const deleteMemberOfTeam = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
- 
-export const getTeamCode = async (req, res) => {
-  try {
-    const { teamId } = req.params;
-    const verified = await teamService.getConfirmationCode(teamId);
-    if (!verified) return res.status(404).json({ message: "No code found" });
 
-    return res.status(200).json({ code: verified.code }); 
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+export const getTeamCode = async (req, res) => {
+    try {
+        const { teamId } = req.params;
+        const verified = await teamService.getConfirmationCode(teamId);
+        if (!verified) return res.status(404).json({ message: "No code found" });
+
+        return res.status(200).json({ code: verified.code });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
 
 

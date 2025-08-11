@@ -1,52 +1,42 @@
-import { useEffect, useRef } from 'react';
+import { useEffect,  } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuthStore } from '../stores/auth_store';
 import useNotificationStore from '../stores/notification_store';
-import type { NotificationType } from '../types/notification';
+ 
 
+let socketInstance: Socket | null = null;
 
 export const useNotifications = () => {
     const { user } = useAuthStore();
     const { addNotification, fetchNotifications } = useNotificationStore();
-    const socketRef = useRef<Socket | null>(null);
 
     useEffect(() => {
-        if (user && !socketRef.current) {
-           
-            const socket = io(import.meta.env.VITE_API_SOCKET_URL, {
-            withCredentials: true,
-            reconnection: true,
-            reconnectionAttempts: 5,
-            reconnectionDelay: 1000,
-            transports: ['polling'],
-        });
-            socketRef.current = socket;
-            socket.emit("joinUserRoom", user.id);
+        if (user && !socketInstance) {
+            socketInstance = io(import.meta.env.VITE_API_SOCKET_URL, {
+                query: { userId: user.id },
+                withCredentials: true,
+                reconnection: true,
+                reconnectionAttempts: 5,
+                reconnectionDelay: 1000,
+                transports: ['polling'],
+            });
 
+            socketInstance.emit("joinUserRoom", user.id);
             fetchNotifications(user.id);
 
-
-            socket.on("newNotification", (notification: NotificationType) => {
-
+            socketInstance.on("newNotification", (notification) => {
                 addNotification(notification);
             });
 
-            socket.on("taskCompletedNotification", (notification: NotificationType) => {
-
+            socketInstance.on("taskCompletedNotification", (notification) => {
                 addNotification(notification);
             });
         }
 
         return () => {
-            if (socketRef.current) {
-
-                socketRef.current.off("newNotification");
-                socketRef.current.off("taskCompletedNotification");
-                socketRef.current.disconnect();
-                socketRef.current = null;
-            }
+            // No desconectamos en desmontaje para mantener una sola conexión viva
         };
     }, [user, fetchNotifications, addNotification]);
 
-    return socketRef.current;
+    return socketInstance;
 };

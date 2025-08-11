@@ -1,8 +1,8 @@
 import Notification from "../models/Notification.js";
 
 export const NotificationRepository = {
-  create: async ({ message, recipient }) => {
-    return await Notification.create({ message, recipient });
+  create: async (data) => {
+    return await Notification.create(data);
   },
 
   getAllByUser: async (userId) => {

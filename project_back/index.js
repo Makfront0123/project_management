@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 app.use(cors({
   origin: process.env.CLIENT_URL,
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
 }));
 
 
@@ -28,20 +28,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
-const fileRoutes = fs.readdirSync("./routes");
-fileRoutes.forEach((file) => {
-  import(`./routes/${file}`).then((route) => {
-    app.use("/api/v1/", route.default);
-  }).catch((error) => {
-    console.error("Error loading route:", error);
-  });
-});
+
 
 const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-
     origin: [
       process.env.CLIENT_URL,
       /https:\/\/.*\.onrender\.com$/
@@ -54,6 +46,21 @@ const io = new Server(httpServer, {
 });
 
 
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
+
+const fileRoutes = fs.readdirSync("./routes");
+fileRoutes.forEach((file) => {
+  import(`./routes/${file}`).then((route) => {
+    app.use("/api/v1/", route.default);
+  }).catch((error) => {
+    console.error("Error loading route:", error);
+  });
+});
+
+
 io.on("connection", (socket) => {
   console.log("Usuario conectado");
 
@@ -62,6 +69,13 @@ io.on("connection", (socket) => {
     socket.join(`team_${teamId}`);
     console.log(`Usuario unido a sala team_${teamId}`);
   });
+
+  socket.on("joinUserRoom", (userId) => {
+    socket.join(`user_${userId}`);
+    console.log(`✅ Usuario unido a sala: user_${userId}`);
+  });
+
+
 
 
   socket.on("sendMessage", async ({ text, teamId, sender }) => {

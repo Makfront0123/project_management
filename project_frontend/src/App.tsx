@@ -25,6 +25,7 @@ import { ResetPasswordPage } from './pages/ResetPassword';
 
 function App() {
   const { token, loading, checkTokenExpiration, } = useAuthStore()
+ 
   useEffect(() => {
     const interval = setInterval(() => {
       checkTokenExpiration();

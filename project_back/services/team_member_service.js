@@ -35,6 +35,9 @@ class TeamMemberService {
   async getPendingRequests(userId) {
     return await teamMemberRepo.getPendingRequests(userId);
   }
+  async getAdminsOfTeam(teamId) {
+    return await teamMemberRepo.getAdminsOfTeam(teamId);
+  }
    
   
 }

@@ -43,6 +43,9 @@ class TeamMemberRepository {
   async getPendingRequests(userId) {
     return await TeamMember.find({ userId, status: 'pending' });
   }
+  async getAdminsOfTeam(teamId) {
+    return await TeamMember.find({ teamId, role: 'admin' });
+  }
  
 
 }

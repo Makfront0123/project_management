@@ -24,6 +24,14 @@ const NotificationSchema = new mongoose.Schema({
         ref: "Project",
         required: false, 
     },
+    type: {
+        type: String,
+        required: false,
+    },
+    metadata: {
+        type: mongoose.Schema.Types.Mixed, 
+        required: false
+    }
 }, {
     timestamps: true,
 });
