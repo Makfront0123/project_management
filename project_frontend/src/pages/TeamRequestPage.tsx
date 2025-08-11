@@ -16,7 +16,7 @@ const TeamRequestPage = () => {
             <h2 className="text-2xl font-bold mt-20 mb-6 text-white">Pending requests</h2>
 
             {teamMembers.length === 0 ? (
-                <p className="text-gray-500">Loading requests...</p>
+                <p className="text-gray-500">No pending requests</p>
             ) : (
                 <TeamMemberTable members={teamMembers ?? []} onReject={rejectRequest} onAccept={addMember} />
             )}

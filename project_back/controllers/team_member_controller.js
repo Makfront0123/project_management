@@ -63,7 +63,7 @@ export const requestToJoinTeam = async (req, res) => {
         const admins = await teamMemberService.getAdminsOfTeam(teamId);
         const notificationMessage = `${req.user.name} ha solicitado unirse a tu equipo`;
 
- 
+
         const createdNotifications = [];
 
         for (const admin of admins) {
@@ -107,11 +107,22 @@ export const rejectRequestToJoinTeam = async (req, res) => {
         if (existingMember.status !== "pending") {
             return res.status(400).json({ message: "Only pending requests can be rejected." });
         }
+        const notificationMessage = `${req.user.name} ha rechazado tu solicitud para unirte a tu equipo`;
+
+        const notification = await notificationService.createNotification({
+            recipient: userId,
+            message: notificationMessage,
+            type: "join_request",
+            read: false,
+        });
+        req.io.to(`user_${userId}`).emit("newNotification", notification);
 
         await teamMemberService.removeMember({ teamId, userId });
 
+
         res.status(200).json({
             message: "Request rejected and deleted successfully",
+            notification
         });
     } catch (error) {
         res.status(500).json({ message: "Error on server" });
