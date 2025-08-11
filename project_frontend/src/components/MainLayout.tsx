@@ -6,14 +6,6 @@ import { useNotifications } from "../hooks/useNotications";
 const MainLayout = () => {
     const { logout, user } = useAuthStore();
     useNotifications();
-    const baseUrl = import.meta.env.VITE_API_BASE_URL;
-
-    const getImageUrl = (imagePath: string) => {
-        if (!imagePath) return '';
-        const normalizedPath = imagePath.replace(/\\/g, '/');
-        return `${baseUrl}/${normalizedPath}`;
-    };
-
 
     return (
         <div className="min-h-screen w-full relative">
@@ -44,7 +36,7 @@ const MainLayout = () => {
                             </Link>
 
                             <img
-                                src={user?.image ? getImageUrl(user?.image) : ''}
+                                src={user?.image}
                                 className="size-36 rounded-full object-cover"
 
                             />
