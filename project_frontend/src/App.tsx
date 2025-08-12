@@ -21,27 +21,45 @@ import VerifyOtpPage from './pages/VerifyOtpPage';
 import ForgotPage from './pages/ForgotPage';
 import VerifyForgotPage from './pages/VerifyForgotPage';
 import { ResetPasswordPage } from './pages/ResetPassword';
+import { jwtDecode, type JwtPayload } from 'jwt-decode';
 
 
 function App() {
-  const { token, loading, checkTokenExpiration, } = useAuthStore()
- 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      checkTokenExpiration();
-    }, 10_000);
+  const { token, loading, } = useAuthStore()
 
-    return () => clearInterval(interval);
-  }, [checkTokenExpiration]);
+  useEffect(() => {
+    const token = useAuthStore.getState().token;
+    if (!token) return;
+
+    try {
+      const decoded: JwtPayload = jwtDecode(token);
+      if (!decoded.exp) return;
+
+      const now = Date.now();
+      const msUntilExpiration = decoded.exp * 1000 - now - 5000; 
+
+      if (msUntilExpiration <= 0) {
+        useAuthStore.getState().logout();
+        return;
+      }
+
+      const timeout = setTimeout(() => {
+        useAuthStore.getState().checkTokenExpiration();
+      }, msUntilExpiration);
+
+      return () => clearTimeout(timeout);
+    } catch (error) {
+      console.error("Error decodificando token:", error);
+      useAuthStore.getState().logout();
+    }
+  }, [token]);
+
   useEffect(() => {
     useAuthStore.getState().restoreSession();
   }, []);
 
 
-  if (loading && token === null) return <Loading />;
-
-
-
+  if (loading) return <Loading />;
 
   return (
     <>
