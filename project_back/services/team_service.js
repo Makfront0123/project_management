@@ -37,7 +37,7 @@ class TeamService {
             }
         }  
         await notificationRepo.deleteByTeamId(id);
-        await messageRepo.deleteAllMessages(team);
+        await messageRepo.deleteAllMessages(team._id);
 
         const deletedTeam = await teamRepo.deleteTeam(id);
 
