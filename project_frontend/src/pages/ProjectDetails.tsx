@@ -351,7 +351,7 @@ const ProjectDetails = () => {
     return task?.status !== 'completed';
   });
 
-
+ 
 
   return (
     <div className="p-20 w-full h-full flex flex-col gap-8">
@@ -362,7 +362,7 @@ const ProjectDetails = () => {
           <h3 className="text-xl font-semibold mb-2 text-white">⏳ Pending Tasks</h3>
           <div className="space-y-4 mb-8">
             {pendingAssignments.map((assignment) => (
-              <div key={assignment.id} className="flex flex-col gap-2 border border-white rounded p-4">
+              <div key={assignment._id} className="flex flex-col gap-2 border border-white rounded p-4">
                 <TaskCard
                   assignment={assignment}
                   isCompleted={false}
@@ -391,7 +391,7 @@ const ProjectDetails = () => {
 
                         return (
                           <button
-                            key={tag._id}
+                            key={`${tag._id}-${assignment._id}`}
                             onClick={() => {
                               if (!taskId) return;
                               toggleTagOnTask(taskId, tag._id, isAssigned ?? false);
@@ -464,7 +464,7 @@ const ProjectDetails = () => {
           <h3 className="text-xl font-semibold mb-2 text-white">✅ Completed Tasks</h3>
           <div className="space-y-4">
             {completedAssignments.map((assignment) => (
-              <div key={assignment.id} className="flex flex-col gap-2 border rounded p-4 bg-green-50">
+              <div key={assignment._id} className="flex flex-col gap-2 border rounded p-4 bg-green-50">
                 <TaskCard
                   assignment={assignment}
                   isCompleted={true}

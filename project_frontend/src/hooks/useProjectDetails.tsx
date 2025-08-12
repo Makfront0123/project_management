@@ -272,7 +272,7 @@ export const useProjectDetails = () => {
                 }
 
                 const uniqueAssignments = Array.from(
-                    new Map(useTaskAssignamentStore.getState().taskAssignments.map(a => [a.id, a])).values()
+                    new Map(useTaskAssignamentStore.getState().taskAssignments.map(a => [a._id, a])).values()
                 );
                 useTaskAssignamentStore.setState({ taskAssignments: uniqueAssignments });
             } else {

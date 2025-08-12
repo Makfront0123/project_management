@@ -1,4 +1,6 @@
 import projectService from "../services/project_service.js";
+import notificationService from "../services/notification_service.js";
+import teamMemberService from "../services/team_member_service.js";
 export const createProject = async (req, res) => {
     try {
         const owner_id = req.user.id;
@@ -17,10 +19,36 @@ export const createProject = async (req, res) => {
         };
 
         const project = await projectService.createProject(data);
+ 
+        const members = await teamMemberService.getAllMembersOfTeam(teamId);
+        const recipients = members
+            .filter(m => m.userId.toString() !== owner_id)
+            .map(m => m.userId);
+
+        
+        const notifications = await Promise.all(
+            recipients.map(recipientId =>
+                notificationService.createNotification({
+                    recipient: recipientId,
+                    message: `${req.user.name} ha creado el proyecto "${name}" en tu equipo.`,
+                    type: "new_project",
+                    read: false,
+                    metadata: {
+                        teamId,
+                        projectId: project._id,
+                        redirectTo: `/team/${teamId}/projects/${project._id}`
+                    }
+                })
+            )
+        );
+        notifications.forEach((notif, index) => {
+            req.io.to(`user_${recipients[index]}`).emit("newNotification", notif);
+        });
 
         res.status(201).json({
             message: "Project created successfully",
             project,
+            notificationsCount: notifications.length
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -32,7 +60,7 @@ export const getAllProjects = async (req, res) => {
     try {
         const { teamId } = req.params;
         const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;  
+        const limit = parseInt(req.query.limit) || 10;
 
         const data = await projectService.getAllProjects(teamId, page, limit);
 

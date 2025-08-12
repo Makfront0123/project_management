@@ -3,7 +3,7 @@ import type { Task } from "./task";
 
 
 export interface TaskAssignment {
-  id: string;
+  _id: string;
   taskId: Task;
   userId: User;     
   assignedBy: string; 

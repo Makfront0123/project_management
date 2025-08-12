@@ -1,7 +1,8 @@
 import taskAssignmentService from "../services/task_assignment_service.js";
 import taskService from "../services/task_service.js";
 import teamMemberRepo from "../repositories/team_member_repository.js";
-
+import notificationService from "../services/notification_service.js";
+import projectService from "../services/project_service.js";
 export const assignUserToTask = async (req, res) => {
     try {
         const { taskId } = req.params;
@@ -41,11 +42,26 @@ export const assignUserToTask = async (req, res) => {
         const data = { taskId, userId, assignedBy };
         const taskAssignment = await taskAssignmentService.createTaskAssignment(data);
 
+        const notificationMessage = `${req.user.name} has assigned you the task ${task.name}`;
+        const notification = await notificationService.createNotification({
+            recipient: userId,
+            message: notificationMessage,
+            type: "new_task_assignment",
+            read: false,
+            metadata: {
+                taskId,
+                teamId,
+                redirectTo: `/team/${teamId}/projects/${task.projectId}/tasks/${task._id}`
+            }
+        });
+        req.io.to(`user_${userId}`).emit("newNotification", notification);
+
 
 
         res.status(201).json({
             message: "Task assignment created successfully",
             taskAssignment,
+            notification
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -60,15 +76,35 @@ export const removeUserFromTask = async (req, res) => {
             return res.status(400).json({ message: "Missing required fields" });
         }
 
+        const task = await taskService.findTaskById(taskId);
+        if (!task) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+
         const deleted = await taskAssignmentService.removeUserFromTask(taskId, userId);
         console.log("deleted:", deleted);
         if (!deleted) {
             return res.status(404).json({ message: "User is not assigned to task" });
         }
 
+        const notificationMessage = `${req.user.name} has removed your assignment to the task ${task.name}`;
+        const notification = await notificationService.createNotification({
+            recipient: userId,
+            message: notificationMessage,
+            type: "task_unassignment",
+            read: false,
+            metadata: {
+                taskId,
+                teamId: task.teamId,
+                redirectTo: `/team/${task.teamId}/projects/${task.projectId}/tasks/${task._id}`
+            }
+        });
+
+        req.io.to(`user_${userId}`).emit("newNotification", notification);
         res.status(200).json({
             message: "User removed from task successfully",
-            deleted
+            deleted,
+            notification
         });
 
     } catch (error) {
@@ -108,7 +144,7 @@ export const getTasksAssignedToUser = async (req, res) => {
 };
 
 
- 
+
 export const completeAssignedTask = async (req, res) => {
     try {
         const { taskId } = req.params;
@@ -120,9 +156,27 @@ export const completeAssignedTask = async (req, res) => {
         }
 
         await taskService.markTaskAsCompleted(taskId);
-        ///await taskAssignmentService.removeUserFromTask(taskId, userId);
+        
+        const task = await taskService.findTaskById(taskId);
+        const project = await projectService.findProjectById(task.projectId);
+        const admin = project.ownerId
 
-        res.status(200).json({ message: "Task marked as completed and assignment removed" });
+        const notificationMessage = `${req.user.name} has marked the task ${task.name} as completed`;
+        const notification = await notificationService.createNotification({
+            recipient: admin,
+            message: notificationMessage,
+            type: "task_completed",
+            read: false,
+            metadata: {
+                taskId,
+                teamId: task.teamId,
+                redirectTo: `/team/${task.teamId}/projects/${task.projectId}/tasks/${task._id}`
+            }
+        });
+
+        req.io.to(`user_${userId}`).emit("newNotification", notification);
+
+        res.status(200).json({ message: "Task marked as completed and assignment removed", notification });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
