@@ -12,6 +12,7 @@ import { useProjectDetails } from "../hooks/useProjectDetails";
 import type { Tag } from "../types/tag";
 import TaskComments from "../components/TaskComment";
 import type { Task } from "../types/task";
+import TaskFilter from "../components/projectDetails/TaskFilter";
 
 
 
@@ -77,6 +78,13 @@ const ProjectDetails = () => {
   } = useProjectDetails();
 
   const [selectedCommentTask, setSelectedCommentTask] = useState<Task | null>(null);
+  const [filter, setFilter] = useState<"all" | "open" | "completed">("all");
+
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "open") return task.status === "open";
+    if (filter === "completed") return task.status === "completed";
+    return true;
+  })
 
 
 
@@ -89,11 +97,14 @@ const ProjectDetails = () => {
     );
   }
 
+  console.log(tasks);
+
   if (isAdmin) {
     return (
       <div className="p-0 w-full h-full flex flex-col  gap-8">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-white">📋 Tasks in project</h2>
+          <TaskFilter value={filter} onChange={setFilter} />
           <div className="flex items-center gap-x-20">
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded-lg"
@@ -125,7 +136,7 @@ const ProjectDetails = () => {
 
         <div className="flex items-start space-y-4 gap-x-10">
           <div className="flex flex-col gap-y-6 items-center min-w-4xl min-h-[130vh]">
-            {tasks.map((task) => {
+            {filteredTasks.map((task) => {
               const assignment = findAssignmentForTask(task._id);
 
               return (
@@ -351,7 +362,7 @@ const ProjectDetails = () => {
     return task?.status !== 'completed';
   });
 
- 
+
 
   return (
     <div className="p-20 w-full h-full flex flex-col gap-8">

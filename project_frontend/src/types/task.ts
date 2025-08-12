@@ -20,3 +20,11 @@ export type TaskInput = {
     name: string;
     description: string;
 };
+
+
+export type TaskFilterValue = "all" | "open" | "completed";
+
+export interface TaskFilterProps {
+  value: TaskFilterValue;
+  onChange: (value: TaskFilterValue) => void;
+}
