@@ -1,100 +1,16 @@
-import { Navigate, Route, Routes } from 'react-router';
-import './App.css'
-import { useAuthStore } from './stores/auth_store';
-import LoginPage from './pages/LoginPage';
-import MainLayout from './components/MainLayout';
-import DashboardPage from './pages/DashboardPage';
-import ProjectPage from './pages/ProjectPage';
-import { Toaster } from 'react-hot-toast'
-import { Loading } from './components/Loading';
-import RegisterPage from './pages/RegisterPage';
-import CreateTeamPage from './pages/CreateTeamPage';
-import JoinTeamPage from './pages/JoinTeamPage';
-import TeamPage from './pages/TeamPage';
-
-import { useEffect } from 'react';
-import ProjectDetails from './pages/ProjectDetails';
-import TeamRequestPage from './pages/TeamRequestPage';
-import TeamChatPage from './pages/TeamChatPage';
-import TasksPage from './pages/TasksPage';
-import VerifyOtpPage from './pages/VerifyOtpPage';
-import ForgotPage from './pages/ForgotPage';
-import VerifyForgotPage from './pages/VerifyForgotPage';
-import { ResetPasswordPage } from './pages/ResetPassword';
-import { jwtDecode, type JwtPayload } from 'jwt-decode';
-
-
+import './App.css';
+import { Toaster } from 'react-hot-toast';
+import { useTokenExpiration } from './hooks/useTokenExpiration';
+import { AppRoutes } from './routes/AppRoutes';
 function App() {
-  const { token, loading, } = useAuthStore()
-
-  useEffect(() => {
-    const token = useAuthStore.getState().token;
-    if (!token) return;
-
-    try {
-      const decoded: JwtPayload = jwtDecode(token);
-      if (!decoded.exp) return;
-
-      const now = Date.now();
-      const msUntilExpiration = decoded.exp * 1000 - now - 5000; 
-
-      if (msUntilExpiration <= 0) {
-        useAuthStore.getState().logout();
-        return;
-      }
-
-      const timeout = setTimeout(() => {
-        useAuthStore.getState().checkTokenExpiration();
-      }, msUntilExpiration);
-
-      return () => clearTimeout(timeout);
-    } catch (error) {
-      console.error("Error decodificando token:", error);
-      useAuthStore.getState().logout();
-    }
-  }, [token]);
-
-  useEffect(() => {
-    useAuthStore.getState().restoreSession();
-  }, []);
-
-
-  if (loading) return <Loading />;
+  useTokenExpiration();
 
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
-      <Routes>
-        {!token ? (
-          <>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="*" element={<Navigate to="/login" />} />
-            <Route path="/verify" element={<VerifyOtpPage />} />
-            <Route path="/forgot" element={<ForgotPage />} />
-            <Route path="/verify-forgot-otp" element={<VerifyForgotPage />} />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />
-          </>
-        ) : (
-          <Route path="/*" element={<MainLayout />}>
-            <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="projects" element={<ProjectPage />} />
-            <Route path="team/:teamId/requests" element={<TeamRequestPage />} />
-            <Route path="create-team" element={<CreateTeamPage />} />
-            <Route path="join-team" element={<JoinTeamPage />} />
-            <Route path="team/:teamId" element={<TeamPage />} />
-            <Route path="team/:teamId/chat" element={<TeamChatPage />} />
-            <Route path="project" element={<ProjectPage />} />
-            <Route path="tasks" element={<TasksPage />} />
-            <Route path="team/:teamId/project/:projectId" element={<ProjectDetails />} />
-            <Route index element={<Navigate to="/dashboard" />} />
-            <Route path="*" element={<Navigate to="/dashboard" />} />
-          </Route>
-        )}
-      </Routes>
+      <AppRoutes />
     </>
-  )
+  );
 }
 
-
-export default App
+export default App;
