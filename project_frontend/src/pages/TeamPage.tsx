@@ -1,87 +1,32 @@
-import { useState, useMemo, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router";
+import { useForm } from "../hooks/useForm";
 import Modal from "../components/Modal";
 import Paginator from "../components/Paginator";
 import Table from "../components/Table";
 import TeamMenuButton from "../components/TeamMenuButton";
-import { useForm } from "../hooks/useForm";
-import { useNotifications } from "../hooks/useNotications";
-import { useProjectStore } from "../stores/project_store";
-import { useTeamMemberStore } from "../stores/team_member_store";
-import { useTeamStore } from "../stores/team_store";
-import type { ProjectForm } from "../types/projects";
-import type { CreateTeamFormValue } from "../types/team";
+import { useTeamPage } from "../hooks/useTeamPage";
+import { Link } from "react-router";
 
 const TeamPage = () => {
-  const { teamId } = useParams<{ teamId: string }>();
-  useNotifications();
-
-  const navigate = useNavigate();
-
   const {
-    teamMemberships,
+    teamId,
+    team,
+    isAdmin,
+    teamsLoading,
     teamMembers,
-    fetchTeamMembers,
-    deleteMember,
-    getUserTeamStatus,
-  } = useTeamMemberStore();
-
-  const {
     projects,
-    isLoading,
-    getProjects,
-    createProject,
     page,
     totalPages,
-  } = useProjectStore();
-
-  const { updateTeam, deleteTeam } = useTeamStore();
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [teamsLoading, setTeamsLoading] = useState(true);
-  const [isEditTeamModalOpen, setIsEditTeamModalOpen] = useState(false);
-
-
-  const handlePageChange = (newPage: number) => {
-    if (teamId) {
-      getProjects(teamId, newPage);
-    }
-  };
-
-  const handleDeleteTeam = async (teamId: string) => {
-    if (!teamId) return;
-
-    if (window.confirm("¿Estás seguro de que quieres eliminar este equipo? Esta acción es irreversible.")) {
-      try {
-        await deleteTeam(teamId);
-        navigate('/dashboard');
-      } catch {
-        // Error ya manejado con toast en el store
-      }
-    }
-  };
-
-  const team = useMemo(() => {
-    return teamMemberships.find((t) => t.teamId === teamId);
-  }, [teamId, teamMemberships]);
-
-  const isAdmin = team?.role === "admin";
-
-  useEffect(() => {
-    const loadData = async () => {
-      await getUserTeamStatus();
-      setTeamsLoading(false);
-    };
-    loadData();
-  }, [getUserTeamStatus]);
-
-  useEffect(() => {
-    if (teamId) {
-
-      getProjects(teamId);
-      fetchTeamMembers(teamId);
-    }
-  }, [teamId, getProjects, fetchTeamMembers]);
+    isLoading,
+    isModalOpen,
+    setIsModalOpen,
+    isEditTeamModalOpen,
+    setIsEditTeamModalOpen,
+    handlePageChange,
+    handleDeleteTeam,
+    createProject,
+    updateTeam,
+    deleteMember,
+  } = useTeamPage();
 
   const {
     values,
@@ -89,10 +34,10 @@ const TeamPage = () => {
     isSubmitting,
     handleChange,
     handleSubmit,
-  } = useForm<ProjectForm>({
+  } = useForm({
     initialValues: { name: "", description: "" },
     validate: (values) => {
-      const errors: Partial<Record<keyof ProjectForm, string>> = {};
+      const errors: Partial<Record<string, string>> = {};
       if (!values.name.trim()) errors.name = "Name is required";
       if (!values.description.trim()) errors.description = "Description is required";
       return errors;
@@ -114,10 +59,10 @@ const TeamPage = () => {
     isSubmitting: isEditingTeam,
     handleChange: handleEditTeamChange,
     handleSubmit: handleEditTeamSubmit,
-  } = useForm<CreateTeamFormValue>({
+  } = useForm({
     initialValues: {
-      name: team?.name || '',
-      description: team?.description || '',
+      name: team?.name || "",
+      description: team?.description || "",
     },
     onSubmit: async (formValues) => {
       if (!teamId) return;

@@ -8,6 +8,7 @@ import Modal from "../components/Modal"
 import type { CreateTeamFormValue, TeamResponse } from "../types/team"
 import { images } from "../core/images"
 import { useNavigate } from "react-router"
+import { validateCreateTeam } from "../utils/validators"
 
 const CreateTeamPage = () => {
     const [modalOpen, setModalOpen] = useState(false)
@@ -18,12 +19,7 @@ const CreateTeamPage = () => {
             name: "",
             description: ""
         },
-        validate: (values) => {
-            const errors: Partial<Record<keyof CreateTeamFormValue, string>> = {}
-            if (!values.name.trim()) errors.name = "Name is required"
-            if (!values.description.trim()) errors.description = "Description is required"
-            return errors
-        },
+        validate: validateCreateTeam,
         onSubmit: async (values) => {
             try {
                 const { message, team }: TeamResponse = await createTeam(values.name, values.description)
