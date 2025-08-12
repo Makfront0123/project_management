@@ -1,4 +1,3 @@
-// src/hooks/useRegisterForm.ts
 import { useForm } from "./useForm";
 import { useAuthStore } from "../stores/auth_store";
 import { useNavigate } from "react-router";
