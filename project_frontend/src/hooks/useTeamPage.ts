@@ -96,6 +96,5 @@ export function useTeamPage() {
     handlePageChange,
     handleDeleteTeam,
     updateTeam,
-    // ... demás estados y handlers que uses
   };
 }

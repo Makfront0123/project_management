@@ -115,7 +115,7 @@ const ProjectDetails = () => {
   if (!team || isLoading || !currentProject || !tasksLoaded) {
     return (
       <div className="w-full h-screen flex items-center justify-center text-gray-500">
-        Loading...
+        Project not found
       </div>
     );
   }

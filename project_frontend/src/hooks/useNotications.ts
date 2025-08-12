@@ -34,7 +34,6 @@ export const useNotifications = () => {
         }
 
         return () => {
-            // No desconectamos en desmontaje para mantener una sola conexión viva
         };
     }, [user, fetchNotifications, addNotification]);
 
