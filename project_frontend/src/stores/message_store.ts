@@ -16,7 +16,12 @@ interface MessageStore {
 const useMessageStore = create<MessageStore>((set) => ({
     messages: [],
     isLoading: false,
-    addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })),
+    addMessage: (message) => set(state => {
+        if (state.messages.some(m => m._id === message._id)) return state;
+        return { messages: [...state.messages, message] };
+    }),
+
+
     getPrivateMessages: async (fromId: string, toId: string) => {
         set({ isLoading: true });
         const response = await getPrivateMessages(fromId, toId);
