@@ -12,7 +12,8 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'my-app-images',
-    allowed_formats: ['jpg', 'png'],
+    allowed_formats: ['jpg', 'png','pdf','doc','docx'],
+    resource_type: 'auto',
   },
 });
 

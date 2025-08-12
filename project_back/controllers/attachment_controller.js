@@ -14,7 +14,7 @@ export const uploadAttachment = async (req, res) => {
             taskId,
             teamId,
             fileName: file.originalname,
-            fileUrl: `/uploads/${file.filename}`,
+            fileUrl: file.path,
             uploadedBy: req.user.id,
         };
 
@@ -52,15 +52,15 @@ export const getAttachment = async (req, res) => {
     }
 }
 
-export const updateAttachment = async(req, res) => {
-     try {
-        const { attachmentId,teamId } = req.params;
+export const updateAttachment = async (req, res) => {
+    try {
+        const { attachmentId, teamId } = req.params;
         const file = req.file;
         const data = {
             fileName: file.originalname,
             fileUrl: `/uploads/${file.filename}`,
         }
-        const updatedAttachment = await attachmentService.updateAttachment(attachmentId,teamId, data);
+        const updatedAttachment = await attachmentService.updateAttachment(attachmentId, teamId, data);
         res.status(200).json({
             message: "Attachment updated successfully",
             updatedAttachment,
@@ -73,7 +73,7 @@ export const updateAttachment = async(req, res) => {
 
 export const deleteAttachment = async (req, res) => {
     try {
-        const { attachmentId,teamId } = req.params;
+        const { attachmentId, teamId } = req.params;
         await attachmentService.deleteAttachment(attachmentId, teamId);
         res.status(200).json({ message: "Attachment deleted successfully" });
     } catch (error) {
@@ -81,7 +81,7 @@ export const deleteAttachment = async (req, res) => {
     }
 
 }
- 
+
 export const deleteByTaskId = async (req, res) => {
     try {
         const { taskId } = req.params;

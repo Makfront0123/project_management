@@ -153,10 +153,14 @@ export const useProjectDetails = () => {
             const message = `${completedTask.name} ha sido completada en el proyecto ${projectName} por ${completedByUser.name}.`;
 
             await addNotification({
+                _id: projectId ?? '',
                 message,
                 recipient: adminUser,
-                teamId: teamId,
-                read: false
+                read: false,
+                metadata: {
+                    teamId: teamId,
+                },
+                type: "task-completion"
             });
         }
     };
