@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router";
 import { useForm } from "../hooks/useForm";
 import { useAuthStore } from "../stores/auth_store";
+import { validateResetPassword } from "../utils/validators";
 
 
 
@@ -23,22 +24,7 @@ export const ResetPasswordPage = () => {
             password: "",
             confirmPassword: "",
         },
-        validate: (values) => {
-            const errors: Partial<typeof values> = {};
-            if (!values.password) {
-                errors.password = "Password is required";
-            } else if (values.password.length < 6) {
-                errors.password = "Password must be at least 6 characters";
-            }
-
-            if (!values.confirmPassword) {
-                errors.confirmPassword = "Confirm your password";
-            } else if (values.confirmPassword !== values.password) {
-                errors.confirmPassword = "Passwords do not match";
-            }
-
-            return errors;
-        },
+        validate: validateResetPassword,
         onSubmit: async (values) => {
             try {
                 await resetPassword(email ?? '', values.password, values.confirmPassword);
