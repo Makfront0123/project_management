@@ -55,7 +55,7 @@ export const acceptRequestToJoinTeam = async (req, res) => {
         
         const updated = await teamMemberService.updateMemberStatus(teamId, userId, { status: "accepted" });
 
-        const notificationMessage = `${req.user.name} ha aceptado tu solicitud para unirte al equipo.`;
+        const notificationMessage = `${req.user.name} accepted your request to join the team`;
 
         const notification = await notificationService.createNotification({
             recipient: userId,
@@ -109,7 +109,7 @@ export const requestToJoinTeam = async (req, res) => {
         });
 
         const admins = await teamMemberService.getAdminsOfTeam(teamId);
-        const notificationMessage = `${req.user.name} ha solicitado unirse a tu equipo`;
+        const notificationMessage = `${req.user.name} has requested to join your team`;
 
 
         const createdNotifications = [];
@@ -155,7 +155,7 @@ export const rejectRequestToJoinTeam = async (req, res) => {
         if (existingMember.status !== "pending") {
             return res.status(400).json({ message: "Only pending requests can be rejected." });
         }
-        const notificationMessage = `${req.user.name} ha rechazado tu solicitud para unirte a tu equipo`;
+        const notificationMessage = `${req.user.name} rejected your request to join the team`;
 
         const notification = await notificationService.createNotification({
             recipient: userId,

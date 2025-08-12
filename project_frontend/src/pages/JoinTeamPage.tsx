@@ -40,7 +40,7 @@ const JoinTeamPage = () => {
               return (
                 <div
                   key={team._id}
-                  className="flex items-center justify-between border bg-white p-5 rounded-lg shadow hover:shadow-md transition"
+                  className="flex items-center animate-slide-in-top justify-between border bg-white p-5 rounded-lg shadow hover:shadow-md transition"
                 >
                   <li>
                     <p className="text-sm text-gray-600">{team.name}</p>

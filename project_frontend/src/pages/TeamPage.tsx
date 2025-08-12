@@ -191,7 +191,8 @@ const TeamPage = () => {
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          title="Crear nuevo proyecto"
+          title="Create new project"
+           className="animate-slide-in-top"
         >
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -229,6 +230,7 @@ const TeamPage = () => {
           isOpen={isEditTeamModalOpen}
           onClose={() => setIsEditTeamModalOpen(false)}
           title="Edit team"
+          className="animate-slide-in-top"
         >
           <form onSubmit={handleEditTeamSubmit} className="space-y-4">
             <div>

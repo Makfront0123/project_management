@@ -14,7 +14,7 @@ const Table = ({ member, onDelete }: Props) => {
     const isSelfAdmin = member.role === 'admin' && member.userId._id === currentUserId;
 
     return (
-        <table className="flex flex-col w-full border-collapse border p-5 border-gray-300 rounded-lg shadow-md mb-4">
+        <table className="flex flex-col animate-slide-in-left w-full border-collapse border p-5 border-gray-300 rounded-lg shadow-md mb-4">
             <thead className="border-b border-gray-300 p-4">
                 <tr className="flex justify-between font-semibold">
                     <th className="w-1/5 text-left">Name</th>

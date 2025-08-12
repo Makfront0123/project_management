@@ -2,6 +2,7 @@
 
 @theme {
     --animate-slide-in-top: animate-slide-in-top 300ms ease-in-out;
+    --animate-slide-in-left: animate-slide-in-left 500ms ease-in-out;
 
     @keyframes animate-slide-in-top {
         0% {
@@ -10,6 +11,16 @@
 
         100% {
             transform: translateY(0);
+        }
+    }
+
+    @keyframes animate-slide-in-left {
+        0% {
+            transform: translateX(-100%);
+        }
+
+        100% {
+            transform: translateX(0);
         }
     }
 }

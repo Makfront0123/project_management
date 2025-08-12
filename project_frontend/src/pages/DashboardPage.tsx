@@ -96,7 +96,7 @@ const DashboardPage = () => {
   return (
     <div className="flex flex-col items-center justify-start w-full h-screen">
       <h4 className="text-4xl text-center flex flex-col gap-3 mt-20 text-white">
-        Bienvenido a<br /> <span className="text-white">Project Management</span>
+        Welcome to<br /> <span className="text-white">Project Management</span>
       </h4>
 
       {isLoading ? (
@@ -143,6 +143,7 @@ const DashboardPage = () => {
       <Modal
         isOpen={showWelcomeModal}
         onClose={() => setShowWelcomeModal(false)}
+        className="animate-slide-in-top"
         title="Team code"
       >
         <p className="text-center text-lg font-medium">Your team code is:</p>
@@ -153,7 +154,8 @@ const DashboardPage = () => {
       <Modal
         isOpen={!!pendingTeamId}
         onClose={() => setPendingTeamId(null)}
-        title="Ingresa el código del equipo"
+        title="Enter the code of your team"
+        className="animate-slide-in-top"
       >
         <div className="flex flex-col gap-3">
           <input

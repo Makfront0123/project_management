@@ -31,9 +31,6 @@ export function useTeamPage() {
   const [teamsLoading, setTeamsLoading] = useState(true);
   const [isEditTeamModalOpen, setIsEditTeamModalOpen] = useState(false);
 
-  // Estado y lógica adicional que tenías en el componente
-  // ...
-
   const team = useMemo(() => {
     return teamMemberships.find((t) => t.teamId === teamId);
   }, [teamId, teamMemberships]);
@@ -54,8 +51,7 @@ export function useTeamPage() {
       fetchTeamMembers(teamId);
     }
   }, [teamId, getProjects, fetchTeamMembers]);
-
-  // Aquí los handlers (ejemplo):
+ 
   const handlePageChange = (newPage: number) => {
     if (teamId) {
       getProjects(teamId, newPage);
@@ -77,8 +73,7 @@ export function useTeamPage() {
       }
     }
   };
-
-  // Aquí retorna todo lo que necesitas para la UI y JSX
+ 
   return {
     teamId,
     navigate,

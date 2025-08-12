@@ -24,7 +24,7 @@ const AttachmentModal = ({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+        <div className="fixed inset-0 animate-slide-in-top bg-black bg-opacity-30 flex items-center justify-center">
             <div className="bg-white p-10 rounded shadow-lg min-w-3xl space-y-4">
                 <h2 className="text-lg font-semibold">📎Upload Attachment</h2>
                 <input
