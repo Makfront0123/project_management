@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router";
 import { useForm } from "../hooks/useForm";
 import { useAuthStore } from "../stores/auth_store";
-
-
+import { validateForgotPassword } from "../utils/validators";
 
 const ForgotPage = () => {
     const { forgotPassword } = useAuthStore();
@@ -18,15 +17,7 @@ const ForgotPage = () => {
         initialValues: {
             email: "",
         },
-        validate: (values) => {
-            const errors: { email?: string } = {};
-            if (!values.email) {
-                errors.email = "Email is required";
-            } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(values.email)) {
-                errors.email = "Invalid email format";
-            }
-            return errors;
-        },
+        validate: validateForgotPassword,
         onSubmit: async (values) => {
             try {
                 await forgotPassword(values.email);

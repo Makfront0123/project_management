@@ -1,6 +1,5 @@
-
 export function validateLogin(values: { email: string; password: string }) {
-  const errors: Partial<typeof values> = {};
+  const errors: Partial<Record<keyof typeof values, string>> = {};
   if (!values.email) errors.email = "Email is required";
   else if (!/\S+@\S+\.\S+/.test(values.email)) errors.email = "Invalid email";
   
@@ -10,7 +9,6 @@ export function validateLogin(values: { email: string; password: string }) {
   return errors;
 }
 
- 
 export function validateRegister(values: {
   name: string;
   email: string;
@@ -28,3 +26,12 @@ export function validateRegister(values: {
 
   return errors;
 }
+
+export const validateForgotPassword = (values: { email: string }) => {
+  const errors: Partial<Record<keyof typeof values, string>> = {};
+  if (!values.email) errors.email = "Email is required";
+  else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(values.email)) {
+    errors.email = "Invalid email format";
+  }
+  return errors;
+};
