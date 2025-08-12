@@ -86,6 +86,29 @@ const ProjectDetails = () => {
     return true;
   })
 
+  const filteredAssignments = taskAssignments.filter((assignment) => {
+    const taskId = typeof assignment.taskId === "string" ? assignment.taskId : assignment.taskId?._id;
+    const task = tasks.find((t) => t._id === taskId);
+    if (!task) return false;
+
+    if (filter === "open") return task.status === "open";
+    if (filter === "completed") return task.status === "completed";
+    return true;
+  });
+
+  const completedAssignments = filteredAssignments.filter((assignment) => {
+    const taskId = typeof assignment.taskId === 'string' ? assignment.taskId : assignment.taskId?._id;
+    const task = tasks.find((t) => t._id === taskId);
+    return task?.status === 'completed';
+  });
+
+  const pendingAssignments = filteredAssignments.filter((assignment) => {
+    const taskId = typeof assignment.taskId === 'string' ? assignment.taskId : assignment.taskId?._id;
+    const task = tasks.find((t) => t._id === taskId);
+    return task?.status !== 'completed';
+  });
+
+
 
 
 
@@ -97,7 +120,7 @@ const ProjectDetails = () => {
     );
   }
 
-  console.log(tasks);
+
 
   if (isAdmin) {
     return (
@@ -344,28 +367,10 @@ const ProjectDetails = () => {
   }
 
 
-  const completedAssignments = taskAssignments.filter((assignment) => {
-    const taskId = typeof assignment.taskId === 'string'
-      ? assignment.taskId
-      : assignment.taskId?._id;
-
-    const task = tasks.find((t) => t._id === taskId);
-    return task?.status === 'completed';
-  });
-
-  const pendingAssignments = taskAssignments.filter((assignment) => {
-    const taskId = typeof assignment.taskId === 'string'
-      ? assignment.taskId
-      : assignment.taskId?._id;
-
-    const task = tasks.find((t) => t._id === taskId);
-    return task?.status !== 'completed';
-  });
-
-
 
   return (
     <div className="p-20 w-full h-full flex flex-col gap-8">
+      <TaskFilter value={filter} onChange={setFilter} />
       {pendingAssignments.length === 0 ? (
         <p className="text-gray-500 text-center">you have no pending tasks</p>
       ) : (
@@ -373,7 +378,7 @@ const ProjectDetails = () => {
           <h3 className="text-xl font-semibold mb-2 text-white">⏳ Pending Tasks</h3>
           <div className="space-y-4 mb-8">
             {pendingAssignments.map((assignment) => (
-              <div key={assignment._id} className="flex flex-col gap-2 border border-white rounded p-4">
+              <div key={assignment._id} className="flex flex-col animate-slide-in-top gap-2 border border-white rounded p-4">
                 <TaskCard
                   assignment={assignment}
                   isCompleted={false}
@@ -389,7 +394,7 @@ const ProjectDetails = () => {
                 />
                 {
                   pendingAssignments.length > 0 && (
-                    <div className="flex gap-2 flex-wrap items-center">
+                    <div className="flex gap-2 animate-slide-in-top flex-wrap items-center">
                       <span className="font-semibold text-white">Tagsº:</span>
                       {tags.map((tag) => {
                         const taskId =
@@ -475,7 +480,7 @@ const ProjectDetails = () => {
           <h3 className="text-xl font-semibold mb-2 text-white">✅ Completed Tasks</h3>
           <div className="space-y-4">
             {completedAssignments.map((assignment) => (
-              <div key={assignment._id} className="flex flex-col gap-2 border rounded p-4 bg-green-50">
+              <div key={assignment._id} className="flex flex-col animate-slide-in-top gap-2 border rounded p-4 bg-green-50">
                 <TaskCard
                   assignment={assignment}
                   isCompleted={true}
