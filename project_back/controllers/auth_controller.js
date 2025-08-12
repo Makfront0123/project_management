@@ -155,8 +155,9 @@ export const verifyForgotOtp = async (req, res) => {
         });
     } catch (error) {
         const msg = error.message || "Internal Server Error";
-        if (msg === "OTP expired") return res.status(401).json({ message: msg });
-        if (msg === "Invalid OTP") return res.status(401).json({ message: msg });
+        if (msg === "OTP expired") return res.status(410).json({ message: msg });
+        if (msg === "Invalid OTP") return res.status(400).json({ message: msg });
+
         return res.status(500).json({ message: msg });
     }
 };

@@ -19,7 +19,7 @@ export const LoginForm = ({ form }: LoginFormProps) => {
     return (
         <form
             onSubmit={form.handleSubmit}
-            className="flex flex-col items-center justify-center mt-8 gap-y-6"
+            className="flex flex-col items-center md:ml-0 ml-10 justify-center mt-8 gap-y-6"
         >
             <TextInput
                 label="Email"

@@ -203,11 +203,13 @@ export const useAuthStore = create<AuthStore>()(
                 try {
                     const data = await verifyForgotPasswordOtp(email, otp);
                     set({ loading: false });
-                    toast.success(data.message)
+                    toast.success(data.message);
                     return data.message;
                 } catch (error: unknown) {
                     set({ loading: false });
-                    throw new Error(getErrorMessage(error));
+                    const msg = getErrorMessage(error);
+                    toast.error(msg);
+                    throw new Error(msg);
                 }
             },
             resendForgotPasswordOtp: async (email) => {

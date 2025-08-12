@@ -33,7 +33,7 @@ export const TextInput = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={`border border-gray-300 rounded-[20px] p-3 w-[30rem] ${textColor}`}
+        className={`border border-gray-300 rounded-[20px] p-3 md:w-[30rem] w-[25rem] ${textColor}`}
       />
       {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>

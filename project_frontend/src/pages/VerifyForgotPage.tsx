@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useAuthStore } from '../stores/auth_store';
 
 const VerifyForgotPage = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const email = location.state?.email ?? "";
+    const [searchParams] = useSearchParams();
+    const email = searchParams.get("email");
     const [otp, setOtp] = useState("");
     const { verifyForgotPasswordOtp, resendForgotPasswordOtp } = useAuthStore();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await verifyForgotPasswordOtp(email, otp);
+            await verifyForgotPasswordOtp(email ?? '', otp);
             navigate(`/reset-password?email=${email}`);
 
         } catch {
@@ -23,7 +23,7 @@ const VerifyForgotPage = () => {
 
     const handleResend = async () => {
         try {
-            await resendForgotPasswordOtp(email);
+            await resendForgotPasswordOtp(email ?? '');
 
         } catch {
             // Error ya manejado con toast en el store
