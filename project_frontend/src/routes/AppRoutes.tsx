@@ -19,9 +19,10 @@ import VerifyForgotPage from "../pages/VerifyForgotPage";
 import { ResetPasswordPage } from "../pages/ResetPassword";
 
 export function AppRoutes() {
-  const { token, loading } = useAuthStore();
+  const { token, loadingApp } = useAuthStore();
 
-  if (loading) return <Loading />;
+  if (loadingApp) return <Loading />;
+
 
   return (
     <Routes>
