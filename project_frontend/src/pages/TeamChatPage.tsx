@@ -7,7 +7,7 @@ import useMessageStore from "../stores/message_store";
 import { useTeamMemberStore } from "../stores/team_member_store";
 import type { User } from "../types/auth";
 import usePrivateChat from "../hooks/usePrivateChat";
-import type { Message, MessageFormValues } from "../types/message";
+import type { MessageFormValues } from "../types/message";
 import useMessageSound from "../hooks/useMessageSound";
 import { formatDate } from "../utils/formatDate";
 import { deletePrivateMessages } from "../services/message_services";
@@ -20,7 +20,7 @@ const TeamChatPage = () => {
     const { teamMembers, fetchTeamMembers } = useTeamMemberStore();
     const [selectedMember, setSelectedMember] = useState<User | null>(null);
 
-    const { messages, isLoading, getPrivateMessages, getGlobalMessages, deleteGlobalMessages, addMessage } = useMessageStore();
+    const { messages, isLoading, getPrivateMessages, getGlobalMessages, deleteGlobalMessages } = useMessageStore();
 
 
     const { sendMessage: sendGlobalMessage } = useTeamChat(teamId ?? "");
@@ -62,17 +62,6 @@ const TeamChatPage = () => {
             if (!values.message.trim()) return;
 
             if (user && teamId) {
-                const messageToSend: Message = {
-                    _id: "temp-" + Date.now(),
-                    text: values.message,
-                    createdAt: new Date().toISOString(),
-                    sender: {
-                        _id: user.id,          
-                        name: user.name,
-                        email: user.email,
-                    },
-                };
-
                 if (selectedMember) {
                     await sendPrivateMessage(values.message);
                     await getPrivateMessages(user.id, selectedMember.id);
@@ -80,15 +69,10 @@ const TeamChatPage = () => {
                     await sendGlobalMessage(values.message, user, null);
                     await getGlobalMessages(teamId);
                 }
-
-
-                addMessage(messageToSend);
-
                 playSentSound();
             }
             setValues({ message: "" });
         },
-
         validate: (values) => {
             const errors: Partial<Record<keyof MessageFormValues, string>> = {};
             if (!values.message.trim()) {
