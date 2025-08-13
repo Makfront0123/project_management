@@ -10,23 +10,22 @@ import type { JwtPayload, User } from '../types/auth'
 
 
 type AuthStore = {
-    user: User | null
-    token: string | null
-    loadingAction: boolean
-    loadingApp:boolean,
-    login: (email: string, password: string) => Promise<string>
-    register: (formData: FormData) => Promise<void>;
-    restoreSession: () => void
-    logout: () => void
-    verifyOtp: (email: string, otp: string) => Promise<string>
-    resendOtp: (email: string) => Promise<string>
-    forgotPassword: (email: string) => Promise<string>
-    resetPassword: (email: string, password: string, confirmPassword: string) => Promise<string>
-    verifyForgotPasswordOtp: (email: string, otp: string) => Promise<string>
-    resendForgotPasswordOtp: (email: string) => Promise<string>
-    checkTokenExpiration: () => void
+  user: User | null
+  token: string | null
+  loadingAction: boolean
+  loadingApp: boolean,
+  login: (email: string, password: string) => Promise<string>
+  register: (formData: FormData) => Promise<void>;
+  restoreSession: () => void
+  logout: () => void
+  verifyOtp: (email: string, otp: string) => Promise<string>
+  resendOtp: (email: string) => Promise<string>
+  forgotPassword: (email: string) => Promise<string>
+  resetPassword: (email: string, password: string, confirmPassword: string) => Promise<string>
+  verifyForgotPasswordOtp: (email: string, otp: string) => Promise<string>
+  resendForgotPasswordOtp: (email: string) => Promise<string>
+  checkTokenExpiration: () => void
 }
-
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
@@ -61,7 +60,9 @@ export const useAuthStore = create<AuthStore>()(
         }
       },
 
-      restoreSession: () => {
+      restoreSession: async () => {
+        set({ loadingApp: true });
+        await new Promise(res => setTimeout(res, 500));
         const token = get().token;
         if (token) {
           try {
@@ -111,7 +112,7 @@ export const useAuthStore = create<AuthStore>()(
           const data = await logoutUser();
           set({ user: null, token: null, loadingAction: false });
           toast.success(data.message);
-          localStorage.removeItem('auth-store');
+          localStorage.removeItem("auth-store");
           return data.message;
         } catch (error: unknown) {
           set({ user: null, token: null, loadingAction: false });
@@ -221,6 +222,11 @@ export const useAuthStore = create<AuthStore>()(
     }),
     {
       name: "auth-store",
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.restoreSession();
+        }
+      },
     }
   )
 );
