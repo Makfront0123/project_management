@@ -90,8 +90,8 @@ const TeamChatPage = () => {
 
     return (
         <div className="h-screen w-full flex p-0">
-            <div className="bg-white rounded-xl min-w-[30vh] max-h-[77.5vh]">
-                <div className="flex flex-col p-10 gap-y-2">
+            <div className="bg-white rounded-xl min-w-[30vh] max-h-[77.5vh] flex flex-col">
+                <div className="flex-shrink-0 p-10">
                     <button
                         onClick={() => {
                             setSelectedMember(null);
@@ -103,7 +103,9 @@ const TeamChatPage = () => {
                     >
                         Chat General
                     </button>
+                </div>
 
+                <div className="flex-1 overflow-y-auto px-10 pb-10 space-y-2">
                     {membersToDisplay.map((member) => (
                         <button
                             key={member._id}
@@ -112,14 +114,13 @@ const TeamChatPage = () => {
                                     id: member.userId._id,
                                     name: member.userId.name,
                                     email: member.userId.email
-
                                 };
                                 setSelectedMember(selected);
                                 getPrivateMessages(user.id, selected.id);
                             }}
                             className={`p-2 w-full rounded-xl hover:opacity-70 duration-300 ${selectedMember?.id === member.userId._id
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-600 text-white"
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-gray-600 text-white"
                                 }`}
                         >
                             {member.userId.name ?? member.userId.email}
@@ -127,6 +128,7 @@ const TeamChatPage = () => {
                     ))}
                 </div>
             </div>
+
             <div className="flex flex-col w-full">
                 <div className="flex-1 max-h-[72vh] overflow-y-scroll bg-gray-900 p-4 rounded">
                     <div>
