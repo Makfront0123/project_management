@@ -17,9 +17,15 @@ import VerifyOtpPage from "../pages/VerifyOtpPage";
 import ForgotPage from "../pages/ForgotPage";
 import VerifyForgotPage from "../pages/VerifyForgotPage";
 import { ResetPasswordPage } from "../pages/ResetPassword";
+import { useEffect } from "react";
 
 export function AppRoutes() {
-  const { token, loadingApp } = useAuthStore();
+  const { token, loadingApp, restoreSession } = useAuthStore();
+
+
+  useEffect(() => {
+    restoreSession();
+  }, [restoreSession]);
 
   if (loadingApp) return <Loading />;
 
