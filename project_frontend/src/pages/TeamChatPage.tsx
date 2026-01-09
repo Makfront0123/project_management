@@ -47,6 +47,7 @@ const TeamChatPage = () => {
             fetchTeamMembers(teamId);
         }
     }, [teamId, fetchTeamMembers]);
+    
 
 
     const {
@@ -119,8 +120,8 @@ const TeamChatPage = () => {
                                 getPrivateMessages(user.id, selected.id);
                             }}
                             className={`p-2 w-full rounded-xl hover:opacity-70 duration-300 ${selectedMember?.id === member.userId._id
-                                    ? "bg-blue-600 text-white"
-                                    : "bg-gray-600 text-white"
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-600 text-white"
                                 }`}
                         >
                             {member.userId.name ?? member.userId.email}
