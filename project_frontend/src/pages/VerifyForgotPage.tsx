@@ -14,7 +14,6 @@ const VerifyForgotPage = () => {
     e.preventDefault();
 
     if (otp.length !== 6) {
-      // Opcional: aquí puedes mostrar un error local si quieres
       return;
     }
 
