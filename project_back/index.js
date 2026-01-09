@@ -14,29 +14,13 @@ dotenv.config();
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const allowedOrigins = [
-  "https://project-management-sigma-ruddy.vercel.app"
-];
 
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-
-    console.error("CORS blocked origin:", origin);
-    return callback(new Error("Not allowed by CORS"));
-  },
+  origin: process.env.CLIENT_URL,
   credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
-app.options("*", cors());
-
 
 
 app.use(express.json());
