@@ -18,9 +18,11 @@ const __dirname = path.dirname(__filename);
 
 app.use(cors({
   origin: process.env.CLIENT_URL,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+app.options("*", cors());
 
 
 app.use(express.json());
@@ -39,7 +41,6 @@ const io = new Server(httpServer, {
       /https:\/\/.*\.onrender\.com$/
     ],
     methods: ["GET", "POST"],
-    credentials: true,
   },
   pingTimeout: 60000,
   pingInterval: 25000,
