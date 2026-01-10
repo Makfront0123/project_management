@@ -7,13 +7,10 @@ import { dbConnect } from "./config/dbConntect.js";
 import dotenv from "dotenv";
 import { Server } from "socket.io";
 import MessageModel from "./models/Message.js";
-import path from "path";
 import { fileURLToPath } from 'url';
 
 dotenv.config();
 const app = express();
-
-const __filename = fileURLToPath(import.meta.url);
 
 app.use(cors({
   origin: process.env.CLIENT_URL,
@@ -39,6 +36,7 @@ const io = new Server(httpServer, {
       /https:\/\/.*\.onrender\.com$/
     ],
     methods: ["GET", "POST"],
+    credentials: true,
   },
   pingTimeout: 60000,
   pingInterval: 25000,
