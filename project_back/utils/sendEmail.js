@@ -1,4 +1,27 @@
-import nodemailer from 'nodemailer';
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+export const sendEmail = async ({ to, subject, text }) => {
+  try {
+    await resend.emails.send({
+      from: "Mariachi Show <reservas@mariachishowdelrecuerdomedellin.com>",
+      to,
+      subject,
+      text,
+    });
+
+    console.log(`📧 Email sent to ${to}`);
+  } catch (error) {
+    console.error("❌ Resend error:", error);
+    throw error;
+  }
+};
+
+
+
+/**
+ * import nodemailer from 'nodemailer';
 
 const sendEmail = async ({ to, subject, text }) => {
     try {
@@ -26,3 +49,5 @@ const sendEmail = async ({ to, subject, text }) => {
 };
 
 export default sendEmail;
+ * 
+ */

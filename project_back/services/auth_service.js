@@ -1,7 +1,7 @@
 import authRepo from "../repositories/auth_repository.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import sendEmail from "../utils/sendEmail.js";
+import { sendEmail } from "../utils/sendEmail.js";
 class AuthService {
     async register(data) {
         const existingUser = await authRepo.findUserByEmail(data.email);
@@ -23,11 +23,16 @@ class AuthService {
             otp,
             otpExpires,
         })
-        await sendEmail({
-            to: data.email,
-            subject: "Verify your account",
-            text: `Your OTP is ${otp}. Please enter it in the verification page.`
-        });
+        try {
+            await sendEmail({
+                to: data.email,
+                subject: "Verify your account",
+                text: `Your OTP is ${otp}`,
+            });
+        } catch (emailError) {
+            console.error("⚠️ Email failed:", emailError.message);
+        }
+
         return user;
     }
     async login(data) {
