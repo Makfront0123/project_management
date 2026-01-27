@@ -1,4 +1,6 @@
+import TaksAssignment from "../models/TaksAssignment.js";
 import Task from "../models/Task.js";
+ 
 import mongoose from "mongoose";
 class TaskRepository {
     async createTask(data) {
@@ -39,6 +41,20 @@ class TaskRepository {
             { $set: { status: "completed" } },
             { new: true }
         );
+    }
+
+
+    async getTasksByUser(userId) {
+        const assignments = await TaksAssignment.find({ userId });
+
+        const taskIds = assignments.map(a => a.taskId);
+
+        if (!taskIds.length) return [];
+        return await Task.find({
+            _id: { $in: taskIds }
+        })
+            .populate("projectId")
+            .lean();
     }
 }
 

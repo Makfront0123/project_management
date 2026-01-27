@@ -46,7 +46,11 @@ class TeamMemberRepository {
   async getAdminsOfTeam(teamId) {
     return await TeamMember.find({ teamId, role: 'admin' });
   }
- 
+
+  async findTeamsByUserId(userId) {
+    return await TeamMember.find({ userId });
+  }
+
 
 }
 

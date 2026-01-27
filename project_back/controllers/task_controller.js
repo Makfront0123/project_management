@@ -61,13 +61,27 @@ export const updateTask = async (req, res) => {
     }
 }
 
-export const deleteTask = async(req,res) => {
-  try {
-    const { projectId, taskId } = req.params;
+export const getTaskByUser = async (req, res) => {
+    try {
+        const userId = req.user.id;
 
-    await taskService.deleteTask(projectId, taskId);
-    res.status(200).json({ message: "Task deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+        const tasks = await taskService.getTasksByUser(userId);
+
+        res.status(200).json(tasks);
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const deleteTask = async (req, res) => {
+    try {
+        const { projectId, taskId } = req.params;
+
+        await taskService.deleteTask(projectId, taskId);
+        res.status(200).json({ message: "Task deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }

@@ -12,31 +12,31 @@ class ProjectRepository {
     async createProject(data) {
         return await Project.create(data);
     }
-   async getAllProjects(teamId, page = 1, limit = 10) {
-    try {
-        const skip = (page - 1) * limit;  
-        
-       
-        const projects = await Project.find({ teamId })
-            .skip(skip)
-            .limit(limit);
-        
-     
-        const totalProjects = await Project.countDocuments({ teamId });
-        
- 
-        const totalPages = Math.ceil(totalProjects / limit);
-        
-        return {
-            projects,
-            totalPages,
-            totalProjects,
-        };
-    } catch (error) {
-        console.error("Error fetching projects with pagination:", error);
-        throw error;
+    async getAllProjects(teamId, page = 1, limit = 10) {
+        try {
+            const skip = (page - 1) * limit;
+
+
+            const projects = await Project.find({ teamId })
+                .skip(skip)
+                .limit(limit);
+
+
+            const totalProjects = await Project.countDocuments({ teamId });
+
+
+            const totalPages = Math.ceil(totalProjects / limit);
+
+            return {
+                projects,
+                totalPages,
+                totalProjects,
+            };
+        } catch (error) {
+            console.error("Error fetching projects with pagination:", error);
+            throw error;
+        }
     }
-}
     async getProjectById(teamId, projectId) {
         return await Project.findOne({
             _id: new mongoose.Types.ObjectId(projectId),
@@ -54,6 +54,11 @@ class ProjectRepository {
         );
     }
 
+    async findByTeamIds(teamIds) {
+        return await Project.find({
+            teamId: { $in: teamIds }
+        }).sort({ createdAt: -1 });
+    }
 
 
     async findProjectById(projectId) {
@@ -68,12 +73,12 @@ class ProjectRepository {
 
         await taskAssignmentRepo.deleteByTaskId(taskIds);
         await commentRepo.deleteByProjectId(projectId);
-         await tagRepo.deleteByTeamId(teamId);
+        await tagRepo.deleteByTeamId(teamId);
         await tagTaskRepo.deleteByTaskId(taskIds);
         await attachmentRepo.deleteByTaskId(taskIds);
         await taskRepo.deleteByProjectId(projectId);
         await notificationRepo.deleteByProjectId(projectId);
-        
+
 
 
 

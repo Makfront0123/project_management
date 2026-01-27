@@ -1,4 +1,5 @@
 import projectRepo from "../repositories/project_repository.js";
+import teamMemberRepo from "../repositories/team_member_repository.js";
 class ProjectService {
     async createProject(data) {
         return await projectRepo.createProject(data);
@@ -8,6 +9,13 @@ class ProjectService {
     }
     async getProjectById(teamId, projectId) {
         return await projectRepo.getProjectById(teamId, projectId);
+    }
+    async getProjectsByUser(userId) {
+        const teams = await teamMemberRepo.findTeamsByUserId(userId);
+
+        const teamIds = teams.map(t => t.teamId);
+
+        return await projectRepo.findByTeamIds(teamIds);
     }
     async findProjectById(projectId) {
         return await projectRepo.findProjectById(projectId);

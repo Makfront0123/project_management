@@ -40,6 +40,16 @@ export const getProjects = async (teamId: string, page = 1, limit = 10) => {
     return response.data;
 }
 
+export const getProjectsByUser = async () => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.get(`${baseUrl}/teams/projects`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+    return response.data;
+}
+
 export const getProject = async (id: string, teamId: string) => {
     const token = useAuthStore.getState().token;
     const response = await axios.get(`${baseUrl}/teams/${teamId}/projects/${id}`, {

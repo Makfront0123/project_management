@@ -36,16 +36,16 @@ class TaskService {
     }
 
     async deleteTask(projectId, taskId) {
-        
+
         const task = await taskRepo.findTaskById(taskId);
         if (!task || task.projectId.toString() !== projectId) {
             throw new Error('Tarea no encontrada o no pertenece al proyecto');
         }
 
-        
+
         await taskRepo.deleteTask(projectId, taskId);
 
-        
+
         await Promise.all([
             Comment.deleteMany({ taskId }),
             TaskAssignment.deleteMany({ taskId }),
@@ -56,6 +56,11 @@ class TaskService {
     async markTaskAsCompleted(taskId) {
         return await taskRepo.markTaskAsCompleted(taskId);
     }
+
+    async getTasksByUser(userId) {
+        return await taskRepo.getTasksByUser(userId);
+    }
+
 }
 
 export default new TaskService();

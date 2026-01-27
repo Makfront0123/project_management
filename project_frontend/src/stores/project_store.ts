@@ -1,7 +1,7 @@
 
 import { create } from 'zustand';
 import toast from 'react-hot-toast';
-import { getProjects, getProject, createProject, updateProject, deleteProject } from '../services/project_services';
+import { getProjects, getProject, createProject, updateProject, deleteProject, getProjectsByUser } from '../services/project_services';
 import type { Project, NewProject } from '../types/projects';
 
 type ProjectStore = {
@@ -15,6 +15,7 @@ type ProjectStore = {
   getProjects: (teamId: string, page?: number, limit?: number) => Promise<void>;
   createProject: (teamId: string, data: NewProject) => Promise<void>;
   getProject: (id: string, teamId: string) => Promise<void>;
+  getProjectsByUser: () => Promise<void>;
   updateProject: (id: string, data: Partial<Project>, teamId: string) => Promise<void>;
   deleteProject: (id: string, teamId: string) => Promise<void>;
 };
@@ -56,6 +57,18 @@ export const useProjectStore = create<ProjectStore>((set) => ({
       set({ currentProject: data, isLoading: false });
     } catch (error) {
       console.error("Error fetching project:", error);
+      set({ isLoading: false });
+    }
+  },
+
+  getProjectsByUser: async () => {
+    set({ isLoading: true });
+    try {
+      const projects = await getProjectsByUser();
+      console.log(projects);
+      set({ projects, isLoading: false });
+    } catch (error) {
+      console.error("Error fetching projects:", error);
       set({ isLoading: false });
     }
   },

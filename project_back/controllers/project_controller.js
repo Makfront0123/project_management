@@ -19,13 +19,13 @@ export const createProject = async (req, res) => {
         };
 
         const project = await projectService.createProject(data);
- 
+
         const members = await teamMemberService.getAllMembersOfTeam(teamId);
         const recipients = members
             .filter(m => m.userId.toString() !== owner_id)
             .map(m => m.userId);
 
-        
+
         const notifications = await Promise.all(
             recipients.map(recipientId =>
                 notificationService.createNotification({
@@ -54,6 +54,19 @@ export const createProject = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const getProjectsByUser = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const projects = await projectService.getProjectsByUser(userId);
+
+        res.status(200).json(projects);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 
 export const getAllProjects = async (req, res) => {

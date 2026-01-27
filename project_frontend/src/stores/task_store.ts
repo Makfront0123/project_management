@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { createTask, deleteTask, getTasks, updateTask } from "../services/task_services";
+import { createTask, deleteTask, getTasks, getTasksByUser, updateTask } from "../services/task_services";
 import type { Task, TaskInput } from "../types/task";
 import toast from "react-hot-toast";
 
@@ -11,6 +11,7 @@ interface TaskStore {
     isLoading: boolean;
     createTask: (projectId: string, data: TaskInput) => Promise<Task>;
     getTasks: (projectId: string) => Promise<Task[]>;
+    getTaskByUser: () => Promise<Task[]>;
     deleteTask: (id: string, projectId: string) => Promise<Task>;
     updateTask: (id: string, data: TaskInput, projectId: string) => Promise<Task>;
 }
@@ -30,6 +31,13 @@ const useTaskStore = create<TaskStore>((set) => ({
     getTasks: async (projectId: string) => {
         set({ isLoading: true });
         const response = await getTasks(projectId);
+        set({ tasks: response, isLoading: false });
+        return response;
+    },
+
+    getTaskByUser: async () => {
+        set({ isLoading: true });
+        const response = await getTasksByUser();
         set({ tasks: response, isLoading: false });
         return response;
     },

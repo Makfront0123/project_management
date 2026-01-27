@@ -1,179 +1,47 @@
-import { useEffect, useState } from "react"
-import { useTeamMemberStore } from "../stores/team_member_store"
-import Modal from "../components/Modal"
-import { useNavigate } from "react-router"
+import { SelectGroups } from "../components/SelectGroups"
+import { icons } from "../core/icons"
+import { Button } from "../components/ui/button"
+import CardStasts from "@/components/CardStasts"
+import { cardStats } from "@/data/cardStats"
+import MyTasks from "@/components/MyTasks"
+import ProjectOverview from "@/components/ProjectOverview"
+
+import { DropdownMenuOptions } from "@/components/DropdownMenu"
+
 
 const DashboardPage = () => {
-  const {
-    teamMemberships,
-    isLoading,
-    getUserTeamStatus,
-    getTeamCode,
-    confirmJoinWithCode,
-  } = useTeamMemberStore()
-
-
-
-  const navigate = useNavigate()
-
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false)
-  const [teamCode, setTeamCode] = useState("")
-
-  const [pendingTeamId, setPendingTeamId] = useState<string | null>(null)
-  const [inputCode, setInputCode] = useState("")
-  const [codeError, setCodeError] = useState("")
-
-
-  useEffect(() => {
-    const loadTeams = async () => {
-      await getUserTeamStatus();
-    };
-    loadTeams();
-  }, [getUserTeamStatus]);
-
-
-  useEffect(() => {
-    if (teamMemberships.length > 0) {
-      const firstTeam = teamMemberships[0]
-      if (firstTeam.role !== "member") return
-
-      const key = `shown_code_${firstTeam.teamId}`
-      if (!localStorage.getItem(key)) {
-        getTeamCode(firstTeam.teamId)
-          .then((code) => {
-            setTeamCode(code)
-            setShowWelcomeModal(true)
-            localStorage.setItem(key, "true")
-          })
-          .catch((err) => {
-            console.error("Error fetching team code:", err)
-          })
-      }
-    }
-  }, [teamMemberships, getTeamCode])
-
-  useEffect(() => {
-    const keys = Object.keys(localStorage).filter(key => key.startsWith('shown_code_'))
-    const currentTeamIds = teamMemberships.map(team => team.teamId)
-    keys.forEach(key => {
-      const teamId = key.replace('shown_code_', '')
-      if (!currentTeamIds.includes(teamId)) {
-        localStorage.removeItem(key)
-      }
-    })
-  }, [teamMemberships])
-
-
-  const handleTeamClick = (teamId: string, role: string) => {
-    if (role === "member") {
-      setPendingTeamId(teamId)
-      setInputCode("")
-      setCodeError("")
-    } else {
-      navigate(`/team/${teamId}`)
-    }
-  }
-
-  const handleConfirmCode = async () => {
-    if (!inputCode.trim()) {
-      return setCodeError("Code is required")
-    }
-
-    try {
-      await confirmJoinWithCode(pendingTeamId!, inputCode)
-      navigate(`/team/${pendingTeamId}`)
-    } catch {
-      setCodeError("Code is incorrect. Please try again.")
-    }
-
-  }
-
-  const handleTeam = () => navigate('/create-team')
-  const handleJoinTeam = () => navigate('/join-team')
-
 
 
   return (
-    <div className="flex flex-col items-center justify-start w-full h-screen">
-      <h4 className="text-4xl text-center flex flex-col gap-3 mt-20 text-white">
-        Welcome to<br /> <span className="text-white">Project Management</span>
-      </h4>
-
-      {isLoading ? (
-        <p className="mt-36 text-gray-500 font-light text-2xl">Loading teams...</p>
-      ) : teamMemberships.length === 0 ? (
-        <>
-          <h3 className="mt-36 text-gray-500 font-light text-3xl">You are not a member of any team yet.</h3>
-          <div className="flex items-center mt-20 gap-x-10">
-            <button onClick={handleTeam} className="px-4 py-3 border-2 text-white border-gray-600 rounded-lg cursor-pointer hover:scale-105 transition">
-              Create team
-            </button>
-            <button onClick={handleJoinTeam} className="px-4 py-3 bg-blue-600 text-white rounded-lg cursor-pointer hover:scale-105 transition">
-              Join a team
-            </button>
-          </div>
-        </>
-      ) : (
-        <div className="mt-20 w-full max-w-xl ">
-          <h3 className="text-2xl mb-4 text-gray-700 font-semibold">Your teams</h3>
-          <ul className="space-y-4">
-            {teamMemberships.map((team) => (
-              <button
-                key={team.teamId}
-                onClick={() => handleTeamClick(team.teamId, team.role)}
-                className="w-full text-left p-4 border rounded shadow hover:bg-gray-50 bg-gray-300 transition"
-              >
-                <p className="text-xl font-medium">{team.name}</p>
-                <p className="text-gray-500 text-sm">Rol: {team.role}</p>
-              </button>
-            ))}
-          </ul>
-          <div className="flex items-center mt-10 gap-x-10">
-            <button onClick={handleTeam} className="px-4 py-3 border-2 border-gray-600 text-white rounded-lg cursor-pointer hover:scale-105 transition">
-              Create team
-            </button>
-            <button onClick={handleJoinTeam} className="px-4 py-3 bg-blue-600 text-white rounded-lg cursor-pointer hover:scale-105 transition">
-              Join a team
-            </button>
-          </div>
+    <div className="flex flex-col items-start justify-start w-full h-screen bg-white">
+      <header className="flex items-center justify-between w-full py-3 px-10 bg-white border-b-2 border-gray-200">
+        <SelectGroups />
+        <div className="flex items-center gap-x-5">
+          <img src={icons.notifications} alt="Logo" className="size-10 p-2 border-2 cursor-pointer hover:opacity-70 rounded-sm" />
+          <DropdownMenuOptions />
         </div>
-      )}
+      </header>
 
-
-      <Modal
-        isOpen={showWelcomeModal}
-        onClose={() => setShowWelcomeModal(false)}
-        className="animate-slide-in-top"
-        title="Team code"
-      >
-        <p className="text-center text-lg font-medium">Your team code is:</p>
-        <p className="text-center text-2xl font-bold text-blue-600 mt-2">{teamCode}</p>
-      </Modal>
-
-
-      <Modal
-        isOpen={!!pendingTeamId}
-        onClose={() => setPendingTeamId(null)}
-        title="Enter the code of your team"
-        className="animate-slide-in-top"
-      >
-        <div className="flex flex-col gap-3">
-          <input
-            type="text"
-            className="border px-3 py-2 rounded"
-            placeholder="Team code"
-            value={inputCode}
-            onChange={(e) => setInputCode(e.target.value)}
-          />
-          {codeError && <p className="text-red-500 text-sm">{codeError}</p>}
-          <button
-            onClick={handleConfirmCode}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Confirm
-          </button>
+      <div className="flex items-center justify-between w-full p-10">
+        <div>
+          <h2 className="text-2xl font-bold">Welcome back, Great to see you!</h2>
+          <p className="text-gray-300">Here's a list of your teams</p>
         </div>
-      </Modal>
+        <Button>New Project</Button>
+      </div>
+
+      <div className="flex items-center justify-evenly w-full">
+        {
+          cardStats.map((stat) => (
+            <CardStasts key={stat.title} {...stat} />
+          ))
+        }
+      </div>
+
+      <div className="flex p-8 w-full min-h-[58vh]  gap-x-5">
+        <ProjectOverview />
+        <MyTasks />
+      </div>
     </div>
   )
 }

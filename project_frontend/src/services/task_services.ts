@@ -27,6 +27,18 @@ export const getTasks = async (projectId: string) => {
     return response.data
 }
 
+export const getTasksByUser = async () => {
+    const token = useAuthStore.getState().token
+    const response = await axios.get(`${baseUrl}/projects/tasks/user`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    )
+    return response.data
+}
+
 export const deleteTask = async (id: string, projectId: string) => {
     const token = useAuthStore.getState().token
     const response = await axios.delete(`${baseUrl}/projects/${projectId}/tasks/${id}`,
