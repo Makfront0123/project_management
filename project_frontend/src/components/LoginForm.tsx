@@ -43,7 +43,7 @@ export const LoginForm = ({ form }: LoginFormProps) => {
             <button
                 type="submit"
                 disabled={form.isSubmitting}
-                className="bg-red-600 hover:bg-red-400 text-white duration-200 font-bold py-3 cursor-pointer w-full rounded-md"
+                className="bg-[#4e38f5] hover:bg-red-400 text-white duration-200 font-bold py-3 cursor-pointer w-full rounded-md"
             >
                 Login
             </button>

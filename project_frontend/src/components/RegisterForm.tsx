@@ -59,16 +59,16 @@ export const RegisterForm = ({ form }: RegisterFormProps) => {
                     type="file"
                     id="image"
                     name="image"
-                    accept="image/*"  
-                    onChange={form.handleChange} 
+                    accept="image/*"
+                    onChange={form.handleChange}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
                 />
-                {form.errors.image && <p className="text-red-500 text-xs italic mt-1">{form.errors.image}</p>}
+                {form.errors.image && <p className="text-[#4e38f5] text-xs italic mt-1">{form.errors.image}</p>}
             </div>
             <button
                 type="submit"
                 disabled={form.isSubmitting}
-                className="bg-red-600 hover:bg-red-400 text-white duration-200 font-bold py-3 cursor-pointer w-full rounded-md"
+                className="bg-[#4e38f5] hover:bg-[#4e38f5]/80 text-white duration-200 font-bold py-3 cursor-pointer w-full rounded-md"
             >
                 Register
             </button>
