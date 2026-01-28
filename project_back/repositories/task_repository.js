@@ -1,6 +1,6 @@
 import TaksAssignment from "../models/TaksAssignment.js";
 import Task from "../models/Task.js";
- 
+
 import mongoose from "mongoose";
 class TaskRepository {
     async createTask(data) {
@@ -41,6 +41,13 @@ class TaskRepository {
             { $set: { status: "completed" } },
             { new: true }
         );
+    }
+
+    async countByProjectId(projectId) {
+        return await Task.countDocuments({ projectId });
+    }
+    async countCompletedByProjectId(projectId) {
+        return await Task.countDocuments({ projectId, status: "completed" });
     }
 
 

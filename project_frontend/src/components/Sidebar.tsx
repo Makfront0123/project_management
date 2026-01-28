@@ -5,7 +5,7 @@ import { icons } from "../core/icons";
 
 
 export const Sidebar = () => (
-  <aside className="min-w-[280px] min-h-screen p-0 border-r-2 border-gray-200 text-white">
+  <aside className="min-w-[250px] min-h-screen p-0 border-r-2 border-gray-200 text-white">
     <div className="py-4 bg-white flex items-center border-b-2 border-gray-200 px-5">
       <img src={icons.logo} alt="Logo" className="size-8" />
       <h1 className="text-xl font-bold text-gray-900">

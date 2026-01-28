@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const projectSchema = new mongoose.Schema({
     name: String,
     description: String,
-  
+
     teamId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Team"
@@ -11,6 +11,11 @@ const projectSchema = new mongoose.Schema({
     ownerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+    },
+    status: {
+        type: String,
+        enum: ["active", "completed", "archived", "cancelled"],
+        default: "active"
     }
 }, { timestamps: true })
 

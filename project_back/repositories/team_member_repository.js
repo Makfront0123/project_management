@@ -51,6 +51,10 @@ class TeamMemberRepository {
     return await TeamMember.find({ userId });
   }
 
+  async findMembersByTeamId(teamId) {
+    return await TeamMember.find({ teamId });
+  }
+
 
 }
 

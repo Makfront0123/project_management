@@ -1,16 +1,21 @@
 export interface Project {
-    _id: string;
-    name: string;
-    description: string;
-    teamId: string;
-    ownerId: string;
-    createdAt: string;
-    updatedAt: string;
+  _id: string;
+  name: string;
+  description: string;
+  teamId: string;
+  ownerId: string;
+  status: string;
+  membersCount: number;
+  totalTasks: number;
+  completedTasks: number;
+  progress: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type ProjectFormValues = {
-    name: string;
-    description: string;
+  name: string;
+  description: string;
 };
 
 

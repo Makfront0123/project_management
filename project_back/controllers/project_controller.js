@@ -16,6 +16,7 @@ export const createProject = async (req, res) => {
             description,
             teamId,
             ownerId: owner_id,
+            status: req.body.status || "active"
         };
 
         const project = await projectService.createProject(data);
@@ -104,6 +105,7 @@ export const updateProject = async (req, res) => {
         const data = {
             name: req.body.name,
             description: req.body.description,
+            status: req.body.status
         }
         const updatedProject = await projectService.updateProject(teamId, projectId, data);
         res.status(200).json({

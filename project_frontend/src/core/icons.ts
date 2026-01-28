@@ -10,4 +10,5 @@ export const icons = {
     sidebar02: "/icons/tabler--folders.svg",
     sidebar03: "/icons/mynaui--users.svg",
     sidebar04: "/icons/mdi-light--settings.svg",
+    calendar: "/icons/mdi--calendar-outline.svg",
 }
