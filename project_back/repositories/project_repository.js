@@ -8,7 +8,17 @@ import attachmentRepo from "./attachment_repository.js";
 import commentRepo from "./comment_repository.js";
 import notificationRepo from "./notification_repository.js";
 import mongoose from "mongoose";
+
+const { ObjectId } = mongoose.Types;
 class ProjectRepository {
+    isValidId(id) {
+        return ObjectId.isValid(id);
+    }
+
+    toObjectId(id) {
+        return new ObjectId(id);
+    }
+
     async createProject(data) {
         return await Project.create(data);
     }
@@ -43,6 +53,105 @@ class ProjectRepository {
             teamId: teamId,
         });
     }
+
+    async getProjectWithStats(teamId, projectId) {
+
+        if (!this.isValidId(teamId) || !this.isValidId(projectId)) {
+            return null;
+        }
+
+        const result = await Project.aggregate([
+            {
+                $match: {
+                    _id: this.toObjectId(projectId),
+                    teamId: this.toObjectId(teamId),
+                },
+            },
+
+            // Tasks
+            {
+                $lookup: {
+                    from: "tasks",
+                    localField: "_id",
+                    foreignField: "projectId",
+                    as: "tasks",
+                },
+            },
+
+            // Members
+            {
+                $lookup: {
+                    from: "teammembers",
+                    localField: "teamId",
+                    foreignField: "teamId",
+                    as: "members",
+                },
+            },
+
+            // Stats
+            {
+                $addFields: {
+                    totalTasks: { $size: "$tasks" },
+
+                    completedTasks: {
+                        $size: {
+                            $filter: {
+                                input: "$tasks",
+                                as: "task",
+                                cond: { $eq: ["$$task.status", "completed"] },
+                            },
+                        },
+                    },
+
+                    pendingTasks: {
+                        $size: {
+                            $filter: {
+                                input: "$tasks",
+                                as: "task",
+                                cond: { $ne: ["$$task.status", "completed"] },
+                            },
+                        },
+                    },
+
+                    membersCount: { $size: "$members" },
+                },
+            },
+
+            // Progress
+            {
+                $addFields: {
+                    progress: {
+                        $cond: [
+                            { $eq: ["$totalTasks", 0] },
+                            0,
+                            {
+                                $round: [
+                                    {
+                                        $multiply: [
+                                            { $divide: ["$completedTasks", "$totalTasks"] },
+                                            100,
+                                        ],
+                                    },
+                                    0,
+                                ],
+                            },
+                        ],
+                    },
+                },
+            },
+
+            // Cleanup
+            {
+                $project: {
+                    tasks: 0,
+                    members: 0,
+                },
+            },
+        ]);
+
+        return result[0] || null;
+    }
+
     async updateProject(teamId, projectId, data) {
         return await Project.findOneAndUpdate(
             {
@@ -85,6 +194,126 @@ class ProjectRepository {
         const deletedProject = await Project.findByIdAndDelete(projectId);
 
         return deletedProject;
+    }
+    async getProjectsWithStatsByUser(teamIds) {
+        return Project.aggregate([
+            {
+                $match: {
+                    teamId: { $in: teamIds }
+                }
+            },
+
+            // Join tasks
+            {
+                $lookup: {
+                    from: "tasks",
+                    localField: "_id",
+                    foreignField: "projectId",
+                    as: "tasks"
+                }
+            },
+
+            // Join members
+            {
+                $lookup: {
+                    from: "teammembers",
+                    localField: "teamId",
+                    foreignField: "teamId",
+                    as: "members"
+                }
+            },
+
+            {
+                $addFields: {
+                    totalTasks: { $size: "$tasks" },
+
+                    completedTasks: {
+                        $size: {
+                            $filter: {
+                                input: "$tasks",
+                                as: "task",
+                                cond: { $eq: ["$$task.status", "completed"] }
+                            }
+                        }
+                    },
+
+                    pendingTasks: {
+                        $size: {
+                            $filter: {
+                                input: "$tasks",
+                                as: "task",
+                                cond: { $ne: ["$$task.status", "completed"] }
+                            }
+                        }
+                    },
+
+                    membersCount: { $size: "$members" }
+                }
+            },
+            {
+                $addFields: {
+                    progress: {
+                        $cond: [
+                            { $eq: ["$totalTasks", 0] },
+                            0,
+                            {
+                                $multiply: [
+                                    { $divide: ["$completedTasks", "$totalTasks"] },
+                                    100
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+
+            {
+                $project: {
+                    tasks: 0,
+                    members: 0
+                }
+            }
+        ]);
+    }
+
+    // ===============================
+    // TIMELINE
+    // ===============================
+    async getTasksOverTime(projectId) {
+
+        if (!this.isValidId(projectId)) return [];
+
+        return Task.aggregate([
+            {
+                $match: {
+                    projectId: this.toObjectId(projectId),
+                },
+            },
+
+            {
+                $group: {
+                    _id: {
+                        $dateToString: {
+                            format: "%Y-%m-%d",
+                            date: "$createdAt",
+                        },
+                    },
+                    count: { $sum: 1 },
+                },
+            },
+
+            { $sort: { _id: 1 } },
+
+            {
+                $project: {
+                    _id: 0,
+                    date: "$_id",
+                    count: 1,
+                },
+            },
+        ]);
+
+
     }
 }
 

@@ -62,3 +62,4 @@ export const updateTask = async (id: string, data: TaskInput, projectId: string)
     )
     return response.data
 }
+

@@ -17,9 +17,16 @@ class TaskService {
         return await taskRepo.getTaskById(projectId, taskId);
     }
 
+
+
     async findTaskById(taskId) {
         return await taskRepo.findTaskById(taskId);
     }
+
+    async getTasksWithAssignments(projectId, taskId) {
+        return await taskRepo.getTasksWithAssignments(projectId, taskId);
+    }
+
 
     async findTaskWithTeam(taskId) {
         const task = await taskRepo.findTaskById(taskId);

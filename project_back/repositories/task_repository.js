@@ -7,8 +7,41 @@ class TaskRepository {
         return await Task.create(data);
     }
     async getAllTasksByProject(projectId) {
-        return await Task.find({ projectId });
+        return await Task.aggregate([
+            {
+                $match: {
+                    projectId: new mongoose.Types.ObjectId(projectId)
+                }
+            },
+
+            // Join assignments
+            {
+                $lookup: {
+                    from: "taskassignments",
+                    localField: "_id",
+                    foreignField: "taskId",
+                    as: "assignments"
+                }
+            },
+
+            // Join users
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "assignments.userId",
+                    foreignField: "_id",
+                    as: "assignedUsers"
+                }
+            },
+
+            {
+                $project: {
+                    assignments: 0
+                }
+            }
+        ]);
     }
+
     async getTaskById(projectId, taskId) {
         return await Task.findById({
             _id: new mongoose.Types.ObjectId(taskId),
@@ -62,6 +95,50 @@ class TaskRepository {
         })
             .populate("projectId")
             .lean();
+    }
+
+    async getTasksWithAssignments(projectId, taskId) {
+        return await Task.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(taskId),
+                    projectId: new mongoose.Types.ObjectId(projectId),
+                },
+            },
+
+            // Join assignments
+            {
+                $lookup: {
+                    from: "taskassignments",
+                    localField: "_id",
+                    foreignField: "taskId",
+                    as: "assignments",
+                },
+            },
+
+            // Join users
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "assignments.userId",
+                    foreignField: "_id",
+                    as: "assignedUsers",
+                },
+            },
+
+            {
+                $project: {
+                    name: 1,
+                    status: 1,
+                    description: 1,
+                    assignedUsers: {
+                        _id: 1,
+                        name: 1,
+                        email: 1,
+                    },
+                },
+            },
+        ]);
     }
 }
 

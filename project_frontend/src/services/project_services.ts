@@ -40,6 +40,16 @@ export const getProjects = async (teamId: string, page = 1, limit = 10) => {
     return response.data;
 }
 
+export const getProjectAnalytics = async (teamId: string, projectId: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects/${projectId}/analytics`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+    return response.data;
+}
+
 export const getProjectsByUser = async () => {
     const token = useAuthStore.getState().token;
     const response = await axios.get(`${baseUrl}/teams/projects`, {
@@ -50,15 +60,16 @@ export const getProjectsByUser = async () => {
     return response.data;
 }
 
-export const getProject = async (id: string, teamId: string) => {
+export const getProject = async (projectId: string, teamId: string) => {
     const token = useAuthStore.getState().token;
-    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects/${id}`, {
+    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects/${projectId}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     });
     return response.data;
 }
+
 
 export const updateProject = async (id: string, data: Partial<Project>, teamId: string) => {
     const response = await axios.put(`${baseUrl}/teams/${teamId}/projects/${id}`, data, {

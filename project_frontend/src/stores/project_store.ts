@@ -1,126 +1,251 @@
+import { create } from "zustand";
+import toast from "react-hot-toast";
 
-import { create } from 'zustand';
-import toast from 'react-hot-toast';
-import { getProjects, getProject, createProject, updateProject, deleteProject, getProjectsByUser } from '../services/project_services';
-import type { Project, NewProject } from '../types/projects';
+import {
+  getProjects,
+  getProject,
+  createProject,
+  updateProject,
+  deleteProject,
+  getProjectsByUser,
+  getProjectAnalytics,
+} from "../services/project_services";
+
+import type { Project, NewProject } from "../types/projects";
+
+/* ================= TYPES ================= */
 
 type ProjectStore = {
   projects: Project[];
   currentProject: Project | null;
-  isLoading: boolean;
+  analytics: Project | null;
+
+  /* Loadings */
+  isLoadingProjects: boolean;
+  isLoadingProject: boolean;
+  isLoadingAnalytics: boolean;
+
   page: number;
   limit: number;
   totalPages: number;
   totalProjects: number;
-  getProjects: (teamId: string, page?: number, limit?: number) => Promise<void>;
-  createProject: (teamId: string, data: NewProject) => Promise<void>;
-  getProject: (id: string, teamId: string) => Promise<void>;
+
+  /* Actions */
+  getProjects: (
+    teamId: string,
+    page?: number,
+    limit?: number
+  ) => Promise<void>;
+
+  getProject: (
+    id: string,
+    teamId: string
+  ) => Promise<void>;
+
+  getProjectAnalytics: (
+    teamId: string,
+    projectId: string
+  ) => Promise<void>;
+
   getProjectsByUser: () => Promise<void>;
-  updateProject: (id: string, data: Partial<Project>, teamId: string) => Promise<void>;
-  deleteProject: (id: string, teamId: string) => Promise<void>;
+
+  createProject: (
+    teamId: string,
+    data: NewProject
+  ) => Promise<void>;
+
+  updateProject: (
+    id: string,
+    data: Partial<Project>,
+    teamId: string
+  ) => Promise<void>;
+
+  deleteProject: (
+    id: string,
+    teamId: string
+  ) => Promise<void>;
 };
 
+/* ================= STORE ================= */
+
 export const useProjectStore = create<ProjectStore>((set) => ({
+  /* State */
+
   projects: [],
   currentProject: null,
-  isLoading: false,
+  analytics: null,
+
+  isLoadingProjects: false,
+  isLoadingProject: false,
+  isLoadingAnalytics: false,
+
   page: 1,
   limit: 10,
   totalPages: 1,
   totalProjects: 0,
 
+  /* ================= PROJECTS ================= */
 
-  getProjects: async (teamId: string, page = 1, limit = 2) => {
-    set({ isLoading: true, projects: [] });
+  getProjects: async (teamId, page = 1, limit = 10) => {
+    set({
+      isLoadingProjects: true,
+      projects: [],
+    });
+
     try {
-
-
-      const { projects, totalPages, totalProjects } = await getProjects(teamId, page, limit);
+      const {
+        projects,
+        totalPages,
+        totalProjects,
+      } = await getProjects(teamId, page, limit);
 
       set({
         projects,
         totalPages,
         totalProjects,
         page,
-        isLoading: false
+        isLoadingProjects: false,
       });
+
     } catch (error) {
       console.error("Error fetching projects:", error);
-      set({ isLoading: false });
+
+      set({ isLoadingProjects: false });
     }
   },
 
-  getProject: async (id: string, teamId: string) => {
-    set({ isLoading: true, currentProject: null });
+  /* ================= SINGLE PROJECT ================= */
+
+  getProject: async (projectId, teamId) => {
+    set({
+      isLoadingProject: true,
+      currentProject: null,
+    });
+
     try {
-      const data = await getProject(id, teamId);
-      set({ currentProject: data, isLoading: false });
+      const data = await getProject(projectId, teamId);
+
+      set({
+        currentProject: data,
+        isLoadingProject: false,
+      });
+
     } catch (error) {
       console.error("Error fetching project:", error);
-      set({ isLoading: false });
+
+      set({ isLoadingProject: false });
     }
   },
+
+  /* ================= ANALYTICS ================= */
+
+  getProjectAnalytics: async (teamId, projectId) => {
+    set({ isLoadingAnalytics: true });
+
+    try {
+      const data = await getProjectAnalytics(teamId, projectId);
+
+      set({
+        analytics: data,
+        isLoadingAnalytics: false,
+      });
+
+    } catch (error) {
+      console.error("Error fetching analytics:", error);
+
+      set({ isLoadingAnalytics: false });
+    }
+  },
+
+  /* ================= USER PROJECTS ================= */
 
   getProjectsByUser: async () => {
-    set({ isLoading: true });
+    set({ isLoadingProjects: true });
+
     try {
       const projects = await getProjectsByUser();
-      console.log(projects);
-      set({ projects, isLoading: false });
+
+      set({
+        projects,
+        isLoadingProjects: false,
+      });
+
     } catch (error) {
       console.error("Error fetching projects:", error);
-      set({ isLoading: false });
+
+      set({ isLoadingProjects: false });
     }
   },
 
-  createProject: async (teamId: string, data: NewProject) => {
-    set({ isLoading: true });
+  /* ================= CREATE ================= */
+
+  createProject: async (teamId, data) => {
+    set({ isLoadingProject: true });
+
     try {
       const { message, project } = await createProject(teamId, data);
+
       set((state) => ({
         projects: [...state.projects, project],
-        isLoading: false,
         totalProjects: state.totalProjects + 1,
+        isLoadingProject: false,
       }));
+
       toast.success(message);
+
     } catch (error) {
       console.error("Error creando proyecto:", error);
-      set({ isLoading: false });
+
+      set({ isLoadingProject: false });
     }
   },
 
-  updateProject: async (id: string, data: Partial<Project>, teamId: string) => {
-    set({ isLoading: true });
+  /* ================= UPDATE ================= */
+
+  updateProject: async (id, data, teamId) => {
+    set({ isLoadingProject: true });
+
     try {
-      const { message, } = await updateProject(id, data, teamId);
+      const { message } = await updateProject(id, data, teamId);
+
       const updatedProject = await getProject(id, teamId);
+
       set((state) => ({
         projects: state.projects.map((project) =>
           project._id === id ? updatedProject : project
         ),
-        isLoading: false,
+        isLoadingProject: false,
       }));
 
       toast.success(message);
+
     } catch (error) {
       console.error("Error actualizando proyecto:", error);
-      set({ isLoading: false });
+
+      set({ isLoadingProject: false });
     }
   },
 
-  deleteProject: async (id: string, teamId: string) => {
-    set({ isLoading: true });
+  /* ================= DELETE ================= */
+
+  deleteProject: async (id, teamId) => {
+    set({ isLoadingProject: true });
+
     try {
       const { message } = await deleteProject(id, teamId);
+
       set((state) => ({
         projects: state.projects.filter((p) => p._id !== id),
-        isLoading: false,
         totalProjects: state.totalProjects - 1,
+        isLoadingProject: false,
       }));
+
       toast.success(message);
+
     } catch (error) {
       console.error("Error eliminando proyecto:", error);
-      set({ isLoading: false });
+
+      set({ isLoadingProject: false });
     }
   },
 }));

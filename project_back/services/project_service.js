@@ -9,7 +9,7 @@ class ProjectService {
         return await projectRepo.getAllProjects(teamId, page, limit);
     }
     async getProjectById(teamId, projectId) {
-        return await projectRepo.getProjectById(teamId, projectId);
+        return await projectRepo.getProjectWithStats(teamId, projectId);
     }
     async getProjectsByUser(userId) {
         const teams = await teamMemberRepo.findTeamsByUserId(userId);
@@ -38,6 +38,25 @@ class ProjectService {
 
         return projectsWithStats;
     }
+
+
+    async getProjectAnalytics(teamId, projectId) {
+        const project = await projectRepo.getProjectWithStats(
+            teamId,
+            projectId
+        );
+
+        if (!project) throw new Error("Project not found");
+
+        const timeline = await projectRepo.getTasksOverTime(projectId);
+
+        return {
+            ...project,
+            tasksTimeline: timeline,
+        };
+    }
+
+
 
 
     async findProjectById(projectId) {

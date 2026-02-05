@@ -1,6 +1,6 @@
 import express from "express";
 import authenticate from "../middlewares/auth_middleware.js";
-import { createProject, getAllProjects, getProject, updateProject, deleteProject, getProjectsByUser } from "../controllers/project_controller.js";
+import { createProject, getAllProjects, getProject, updateProject, deleteProject, getProjectsByUser, getProjectAnalytics } from "../controllers/project_controller.js";
 import { isTeamAdmin } from "../middlewares/admin_middleware.js";
 import { isTeamMember } from "../middlewares/isTeamMember_middleware.js";
 
@@ -13,5 +13,8 @@ router.get("/teams/projects", authenticate, getProjectsByUser);
 router.get("/teams/:teamId/projects/:projectId", authenticate, isTeamMember, getProject);
 router.put("/teams/:teamId/projects/:projectId", authenticate, isTeamAdmin, updateProject);
 router.delete("/teams/:teamId/projects/:projectId", authenticate, isTeamAdmin, deleteProject);
-
+router.get(
+    "/teams/:teamId/projects/:projectId/analytics",
+    getProjectAnalytics
+);
 export default router;

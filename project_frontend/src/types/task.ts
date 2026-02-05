@@ -1,3 +1,4 @@
+import type { User } from "./auth";
 import type { Tag } from "./tag";
 
 export interface Task {
@@ -6,11 +7,13 @@ export interface Task {
     description: string;
     projectId: string;
     status: string;
-    assignedTo?: string;
-    tags?: Tag[]; 
+    assignedUsers?: User[];
+    tags?: Tag[];
+    createdAt: string;
 }
 
 export type TaskFormValues = {
+    id: string;
     name: string;
     description: string;
 };
@@ -25,6 +28,6 @@ export type TaskInput = {
 export type TaskFilterValue = "all" | "open" | "completed";
 
 export interface TaskFilterProps {
-  value: TaskFilterValue;
-  onChange: (value: TaskFilterValue) => void;
+    value: TaskFilterValue;
+    onChange: (value: TaskFilterValue) => void;
 }

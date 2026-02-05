@@ -74,6 +74,16 @@ export const getTaskByUser = async (req, res) => {
     }
 };
 
+export const getTasksWithAssignments = async (req, res) => {
+    try {
+        const { projectId, taskId } = req.params;
+        const task = await taskService.getTaskWithAssignments(projectId, taskId);
+        res.status(200).json(task);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 
 export const deleteTask = async (req, res) => {
     try {

@@ -7,7 +7,7 @@ import { dbConnect } from "./config/dbConntect.js";
 import dotenv from "dotenv";
 import { Server } from "socket.io";
 import MessageModel from "./models/Message.js";
-import { fileURLToPath } from 'url';
+import path from "path";
 
 dotenv.config();
 const app = express();
@@ -48,14 +48,41 @@ app.use((req, res, next) => {
   next();
 });
 
-const fileRoutes = fs.readdirSync("./routes");
-fileRoutes.forEach((file) => {
-  import(`./routes/${file}`).then((route) => {
-    app.use("/api/v1/", route.default);
-  }).catch((error) => {
-    console.error("Error loading route:", error);
-  });
+
+const routesPath = path.join(process.cwd(), "routes");
+
+const priorityRoutes = [
+  "project.routes.js",
+  "team.routes.js",
+  "user.routes.js",
+  "auth.routes.js",
+  "attachment.routes.js",
+  "comment.routes.js",
+  "notification.routes.js",
+  "task.routes.js",
+  "tag.routes.js",
+  "task_assignment.routes.js",
+  "task_tag.routes.js",
+  "team_member.routes.js",
+  "user.routes.js",
+];
+
+let files = fs.readdirSync(routesPath);
+
+files.sort((a, b) => {
+  const aIndex = priorityRoutes.indexOf(a);
+  const bIndex = priorityRoutes.indexOf(b);
+
+  if (aIndex === -1 && bIndex === -1) return 0;
+  if (aIndex === -1) return 1;
+  if (bIndex === -1) return -1;
+
+  return aIndex - bIndex;
 });
+for (const file of files) {
+  const route = await import(`./routes/${file}`);
+  app.use("/api/v1", route.default);
+}
 
 
 io.on("connection", (socket) => {

@@ -1,6 +1,7 @@
 import projectService from "../services/project_service.js";
 import notificationService from "../services/notification_service.js";
 import teamMemberService from "../services/team_member_service.js";
+import mongoose from "mongoose";
 export const createProject = async (req, res) => {
     try {
         const owner_id = req.user.id;
@@ -68,6 +69,35 @@ export const getProjectsByUser = async (req, res) => {
     }
 };
 
+
+export const getProjectAnalytics = async (req, res) => {
+    try {
+        const { teamId, projectId } = req.params;
+
+        if (
+            !mongoose.Types.ObjectId.isValid(teamId) ||
+            !mongoose.Types.ObjectId.isValid(projectId)
+        ) {
+            return res.status(400).json({
+                message: "Invalid IDs",
+            });
+        }
+
+        const data = await projectService.getProjectAnalytics(
+            teamId,
+            projectId
+        );
+
+        res.status(200).json(data);
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: error.message || "Error getting analytics",
+        });
+    }
+};
 
 
 export const getAllProjects = async (req, res) => {
