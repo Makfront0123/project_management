@@ -1,14 +1,17 @@
 import { create } from 'zustand'
 import { getUserTeamStatus } from '../services/auth_services'
-import { createTeam, deleteTeam, getAllTeams, updateTeam } from '../services/team_services'
+import { createTeam, deleteTeam, getAllTeams, getTeamDashboard, updateTeam } from '../services/team_services'
 import { getErrorMessage } from '../utils/getErrorMessage'
-import type { Team } from '../types/team'
+import type { Team, TeamDashboardResponse} from '../types/team'
 import toast from 'react-hot-toast'
 
 
 
 type TeamStore = {
   teams: Team[]
+  dashboard: TeamDashboardResponse | null
+  activeTeamId: string | null;
+  setActiveTeam: (teamId: string) => void;
   isLoading: boolean
   page: number
   limit: number
@@ -19,10 +22,14 @@ type TeamStore = {
   getAllTeams: (page?: number, limit?: number) => Promise<void>
   updateTeam: (data: Partial<Team>, teamId: string) => Promise<string>
   deleteTeam: (id: string) => Promise<string>
+  getTeamDashboard: (teamId: string) => Promise<void>
 }
 
 export const useTeamStore = create<TeamStore>((set) => ({
   teams: [],
+  activeTeamId: null,
+  dashboard: null,
+  setActiveTeam: (teamId) => set({ activeTeamId: teamId }),
   isLoading: false,
   page: 1,
   limit: 4,
@@ -32,7 +39,11 @@ export const useTeamStore = create<TeamStore>((set) => ({
     set({ isLoading: true })
     try {
       const data = await getUserTeamStatus()
-      set({ teams: data.teams, isLoading: false })
+      set((state) => ({
+        teams: data.teams,
+        activeTeamId: state.activeTeamId ?? data.teams[0]?._id ?? null,
+        isLoading: false
+      }))
     } catch (error) {
       console.error("Error fetching teams:", error)
       set({ isLoading: false })
@@ -56,26 +67,47 @@ export const useTeamStore = create<TeamStore>((set) => ({
       throw new Error(getErrorMessage(error))
     }
   },
+  getTeamDashboard: async (teamId: string) => {
+    set({ isLoading: true })
 
+    try {
+      const response = await getTeamDashboard(teamId)
+
+      set({
+        dashboard: response,
+        isLoading: false,
+      })
+
+    } catch (error) {
+      console.error("Error fetching team dashboard:", error)
+
+      set({ isLoading: false })
+
+      throw new Error(getErrorMessage(error))
+    }
+  },
   getAllTeams: async (page = 1, limit = 4) => {
     set({ isLoading: true, teams: [] })
     try {
       const response = await getAllTeams(page, limit)
-    
-      set({
+      set((state) => ({
         teams: response.teams,
+
+        activeTeamId:
+          state.activeTeamId ?? response.teams[0]?._id ?? null,
+
         totalPages: response.totalPages,
         totalTeams: response.totalTeams,
         page,
         isLoading: false,
-      });
+      }))
     } catch (error) {
       console.error("Error fetching teams:", error)
       set({ isLoading: false })
     }
   },
   updateTeam: async (data: Partial<Team>, teamId: string) => {
-   
+
     set({ isLoading: true })
     try {
       const { team, message } = await updateTeam(teamId, data)

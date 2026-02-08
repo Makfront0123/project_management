@@ -4,10 +4,21 @@ import useNotificationStore from "@/stores/notification_store";
 import { useTeamMemberStore } from "@/stores/team_member_store";
 import { useTaskAssignments } from "./projectDetails/useTaskAssignments";
 import { useTaskManager } from "./projectDetails/useTasksManager";
+import type { TaskPriority } from "@/types/task";
 
 interface TaskWorkflows {
     completeTask: (params: CompleteTaskParams) => Promise<void>;
     deleteTask: (taskId: string, projectId: string) => Promise<void>;
+
+    createTask: (params: CreateTaskParams) => Promise<void>;
+}
+
+interface CreateTaskParams {
+    name: string;
+    description: string;
+    projectId: string;
+    priority?: TaskPriority;
+    assignedUserId?: string | null;
 }
 
 export const useTaskWorkflows = (): TaskWorkflows => {
@@ -69,8 +80,28 @@ export const useTaskWorkflows = (): TaskWorkflows => {
         [tasks]
     );
 
+    const createTask = useCallback(
+        async ({
+            name,
+            description,
+            projectId,
+            priority,
+            assignedUserId,
+        }: CreateTaskParams): Promise<void> => {
+
+            await tasks.createTask(projectId, {
+                name,
+                description,
+                priority,
+                assignedUserId,
+            });
+
+        },
+        [tasks]
+    );
     return {
         completeTask,
         deleteTask,
+        createTask,
     };
 };

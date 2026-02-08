@@ -31,13 +31,6 @@ const ProjectCard = ({ projects, variant = "grid" }: ProjectCardProps) => {
 
                         <div className="flex items-center gap-x-3 mb-4">
                             <div className="flex items-center gap-1">
-                                <img src={icons.sidebar03} className="size-4" />
-                                <span className="text-gray-400 text-sm">
-                                    {project.membersCount} members
-                                </span>
-                            </div>
-
-                            <div className="flex items-center gap-1">
                                 <img src={icons.calendar} className="size-4" />
                                 <span className="text-sm text-gray-400">
                                     {formatDateShort(project.createdAt)}

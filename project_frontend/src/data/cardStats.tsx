@@ -7,7 +7,12 @@ export const cardStats = [
         icon: icons.feature01
     },
     {
-        title: "Total Tasks",
+        title: "Completed Projects",
+        value: "100",
+        icon: icons.feature01
+    },
+    {
+        title: "My Tasks",
         value: "100",
         icon: icons.feature01
     },
@@ -16,10 +21,6 @@ export const cardStats = [
         value: "100",
         icon: icons.feature01
     },
-    {
-        title: "Total Teams",
-        value: "100",
-        icon: icons.feature01
-    },
+
 ]
 

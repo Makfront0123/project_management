@@ -1,6 +1,5 @@
 import axios from "axios";
 import type { NewProject, Project } from "../types/projects";
-import type { Team } from "../types/team";
 import { useAuthStore } from "../stores/auth_store";
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
@@ -50,15 +49,6 @@ export const getProjectAnalytics = async (teamId: string, projectId: string) => 
     return response.data;
 }
 
-export const getProjectsByUser = async () => {
-    const token = useAuthStore.getState().token;
-    const response = await axios.get(`${baseUrl}/teams/projects`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-    return response.data;
-}
 
 export const getProject = async (projectId: string, teamId: string) => {
     const token = useAuthStore.getState().token;
@@ -92,7 +82,12 @@ export const deleteProject = async (id: string, teamId: string) => {
     return response.data;
 }
 
-export const getProjectsByTeam = async (teamId: Team) => {
-    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects`);
+export const getProjectsByTeam = async (teamId: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.get(`${baseUrl}/teams/${teamId}/projects`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
     return response.data;
 }

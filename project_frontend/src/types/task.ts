@@ -17,11 +17,13 @@ export type TaskFormValues = {
     name: string;
     description: string;
 };
-
+export type TaskPriority = "low" | "medium" | "high" | "urgent";
 
 export type TaskInput = {
-    name: string;
-    description: string;
+    name?: string;
+    description?: string;
+    priority?: TaskPriority;
+    assignedUserId?: string | null;
 };
 
 

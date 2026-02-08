@@ -7,20 +7,16 @@ import {
   createProject,
   updateProject,
   deleteProject,
-  getProjectsByUser,
+  getProjectsByTeam,
   getProjectAnalytics,
 } from "../services/project_services";
 
 import type { Project, NewProject } from "../types/projects";
-
-/* ================= TYPES ================= */
-
 type ProjectStore = {
   projects: Project[];
   currentProject: Project | null;
   analytics: Project | null;
 
-  /* Loadings */
   isLoadingProjects: boolean;
   isLoadingProject: boolean;
   isLoadingAnalytics: boolean;
@@ -30,7 +26,6 @@ type ProjectStore = {
   totalPages: number;
   totalProjects: number;
 
-  /* Actions */
   getProjects: (
     teamId: string,
     page?: number,
@@ -47,7 +42,7 @@ type ProjectStore = {
     projectId: string
   ) => Promise<void>;
 
-  getProjectsByUser: () => Promise<void>;
+  getProjectsByTeam: (teamId: string) => Promise<void>;
 
   createProject: (
     teamId: string,
@@ -66,10 +61,7 @@ type ProjectStore = {
   ) => Promise<void>;
 };
 
-/* ================= STORE ================= */
-
 export const useProjectStore = create<ProjectStore>((set) => ({
-  /* State */
 
   projects: [],
   currentProject: null,
@@ -83,9 +75,6 @@ export const useProjectStore = create<ProjectStore>((set) => ({
   limit: 10,
   totalPages: 1,
   totalProjects: 0,
-
-  /* ================= PROJECTS ================= */
-
   getProjects: async (teamId, page = 1, limit = 10) => {
     set({
       isLoadingProjects: true,
@@ -114,17 +103,14 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     }
   },
 
-  /* ================= SINGLE PROJECT ================= */
-
   getProject: async (projectId, teamId) => {
     set({
       isLoadingProject: true,
-      currentProject: null,
     });
 
     try {
       const data = await getProject(projectId, teamId);
-
+      console.log('data', data)
       set({
         currentProject: data,
         isLoadingProject: false,
@@ -137,14 +123,12 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     }
   },
 
-  /* ================= ANALYTICS ================= */
-
   getProjectAnalytics: async (teamId, projectId) => {
     set({ isLoadingAnalytics: true });
 
     try {
       const data = await getProjectAnalytics(teamId, projectId);
-
+      console.log('data', data)
       set({
         analytics: data,
         isLoadingAnalytics: false,
@@ -157,13 +141,12 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     }
   },
 
-  /* ================= USER PROJECTS ================= */
 
-  getProjectsByUser: async () => {
+  getProjectsByTeam: async (teamId: string) => {
     set({ isLoadingProjects: true });
 
     try {
-      const projects = await getProjectsByUser();
+      const projects = await getProjectsByTeam(teamId);
 
       set({
         projects,
@@ -176,8 +159,6 @@ export const useProjectStore = create<ProjectStore>((set) => ({
       set({ isLoadingProjects: false });
     }
   },
-
-  /* ================= CREATE ================= */
 
   createProject: async (teamId, data) => {
     set({ isLoadingProject: true });
@@ -199,8 +180,6 @@ export const useProjectStore = create<ProjectStore>((set) => ({
       set({ isLoadingProject: false });
     }
   },
-
-  /* ================= UPDATE ================= */
 
   updateProject: async (id, data, teamId) => {
     set({ isLoadingProject: true });
@@ -225,8 +204,6 @@ export const useProjectStore = create<ProjectStore>((set) => ({
       set({ isLoadingProject: false });
     }
   },
-
-  /* ================= DELETE ================= */
 
   deleteProject: async (id, teamId) => {
     set({ isLoadingProject: true });

@@ -41,12 +41,12 @@ export type ProjectForm = {
 };
 
 export interface AdminProjectViewProp {
-  currentProject: Project;
+  currentProject: Project | null;
 
   tasks: Task[];
   filteredTasks: Task[];
 
-  tags: Tag[];
+ 
 
   actions: AdminProjectActions;
 

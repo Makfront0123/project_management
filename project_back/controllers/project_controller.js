@@ -57,17 +57,19 @@ export const createProject = async (req, res) => {
     }
 };
 
-export const getProjectsByUser = async (req, res) => {
+export const getProjectsByTeam = async (req, res) => {
     try {
-        const userId = req.user.id;
-
-        const projects = await projectService.getProjectsByUser(userId);
-
+        const { teamId } = req.params;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const projects = await projectService.getProjectsByTeam(teamId, page, limit);
         res.status(200).json(projects);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Error fetching projects:", error);
+        res.status(500).json({ message: "Internal server error" });
+
     }
-};
+}
 
 
 export const getProjectAnalytics = async (req, res) => {
@@ -96,22 +98,6 @@ export const getProjectAnalytics = async (req, res) => {
         res.status(500).json({
             message: error.message || "Error getting analytics",
         });
-    }
-};
-
-
-export const getAllProjects = async (req, res) => {
-    try {
-        const { teamId } = req.params;
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
-
-        const data = await projectService.getAllProjects(teamId, page, limit);
-
-        res.status(200).json(data);
-    } catch (error) {
-        console.error("Error fetching projects:", error);
-        res.status(500).json({ message: "Internal server error" });
     }
 };
 

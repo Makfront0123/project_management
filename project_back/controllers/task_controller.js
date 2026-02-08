@@ -1,27 +1,42 @@
 import taskService from "../services/task_service.js";
+import TaskAssignment from "../models/TaksAssignment.js";
 export const createTask = async (req, res) => {
     try {
-        const { projectId } = req.params;
-        const { name, description } = req.body;
 
-        const data = {
+        const { projectId } = req.params;
+
+        const {
+            name,
+            description,
+            priority,
+            assignedUserId,
+        } = req.body;
+
+        const task = await taskService.createTask({
             name,
             description,
             projectId,
+            priority,
             status: "open",
-        };
+        });
+        if (assignedUserId) {
 
-        const task = await taskService.createTask(data);
+            await TaskAssignment.create({
+                taskId: task._id,
+                userId: assignedUserId,
+                assignedBy: req.user.id,
+            });
+        }
+
         res.status(201).json({
-            message: "Task created successfully",
+            message: "Task created",
             task,
         });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
-
-
 export const getAllTasksByProject = async (req, res) => {
     try {
         const { projectId } = req.params;

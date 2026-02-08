@@ -1,14 +1,13 @@
-import React from 'react'
+import type { Task } from '@/types/task'
 import { Card } from './ui/card'
-import { useDashboard } from '@/hooks/useDashboard'
 
-const MyTasks = () => {
-    const {
-        tasks,
-        tasksLoading,
-    } = useDashboard()
-
-    if (tasksLoading) {
+interface Props {
+    tasks: Task[]
+    loading: boolean
+}
+const MyTasks = ({ tasks, loading }: Props) => {
+    
+    if (loading) {
         return (
             <Card className='rounded-sm w-full'>
                 Loading tasks...

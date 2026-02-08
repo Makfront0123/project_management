@@ -34,6 +34,16 @@ export const createTeam = async (req, res) => {
     }
 };
 
+export const getTeamDashboard = async (req, res) => {
+    try {
+        const teamId = req.params.teamId;
+        const team = await teamService.getTeamDashboard(teamId);
+        res.status(200).json(team);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const getAllTeams = async (req, res) => {
     const teams = await teamService.getAllTeams(req.query.page, req.query.limit);
     res.status(200).json(teams);

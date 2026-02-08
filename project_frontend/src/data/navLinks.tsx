@@ -14,12 +14,6 @@ export const navLinks = [
         badge: null,
     },
     {
-        name: "Teams",
-        icon: icons.sidebar03,
-        path: "/teams",
-        badge: null,
-    },
-    {
         name: "Settings",
         icon: icons.sidebar04,
         path: "/settings",

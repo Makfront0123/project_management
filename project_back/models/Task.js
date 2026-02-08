@@ -8,6 +8,12 @@ const taskSchema = new mongoose.Schema({
         ref: "Project"
     },
 
+    priority: {
+        type: String,
+        enum: ["low", "medium", "high", "urgent"],
+        default: "medium"
+    },
+
     status: {
         type: String,
         enum: ["open", "in progress", "done"],

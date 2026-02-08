@@ -97,6 +97,23 @@ class TaskRepository {
             .lean();
     }
 
+    async countByProjects(projectIds) {
+        return await Task.aggregate([
+            {
+                $match: {
+                    projectId: { $in: projectIds }
+                }
+            },
+            {
+                $group: {
+                    _id: "$projectId",
+                    total: { $sum: 1 },
+                    completed: { $sum: { $cond: [{ $eq: ["$status", "completed"] }, 1, 0] } },
+                }
+            }
+        ]);
+    }
+
     async getTasksWithAssignments(projectId, taskId) {
         return await Task.aggregate([
             {

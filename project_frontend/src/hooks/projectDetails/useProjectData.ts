@@ -1,73 +1,25 @@
-
 import { useProjectStore } from "@/stores/project_store";
 import useTagStore from "@/stores/tag_store";
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
 
-export const useProjectData = (teamId?: string, projectId?: string) => {
-    const {
-        currentProject,
-        isLoading,
-        getProject,
-        updateProject,
-        deleteProject,
-    } = useProjectStore();
+export const useProjectData = () => {
+  const projectStore = useProjectStore();
+  const tagStore = useTagStore();
 
-    const {
-        tags,
-        getAllTags,
-        deleteTag,
-        updateTag,
-        createTag,
-    } = useTagStore();
+  return {
+    // Project
+    currentProject: projectStore.currentProject,
+    isLoading: projectStore.isLoadingProject,
 
-    const navigate = useNavigate();
+    getProject: projectStore.getProject,
+    updateProject: projectStore.updateProject,
+    deleteProject: projectStore.deleteProject,
 
-    useEffect(() => {
-        if (!projectId || !teamId) return;
+    // Tags
+    tags: tagStore.tags,
 
-        // ✅ cargar proyecto actual
-        getProject(projectId, teamId);
-
-        // ✅ cargar tags
-        getAllTags(teamId);
-
-    }, [projectId, teamId, getProject, getAllTags]);
-
-
-    const onEditProject = async () => {
-        if (!currentProject || !teamId) return;
-
-        await updateProject(
-            currentProject._id,
-            {
-                name: currentProject.name,
-                description: currentProject.description,
-            },
-            teamId
-        );
-    };
-
-    const onDeleteProject = async () => {
-        if (!currentProject || !teamId) return;
-
-        await deleteProject(currentProject._id, teamId);
-
-        navigate(`/team/${teamId}/projects`);
-    };
-
-
-    return {
-        currentProject,
-        isLoading,
-        getProject,
-        updateProject,
-        onEditProject,
-        onDeleteProject,
-        tags,
-        getAllTags,
-        deleteTag,
-        updateTag,
-        createTag,
-    };
+    getAllTags: tagStore.getAllTags,
+    deleteTag: tagStore.deleteTag,
+    updateTag: tagStore.updateTag,
+    createTag: tagStore.createTag,
+  };
 };

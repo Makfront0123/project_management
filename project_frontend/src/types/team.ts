@@ -10,6 +10,7 @@ export type Team = {
   };
   createdAt: string;
   updatedAt: string;
+  membersCount: number;
 };
 
 export interface PagedTeamsResponse {
@@ -26,4 +27,21 @@ export type CreateTeamFormValue = {
 export interface TeamResponse {
   message: string;
   team: Team;
+}
+
+export interface TeamDashboardResponse {
+  _id: string
+  name: string
+  description: string
+  code: string
+  membersCount: number
+
+  projects: {
+    _id: string
+    name: string
+    status: string
+    totalTasks: number
+    completedTasks: number
+    progress: number
+  }[]
 }

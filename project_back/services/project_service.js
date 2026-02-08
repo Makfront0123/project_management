@@ -1,6 +1,6 @@
 import projectRepo from "../repositories/project_repository.js";
-import teamMemberRepo from "../repositories/team_member_repository.js";
 import taskRepo from "../repositories/task_repository.js";
+import teamMemberRepo from "../repositories/team_member_repository.js";
 class ProjectService {
     async createProject(data) {
         return await projectRepo.createProject(data);
@@ -11,34 +11,46 @@ class ProjectService {
     async getProjectById(teamId, projectId) {
         return await projectRepo.getProjectWithStats(teamId, projectId);
     }
-    async getProjectsByUser(userId) {
-        const teams = await teamMemberRepo.findTeamsByUserId(userId);
-        const teamIds = teams.map(t => t.teamId);
-        const projects = await projectRepo.findByTeamIds(teamIds);
+    async getProjectsByTeam(teamId) {
+        const projects = await projectRepo.findByTeamIds(teamId);
 
-        const projectsWithStats = await Promise.all(
-            projects.map(async (project) => {
-                const members = await teamMemberRepo.findMembersByTeamId(project.teamId);
+        if (!projects.length) return [];
 
-                const totalTasks = await taskRepo.countByProjectId(project._id);
-                const completedTasks = await taskRepo.countCompletedByProjectId(project._id);
-                const progress = totalTasks === 0
-                    ? 0
-                    : Math.round((completedTasks / totalTasks) * 100);
+        const members = await teamMemberRepo.findMembersByTeamId(teamId);
+        const membersCount = members.length;
 
-                return {
-                    ...project.toObject(),
-                    membersCount: members.length,
-                    totalTasks,
-                    completedTasks,
-                    progress
-                };
-            })
-        );
+        const projectIds = projects.map(p => p._id);
 
-        return projectsWithStats;
+        const tasksStats = await taskRepo.countByProjects(projectIds);
+        const statsMap = new Map();
+
+        tasksStats.forEach(stat => {
+            statsMap.set(
+                stat._id.toString(),
+                stat
+            );
+        });
+
+        return projects.map(project => {
+
+            const stat = statsMap.get(project._id.toString()) || {
+                total: 0,
+                completed: 0
+            };
+
+            const progress = stat.total === 0
+                ? 0
+                : Math.round((stat.completed / stat.total) * 100);
+
+            return {
+                ...project.toObject(),
+                membersCount,
+                totalTasks: stat.total,
+                completedTasks: stat.completed,
+                progress,
+            };
+        });
     }
-
 
     async getProjectAnalytics(teamId, projectId) {
         const project = await projectRepo.getProjectWithStats(
