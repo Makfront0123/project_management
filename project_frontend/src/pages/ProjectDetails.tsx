@@ -3,6 +3,7 @@ import AdminProjectView from "@/components/projectDetails/AdminProjectView";
 import MemberProjectView from "@/components/projectDetails/MemberProjectView";
 import { useProjectDetails } from "@/hooks/useProjectDetails";
 import { Loading } from "@/components/Loading";
+import { useTaskWorkflows } from "@/hooks/useTaskWorkflows";
 
 
 const ProjectDetails = () => {
@@ -11,62 +12,37 @@ const ProjectDetails = () => {
     tasks,
     isAdmin,
     isLoading,
-    isModalOpen,
-    setIsModalOpen,
     setEditingTask,
+    setIsModalOpen,
+    isModalOpen   // 👈 agregar esto
   } = useProjectDetails();
 
+  const { deleteTask, updateTask } = useTaskWorkflows();
   const filteredTasks = (tasks ?? []).filter(
     (t: Task) => t.status !== "archived"
   );
 
-  const actions = {
-    createTask: () => {
-      setEditingTask(null);
-      setIsModalOpen(true);
-    },
-
-    editTask: (task: Task) => {
-      setEditingTask(task);
-      setIsModalOpen(true);
-    },
-  }; const modals = {
-    isTaskModalOpen: isModalOpen,
-
-    openTaskModal: () => setIsModalOpen(true),
-    closeTaskModal: () => setIsModalOpen(false),
-  };
-
-
-  const memberProps = {
-    currentProject,
-    tasks,
-    isLoading,
-    filteredTasks,
-    openComments: (taskId: string) => {
-      console.log("Abrir comentarios:", taskId);
-    },
-  };
-
-  const adminProps = {
-    currentProject,
-    tasks,
- 
-    filteredTasks,
-    actions,
-    modals,
-  };
-
-  console.log('adminProps', adminProps)
-  if (isLoading || !adminProps.currentProject) {
-    return <Loading />; // o null
+  if (isLoading || !currentProject) {
+    return <Loading />;
   }
   return (
     <>
       {isAdmin ? (
-        <AdminProjectView {...adminProps} />
+        <AdminProjectView
+          currentProject={currentProject}
+          tasks={filteredTasks}
+          deleteTask={deleteTask}
+          updateTask={updateTask}
+          setEditingTask={setEditingTask}
+          setIsModalOpen={setIsModalOpen}
+          isModalOpen={isModalOpen}
+        />
+
       ) : (
-        <MemberProjectView {...memberProps} />
+        <MemberProjectView
+          currentProject={currentProject}
+          tasks={filteredTasks}
+        />
       )}
 
 

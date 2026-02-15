@@ -1,25 +1,17 @@
 import useTaskStore from "@/stores/task_store";
 import { useEffect } from "react";
-import { useParams } from "react-router";
 
-export const useTaskManager = () => {
-    const {
-        tasks,
-        createTask,
-        getTasks,
-        updateTask,
-        deleteTask,
-    } = useTaskStore();
-    const { projectId } = useParams();
+export const useTaskManager = (projectId?: string) => {
+    const { tasks, getTasks, createTask, updateTask, deleteTask } = useTaskStore();
 
     useEffect(() => {
-        getTasks(projectId ?? '');
-    }, [getTasks, projectId]);
+        if (!projectId) return;
+        getTasks(projectId);
+    }, [projectId, getTasks]);
 
     return {
         tasks,
         createTask,
-        getTasks,
         updateTask,
         deleteTask,
     };

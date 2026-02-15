@@ -4,12 +4,12 @@ import useNotificationStore from "@/stores/notification_store";
 import { useTeamMemberStore } from "@/stores/team_member_store";
 import { useTaskAssignments } from "./projectDetails/useTaskAssignments";
 import { useTaskManager } from "./projectDetails/useTasksManager";
-import type { TaskPriority } from "@/types/task";
+import type { Task, TaskPriority } from "@/types/task";
 
 interface TaskWorkflows {
     completeTask: (params: CompleteTaskParams) => Promise<void>;
     deleteTask: (taskId: string, projectId: string) => Promise<void>;
-
+    updateTask: (taskId: string, data: Partial<Task>) => Promise<void>;
     createTask: (params: CreateTaskParams) => Promise<void>;
 }
 
@@ -26,6 +26,7 @@ export const useTaskWorkflows = (): TaskWorkflows => {
     const assignments = useTaskAssignments();
     const { teamMembers } = useTeamMemberStore();
     const { addNotification } = useNotificationStore();
+    
 
     const completeTask = useCallback(
         async ({
@@ -80,6 +81,13 @@ export const useTaskWorkflows = (): TaskWorkflows => {
         [tasks]
     );
 
+    const updateTask = useCallback(
+        async (taskId: string, data: Partial<Task>): Promise<void> => {
+            await tasks.updateTask(taskId, data, data.projectId ?? '');
+        },
+        [tasks]
+    );
+
     const createTask = useCallback(
         async ({
             name,
@@ -103,5 +111,6 @@ export const useTaskWorkflows = (): TaskWorkflows => {
         completeTask,
         deleteTask,
         createTask,
+        updateTask
     };
 };

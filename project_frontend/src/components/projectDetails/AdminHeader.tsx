@@ -12,7 +12,6 @@ const AdminHeader = ({
     project,
     onCreateTask,
 }: Props) => {
-    console.log('project', project)
     return (
         <div className="p-4 flex items-center justify-between gap-4">
 

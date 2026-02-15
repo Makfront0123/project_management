@@ -4,14 +4,16 @@ import { useTaskWorkflows } from "@/hooks/useTaskWorkflows";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import type { TaskPriority } from "@/types/task";
+import type { Task, TaskPriority } from "@/types/task";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { useTeamMembers } from "@/hooks/useTeamMembers";
+
 interface Props {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     teamId: string | null;
     projectId: string | null;
+    editingTask?: Task | null;
 }
 
 interface FormValues {
@@ -21,16 +23,17 @@ interface FormValues {
     assignedUserId: string | null;
 }
 
-export const CreateTaskModal = ({
+export const TaskFormModal = ({
     open,
     onOpenChange,
     teamId,
     projectId,
+    editingTask,
 }: Props) => {
-    const members = useTeamMembers(teamId ?? '');
-    const { createTask } = useTaskWorkflows();
+    const isEditing = !!editingTask;
 
-
+    const members = useTeamMembers(teamId ?? "");
+    const { createTask, updateTask } = useTaskWorkflows();
 
     const form = useForm<FormValues>({
         initialValues: {
@@ -49,22 +52,41 @@ export const CreateTaskModal = ({
         onSubmit: async (values) => {
             if (!projectId) return;
 
-            await createTask({
-                name: values.name.trim(),
-                description: values.description,
-                projectId,
-                priority: values.priority,
-                assignedUserId: values.assignedUserId,
-            });
+            if (isEditing && editingTask) {
+                await updateTask(editingTask._id, {
+                    name: values.name.trim(),
+                    description: values.description,
+                    priority: values.priority,
+                });
+            } else {
+                await createTask({
+                    name: values.name.trim(),
+                    description: values.description,
+                    projectId,
+                    priority: values.priority,
+                    assignedUserId: values.assignedUserId,
+                });
+            }
+
             onOpenChange(false);
+            form.setValues({
+                name: "",
+                description: "",
+                priority: "medium",
+                assignedUserId: null,
+            });
         },
     });
+
+    console.log("IsEditing", isEditing);
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Create Task</DialogTitle>
+                    <DialogTitle>
+                        {isEditing ? "Edit Task" : "Create Task"}
+                    </DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={form.handleSubmit} className="space-y-4">
@@ -74,15 +96,20 @@ export const CreateTaskModal = ({
                         value={form.values.name}
                         onChange={form.handleChange}
                     />
+
                     {form.errors.name && (
-                        <p className="text-sm text-red-500">{form.errors.name}</p>
+                        <p className="text-sm text-red-500">
+                            {form.errors.name}
+                        </p>
                     )}
+
                     <Textarea
                         name="description"
                         placeholder="Description"
                         value={form.values.description}
                         onChange={form.handleChange}
                     />
+
                     <div className="flex items-center gap-x-4">
                         <Select
                             value={form.values.assignedUserId ?? "unassigned"}
@@ -97,9 +124,15 @@ export const CreateTaskModal = ({
                                 <SelectValue placeholder="Assign to" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="unassigned">Unassigned</SelectItem>
+                                <SelectItem value="unassigned">
+                                    Unassigned
+                                </SelectItem>
+
                                 {members.map((member) => (
-                                    <SelectItem key={member.userId._id} value={member.userId._id}>
+                                    <SelectItem
+                                        key={member.userId._id}
+                                        value={member.userId._id}
+                                    >
                                         {member.userId.name}
                                     </SelectItem>
                                 ))}
@@ -107,7 +140,12 @@ export const CreateTaskModal = ({
                         </Select>
                         <Select
                             value={form.values.priority}
-                            onValueChange={(value) => form.setFieldValue("priority", value as TaskPriority)}
+                            onValueChange={(value) =>
+                                form.setFieldValue(
+                                    "priority",
+                                    value as TaskPriority
+                                )
+                            }
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Priority" />
@@ -119,11 +157,17 @@ export const CreateTaskModal = ({
                                 <SelectItem value="high">High</SelectItem>
                             </SelectContent>
                         </Select>
-
                     </div>
+
                     <DialogFooter>
                         <Button type="submit" disabled={form.isSubmitting}>
-                            {form.isSubmitting ? "Creating..." : "Create task"}
+                            {form.isSubmitting
+                                ? isEditing
+                                    ? "Updating..."
+                                    : "Creating..."
+                                : isEditing
+                                    ? "Update Task"
+                                    : "Create Task"}
                         </Button>
                     </DialogFooter>
                 </form>

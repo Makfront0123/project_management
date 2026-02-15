@@ -64,9 +64,8 @@ export interface AdminProjectActions {
 
     assignTask: (taskId: string, userId: string) => void;
 
-    updateTaskStatus: (taskId: string, userId: string) => void;
+    updateTaskStatus: (taskId: string, status: string) => void;
 }
-
 
 export interface ProjectActions {
     createTask: () => void;

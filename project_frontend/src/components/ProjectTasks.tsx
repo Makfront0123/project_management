@@ -9,12 +9,16 @@ import {
 
 import type { Task } from "@/types/task";
 import StatusBadge from "./StatusBadge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
 
 interface Props {
     tasks: Task[];
+    onEdit: (task: Task) => void;
+    onDelete: (taskId: string) => void;
 }
 
-const ProjectTasks = ({ tasks }: Props) => {
+const ProjectTasks = ({ tasks, onEdit, onDelete }: Props) => {
 
     if (!tasks.length) {
         return (
@@ -32,11 +36,12 @@ const ProjectTasks = ({ tasks }: Props) => {
                 <TableHeader>
                     <TableRow>
 
-                        <TableHead>Nombre</TableHead>
-                        <TableHead>Estado</TableHead>
-                        <TableHead>Creado</TableHead>
-                        <TableHead>Acciones</TableHead>
-                        <TableHead>Asignados</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Priority</TableHead>
+                        <TableHead>Created</TableHead>
+                        <TableHead>Actions</TableHead>
+                        <TableHead>Assigned</TableHead>
 
                     </TableRow>
                 </TableHeader>
@@ -52,6 +57,10 @@ const ProjectTasks = ({ tasks }: Props) => {
 
                             <TableCell>
                                 <StatusBadge status={task.status} />
+                            </TableCell>
+
+                            <TableCell>
+                                <span className="px-3 py-1 font-normal rounded-md text-sm bg-gray-200">{task.priority}</span>
                             </TableCell>
 
                             <TableCell>
@@ -84,6 +93,29 @@ const ProjectTasks = ({ tasks }: Props) => {
                                         Sin asignar
                                     </span>
                                 )}
+                            </TableCell>
+
+                            <TableCell>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <button className="p-1 rounded hover:bg-muted">
+                                            <MoreHorizontal className="h-4 w-4" />
+                                        </button>
+                                    </DropdownMenuTrigger>
+
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuItem onClick={() => onEdit(task)}>
+                                            Editar
+                                        </DropdownMenuItem>
+
+                                        <DropdownMenuItem
+                                            className="text-red-600"
+                                            onClick={() => onDelete(task._id)}
+                                        >
+                                            Eliminar
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </TableCell>
 
 

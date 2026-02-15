@@ -7,6 +7,7 @@ export interface Task {
     description: string;
     projectId: string;
     status: string;
+    priority: TaskPriority;
     assignedUsers?: User[];
     tags?: Tag[];
     createdAt: string;

@@ -1,5 +1,4 @@
-import type { AdminProjectActions } from "./Modal";
-import type { Tag } from "./tag";
+
 import type { Task } from "./task";
 
 export interface Project {
@@ -41,31 +40,14 @@ export type ProjectForm = {
 };
 
 export interface AdminProjectViewProp {
-  currentProject: Project | null;
-
+  currentProject: Project;
   tasks: Task[];
-  filteredTasks: Task[];
+  deleteTask: (taskId: string) => Promise<void>;
+  updateTask: (taskId: string, data: Partial<Task>) => Promise<void>;
 
- 
+  editingTask: Task | null;
+  setEditingTask: (task: Task | null) => void;
 
-  actions: AdminProjectActions;
-
-  modals: {
-    isTaskModalOpen: boolean;
-    isAssignModalOpen: boolean;
-    isTagModalOpen: boolean;
-    isProjectModalOpen: boolean;
-
-    openTaskModal: () => void;
-    closeTaskModal: () => void;
-
-    openAssignModal: (task: Task) => void;
-    closeAssignModal: () => void;
-
-    openTagModal: () => void;
-    closeTagModal: () => void;
-
-    openProjectModal: () => void;
-    closeProjectModal: () => void;
-  };
+  setIsModalOpen: (open: boolean) => void;
+  isModalOpen: boolean;
 }

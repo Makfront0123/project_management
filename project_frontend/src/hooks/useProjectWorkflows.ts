@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 
 import { useProjectStore } from "@/stores/project_store";
 import useTagStore from "@/stores/tag_store";
- 
+
 
 interface EditProjectParams {
   projectId: string;
@@ -31,7 +31,7 @@ export const useProjectWorkflows = (): ProjectWorkflows => {
   const projectStore = useProjectStore();
   const tagStore = useTagStore();
 
- 
+
 
   const loadProjects = useCallback(
     async (activeTeamId: string) => {
@@ -68,7 +68,6 @@ export const useProjectWorkflows = (): ProjectWorkflows => {
 
   const createProject = useCallback(
     async ({ name, description, teamId }: CreateProjectParams) => {
-      console.log("createProject", name, description, teamId);
       await projectStore.createProject(
         teamId,
         {
@@ -95,6 +94,6 @@ export const useProjectWorkflows = (): ProjectWorkflows => {
     deleteProject,
     createProject,
     loadProjects,
-    
+
   };
 };

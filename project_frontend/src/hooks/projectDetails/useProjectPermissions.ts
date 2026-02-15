@@ -3,8 +3,6 @@ import { useMemo } from "react";
 
 export const useProjectPermissions = (teamId?: string) => {
   const { teamMemberships, teamMembers } = useTeamMemberStore();
-  console.log('teamMembers', teamMembers)
-
   const team = useMemo(
     () => teamMemberships.find(t => t.teamId === teamId),
     [teamId, teamMemberships]

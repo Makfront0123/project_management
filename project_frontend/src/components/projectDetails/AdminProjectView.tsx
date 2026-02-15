@@ -6,31 +6,40 @@ import ProjectTasks from "../ProjectTasks";
 import ProjectCalendar from "../ProjectCalendar";
 import ProjectSettings from "../ProjectSettings";
 import ProjectAnalytics from "../ProjectAnalytics";
-import { useState } from "react";
-import { CreateTaskModal } from "../CreateTaskModal";
+import { TaskFormModal } from "../TaskFormModal";
 
 const AdminProjectView = ({
   currentProject,
-  tasks
+  tasks,
+  deleteTask,
+  setEditingTask,
+  editingTask,
+  setIsModalOpen,
+  isModalOpen
 }: AdminProjectViewProp) => {
 
   const tabs = useProjectTabs();
-
-  const [openTaskModal, setOpenTaskModal] = useState(false);
 
   return (
     <div className="w-full h-full flex flex-col gap-6 p-4">
 
       <AdminHeader
         project={currentProject}
-        onCreateTask={() => setOpenTaskModal(true)}
+        onCreateTask={() => {
+          setEditingTask(null);
+          setIsModalOpen(true);
+        }}
       />
 
-      <CreateTaskModal
-        open={openTaskModal}
-        onOpenChange={setOpenTaskModal}
+      <TaskFormModal
+        open={isModalOpen}
+        onOpenChange={(open) => {
+          setIsModalOpen(open);
+          if (!open) setEditingTask(null);
+        }}
         teamId={currentProject?.teamId ?? null}
         projectId={currentProject?._id ?? null}
+        editingTask={editingTask}
       />
 
       <ProjectTabs tabs={tabs} />
@@ -38,17 +47,21 @@ const AdminProjectView = ({
       <div className="mt-4">
 
         {tabs.isTasks && (
-          <ProjectTasks tasks={tasks} />
+          <ProjectTasks
+            tasks={tasks}
+            onEdit={(task) => {
+              setEditingTask(task);
+              setIsModalOpen(true);
+            }}
+            onDelete={deleteTask}
+          />
         )}
 
         {tabs.isAnalytics && <ProjectAnalytics />}
-
         {tabs.isSettings && <ProjectSettings />}
-
         {tabs.isCalendar && <ProjectCalendar />}
 
       </div>
-
     </div>
   );
 };

@@ -110,7 +110,6 @@ export const useProjectStore = create<ProjectStore>((set) => ({
 
     try {
       const data = await getProject(projectId, teamId);
-      console.log('data', data)
       set({
         currentProject: data,
         isLoadingProject: false,
@@ -128,7 +127,6 @@ export const useProjectStore = create<ProjectStore>((set) => ({
 
     try {
       const data = await getProjectAnalytics(teamId, projectId);
-      console.log('data', data)
       set({
         analytics: data,
         isLoadingAnalytics: false,

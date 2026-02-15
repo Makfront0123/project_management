@@ -4,7 +4,7 @@ import MemberHeader from "./MemberHeader";
 import MemberTaskList from "./MemberTaskList";
 
 interface Props {
-  currentProject: Project;
+  currentProject: Project ;
   tasks: Task[];
   filteredTasks: Task[];
   isLoading: boolean;
