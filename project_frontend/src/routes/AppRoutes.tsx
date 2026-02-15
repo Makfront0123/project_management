@@ -17,6 +17,7 @@ import VerifyOtpPage from "../pages/VerifyOtpPage";
 import ForgotPage from "../pages/ForgotPage";
 import VerifyForgotPage from "../pages/VerifyForgotPage";
 import { ResetPasswordPage } from "../pages/ResetPassword";
+import PublicPage from "../pages/PublicPage";
 
 export function AppRoutes() {
   const { token, loadingApp, } = useAuthStore();
@@ -27,6 +28,8 @@ export function AppRoutes() {
 
   return (
     <Routes>
+
+      <Route path="/" element={<PublicPage />} />
       {!token ? (
         <>
           <Route path="/login" element={<LoginPage />} />
