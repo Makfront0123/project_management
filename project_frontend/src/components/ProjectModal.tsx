@@ -12,35 +12,40 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { useForm } from "@/hooks/useForm";
 import { useProjectWorkflows } from "@/hooks/useProjectWorkflows";
+import type { Project } from "@/types/projects";
 
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   teamId: string | null;
+  project?: Project;
 }
-
-interface FormValues {
+export interface FormValues {
   name: string;
   description: string;
 }
 
-export const CreateProjectModal = ({
+export const ProjectModal = ({
   open,
   onOpenChange,
   teamId,
+  project,
 }: Props) => {
-  const { createProject } = useProjectWorkflows();
+  const { createProject, updateProject } = useProjectWorkflows();
+
+  const isEditing = !!project;
 
   const form = useForm<FormValues>({
     initialValues: {
-      name: "",
-      description: "",
+      name: project?.name ?? "",
+      description: project?.description ?? "",
     },
 
+    enableReinitialize: true, // 🔥 IMPORTANTE si usas values dinámicos
+
     validate: (values) => {
-      const errors: Partial<Record<keyof FormValues, string>> =
-        {};
+      const errors: Partial<Record<keyof FormValues, string>> = {};
 
       if (!values.name.trim()) {
         errors.name = "Name is required";
@@ -50,11 +55,18 @@ export const CreateProjectModal = ({
     },
 
     onSubmit: async (values) => {
-      await createProject({
-        name: values.name,
-        description: values.description,
-        teamId: teamId ?? "",
-      });
+      if (isEditing && project) {
+        await updateProject(project._id, {
+          name: values.name,
+          description: values.description,
+        });
+      } else {
+        await createProject({
+          name: values.name,
+          description: values.description,
+          teamId: teamId ?? "",
+        });
+      }
 
       onOpenChange(false);
     },
@@ -65,7 +77,9 @@ export const CreateProjectModal = ({
       <DialogContent>
 
         <DialogHeader>
-          <DialogTitle>Create Project</DialogTitle>
+          <DialogTitle>
+            {isEditing ? "Edit Project" : "Create Project"}
+          </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit} className="space-y-4">
@@ -93,13 +107,14 @@ export const CreateProjectModal = ({
           />
 
           <DialogFooter>
-            <Button
-              type="submit"
-              disabled={form.isSubmitting}
-            >
+            <Button type="submit" disabled={form.isSubmitting}>
               {form.isSubmitting
-                ? "Creating..."
-                : "Create"}
+                ? isEditing
+                  ? "Updating..."
+                  : "Creating..."
+                : isEditing
+                  ? "Update"
+                  : "Create"}
             </Button>
           </DialogFooter>
 

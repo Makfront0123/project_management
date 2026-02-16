@@ -6,7 +6,6 @@ import ProjectTasks from "../ProjectTasks";
 import ProjectCalendar from "../ProjectCalendar";
 import ProjectSettings from "../ProjectSettings";
 import ProjectAnalytics from "../ProjectAnalytics";
-import { TaskFormModal } from "../TaskFormModal";
 import TaskModal from "./TaskModal";
 
 const AdminProjectView = ({
@@ -56,8 +55,8 @@ const AdminProjectView = ({
         )}
 
         {tabs.isAnalytics && <ProjectAnalytics />}
-        {tabs.isSettings && <ProjectSettings />}
-        {tabs.isCalendar && <ProjectCalendar />}
+        {tabs.isSettings && <ProjectSettings project={currentProject} />}
+        {tabs.isCalendar && <ProjectCalendar tasks={tasks} />}
 
       </div>
     </div>

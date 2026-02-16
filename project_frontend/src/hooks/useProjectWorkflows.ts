@@ -21,7 +21,7 @@ interface CreateProjectParams {
 interface ProjectWorkflows {
   loadProject: (projectId: string, teamId: string) => Promise<void>;
   loadProjects: (teamId: string) => Promise<void>;
-  editProject: (params: EditProjectParams) => Promise<void>;
+  updateProject: (params: EditProjectParams) => Promise<void>;
   deleteProject: (projectId: string, teamId: string) => Promise<void>;
   createProject: (params: CreateProjectParams) => Promise<void>;
 }
@@ -50,7 +50,7 @@ export const useProjectWorkflows = (): ProjectWorkflows => {
     [projectStore, tagStore]
   );
 
-  const editProject = useCallback(
+  const updateProject = useCallback(
     async ({
       projectId,
       teamId,
@@ -90,7 +90,7 @@ export const useProjectWorkflows = (): ProjectWorkflows => {
 
   return {
     loadProject,
-    editProject,
+    updateProject,
     deleteProject,
     createProject,
     loadProjects,

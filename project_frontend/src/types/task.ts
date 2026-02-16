@@ -8,6 +8,7 @@ export interface Task {
     projectId: string;
     status: string;
     priority: TaskPriority;
+    dueDate: string;
     assignedUsers?: User[];
     tags?: Tag[];
     createdAt: string;

@@ -1,3 +1,4 @@
+import { ProjectModal } from "@/components/ProjectModal"
 import ProjectCard from "@/components/ProjectCard"
 import { SelectContainer } from "@/components/SelectContainer"
 import { Button } from "@/components/ui/button"
@@ -7,7 +8,13 @@ import { useDashboard } from "@/hooks/useDashboard"
 
 
 const ProjectPage = () => {
-  const { projects, projectsLoading } = useDashboard()
+  const {
+    projects,
+    projectsLoading,
+    isCreateOpen,
+    setIsCreateOpen,
+    activeTeamId,
+  } = useDashboard()
 
   const {
     search,
@@ -16,6 +23,8 @@ const ProjectPage = () => {
     setStatus,
     filteredProjects,
   } = useProjectFilter(projects)
+
+
 
   if (projectsLoading) {
     return (
@@ -33,7 +42,9 @@ const ProjectPage = () => {
           <p className="text-gray-300">Manage and track your projects</p>
         </div>
 
-        <Button>New Project</Button>
+        <Button onClick={() => setIsCreateOpen(true)}>
+          New Project
+        </Button>
       </div>
 
       <div className="flex mt-10">
@@ -65,6 +76,12 @@ const ProjectPage = () => {
         )}
 
       </div>
+
+      <ProjectModal
+        open={isCreateOpen}
+        onOpenChange={setIsCreateOpen}
+        teamId={activeTeamId}
+      />
 
     </div>
   )

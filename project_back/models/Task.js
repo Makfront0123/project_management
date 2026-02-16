@@ -3,9 +3,15 @@ import mongoose from "mongoose";
 const taskSchema = new mongoose.Schema({
     name: String,
     description: String,
+
     projectId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Project"
+    },
+
+    dueDate: {
+        type: Date,
+        required: false
     },
 
     priority: {
@@ -20,5 +26,4 @@ const taskSchema = new mongoose.Schema({
         default: "open"
     },
 }, { timestamps: true })
-
 export default mongoose.model("Task", taskSchema)

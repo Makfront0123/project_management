@@ -1,8 +1,70 @@
- 
-const ProjectCalendar = () => {
-  return (
-    <div>ProjectCalendar</div>
-  )
+import type { Task } from "@/types/task";
+import CalendarGrid from "./ProjectCalendar.ts/CalendarGrid";
+import { formatDateShort } from "@/utils/formatDate";
+import StatusBadge from "./StatusBadge";
+
+interface Props {
+  tasks: Task[];
 }
 
-export default ProjectCalendar
+const ProjectCalendar = ({ tasks }: Props) => {
+
+  const upcomingTasks = tasks
+    .filter(
+      (task) =>
+        task.dueDate &&
+        new Date(task.dueDate) >= new Date()
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.dueDate!).getTime() -
+        new Date(b.dueDate!).getTime()
+    )
+    .slice(0, 5);
+  console.log(tasks);
+
+  console.log(upcomingTasks);
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      {/* CALENDAR */}
+      <div className="lg:col-span-2 bg-background rounded-xl border p-6">
+        <h2 className="text-lg font-semibold mb-4">
+          Task Calendar
+        </h2>
+
+        <CalendarGrid tasks={tasks} />
+      </div>
+
+      {/* SIDEBAR */}
+      <div className="bg-background rounded-xl border p-6 space-y-4">
+        <h2 className="text-lg font-semibold">
+          Upcoming Tasks
+        </h2>
+
+        {upcomingTasks.map((task) => (
+          <div
+            key={task._id}
+            className="p-4 rounded-md bg-gray-100"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <p className="font-medium">
+                  {task.name}
+                </p>
+
+                <p className="text-xs text-muted-foreground">
+                  {formatDateShort(task.dueDate)}
+                </p>
+              </div>
+              <StatusBadge status={task.status} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default ProjectCalendar;

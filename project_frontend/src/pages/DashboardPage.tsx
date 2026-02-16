@@ -3,7 +3,7 @@ import MyTasks from "@/components/MyTasks"
 import ProjectOverview from "@/components/ProjectOverview"
 import CardStats from "@/components/CardStasts"
 import { useDashboard } from "@/hooks/useDashboard"
-import { CreateProjectModal } from "@/components/CreateProjectModal"
+import { ProjectModal } from "@/components/ProjectModal"
 
 const DashboardPage = () => {
 
@@ -54,7 +54,7 @@ const DashboardPage = () => {
         />
 
       </div>
-      <CreateProjectModal
+      <ProjectModal
         open={isCreateOpen}
         onOpenChange={setIsCreateOpen}
         teamId={activeTeamId}
