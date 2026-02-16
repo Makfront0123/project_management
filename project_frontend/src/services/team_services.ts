@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useAuthStore } from '../stores/auth_store';
-import type { PagedTeamsResponse, Team, TeamResponse } from '../types/team';
+import type { PagedTeamsResponse, Team, TeamDashboardResponse, TeamResponse } from '../types/team';
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
@@ -41,6 +41,20 @@ export const getAllTeams = async (
   return response.data;
 };
 
+export const getTeamDashboard = async (teamId: string) => {
+  const token = useAuthStore.getState().token
+
+  const response = await axios.get<TeamDashboardResponse>(
+    `${baseUrl}/teams/${teamId}/dashboard`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    }
+  )
+
+  return response.data
+}
 export const updateTeam = async (id: string, data: Partial<Team>) => {
   const token = useAuthStore.getState().token;
 
