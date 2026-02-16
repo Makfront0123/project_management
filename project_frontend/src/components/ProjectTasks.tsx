@@ -18,8 +18,7 @@ interface Props {
     onDelete: (taskId: string) => void;
 }
 
-const ProjectTasks = ({ tasks, onEdit, onDelete }: Props) => {
-
+const ProjectTasks = ({ tasks = [], onEdit, onDelete }: Props) => {
     if (!tasks.length) {
         return (
             <p className="text-gray-400 text-sm">
@@ -49,7 +48,7 @@ const ProjectTasks = ({ tasks, onEdit, onDelete }: Props) => {
 
                 <TableBody>
                     {tasks.map((task) => (
-                        <TableRow key={task._id}>
+                        <TableRow key={task?._id}>
 
                             <TableCell className="font-medium">
                                 {task.name}

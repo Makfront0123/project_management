@@ -7,6 +7,7 @@ import ProjectCalendar from "../ProjectCalendar";
 import ProjectSettings from "../ProjectSettings";
 import ProjectAnalytics from "../ProjectAnalytics";
 import { TaskFormModal } from "../TaskFormModal";
+import TaskModal from "./TaskModal";
 
 const AdminProjectView = ({
   currentProject,
@@ -31,16 +32,13 @@ const AdminProjectView = ({
         }}
       />
 
-      <TaskFormModal
-        open={isModalOpen}
-        onOpenChange={(open) => {
-          setIsModalOpen(open);
-          if (!open) setEditingTask(null);
-        }}
-        teamId={currentProject?.teamId ?? null}
-        projectId={currentProject?._id ?? null}
-        editingTask={editingTask}
-      />
+      <TaskModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        isEditing={!!editingTask}
+        values={editingTask ?? {}}
+        errors={{}}
+        isSubmitting={false} handleChange={() => { }} handleSubmit={() => { }} />
 
       <ProjectTabs tabs={tabs} />
 

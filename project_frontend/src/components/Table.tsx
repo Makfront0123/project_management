@@ -8,15 +8,15 @@ type Props = {
     onDelete?: (memberId: string, teamId: string) => void;
 };
 
-const Table = ({ member, onDelete }: Props) => {
+const TableMembers = ({ member, onDelete }: Props) => {
     const currentUserId = useAuthStore(state => state.user?.id);
 
     const isSelfAdmin = member.role === 'admin' && member.userId._id === currentUserId;
 
     return (
-        <table className="flex flex-col animate-slide-in-left w-full border-collapse border p-5 border-gray-300 rounded-lg shadow-md mb-4">
-            <thead className="border-b border-gray-300 p-4">
-                <tr className="flex justify-between font-semibold">
+        <table className="flex flex-col animate-slide-in-left w-full border-collapse border border-gray-300 rounded-lg shadow-sm mt-10">
+            <thead className="border-b border-gray-300 bg-gray-200 w-full p-3">
+                <tr className="flex justify-between font-semibold [&>th]:text-black">
                     <th className="w-1/5 text-left">Name</th>
                     <th className="w-1/5 text-left">Email</th>
                     <th className="w-1/5 text-left">Role</th>
@@ -25,7 +25,7 @@ const Table = ({ member, onDelete }: Props) => {
                 </tr>
             </thead>
             <tbody>
-                <tr className="flex justify-between items-center mt-2">
+                <tr className="flex justify-between items-center mt-2 text-black p-3">
                     <td className="w-1/5">{member.userId.name}</td>
                     <td className="w-1/5">{member.userId.email}</td>
                     <td className="w-1/5">{member.role}</td>
@@ -46,4 +46,4 @@ const Table = ({ member, onDelete }: Props) => {
         </table>
     );
 };
-export default Table;
+export default TableMembers;

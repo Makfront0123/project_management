@@ -2,7 +2,7 @@ import type { Project } from "@/types/projects"
 import { useMemo, useState } from "react"
 
 
-type StatusFilter = "all" | "active" | "completed" | "pending"
+export type StatusFilter = "all" | "active" | "completed" | "pending"
 
 export const useProjectFilter = (projects: Project[]) => {
     const [search, setSearch] = useState("")

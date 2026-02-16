@@ -77,9 +77,6 @@ export const TaskFormModal = ({
             });
         },
     });
-
-    console.log("IsEditing", isEditing);
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>

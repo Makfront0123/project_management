@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useMemo, useEffect } from "react";
 
 export function usePagination<T>(items: T[] = [], itemsPerPage = 9) {

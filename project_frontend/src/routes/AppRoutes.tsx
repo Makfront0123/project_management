@@ -46,7 +46,7 @@ export function AppRoutes() {
           <Route path="projects" element={<ProjectPage />} />
           <Route path="create-team" element={<CreateTeamPage />} />
           <Route path="join-team" element={<JoinTeamPage />} />
-          <Route path="team/:teamId" element={<TeamPage />} />
+          <Route path="team-members" element={<TeamPage />} />
           <Route path="team/:teamId/requests" element={<TeamRequestPage />} />
           <Route path="team/:teamId/chat" element={<TeamChatPage />} />
           <Route path="tasks" element={<TasksPage />} />

@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import type { StatusFilter } from "@/hooks/useProjectFilter"
+import type { StatusFilter } from "@/hooks/projectDetails/useProjectFilter"
 
 type SelectContainerProps = {
   value: string

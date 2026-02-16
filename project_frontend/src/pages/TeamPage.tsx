@@ -1,11 +1,90 @@
-import { useForm } from "../hooks/useForm";
-import Modal from "../components/Modal";
-import Paginator from "../components/Paginator";
-import Table from "../components/Table";
-import TeamMenuButton from "../components/TeamMenuButton";
-import { useTeamPage } from "../hooks/useTeamPage";
-import { Link } from "react-router";
+import { useTeamStore } from "@/stores/team_store"
+import { useTeamPage } from "@/hooks/useTeamPage"
+import { Button } from "@/components/ui/button"
+import { icons } from "@/core/icons"
+import TableMembers from "@/components/Table"
+import { Input } from "@/components/ui/input"
+import { useMembersFilter } from "@/hooks/useMembersFillter"
+import { usePagination } from "@/hooks/usePagination"
 
+const TeamPage = () => {
+  const { activeTeamId, setIsCreateOpen } = useTeamStore()
+  const { teamMembers, loading } = useTeamPage(activeTeamId)
+  const { search, setSearch, filteredMembers } = useMembersFilter(teamMembers)
+  const { page, totalPages, items: paginatedMembers, nextPage, prevPage, setPage } =
+    usePagination(filteredMembers, 3)
+
+  if (loading) return <p className="text-gray-500">Loading team members...</p>
+
+  return (
+    <div className="flex flex-col w-full min-h-screen bg-white p-10">
+      <div className="flex items-center justify-between w-full">
+        <div>
+          <h2 className="text-2xl font-bold">Team</h2>
+          <p className="text-gray-300">Manage team members and their contributions</p>
+        </div>
+        <Button onClick={() => setIsCreateOpen(true)}>
+          <img src={icons.sidebar03} alt="Add" className="w-5 h-5" />
+          Invite new member
+        </Button>
+      </div>
+
+      <Input
+        className="max-w-[15rem] mt-5"
+        placeholder="Search Team Members..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      <div className="flex flex-col items-center mt-5 w-full">
+        {paginatedMembers.length === 0 ? (
+          <p className="text-gray-500">No members found.</p>
+        ) : (
+          <>
+            <ul className="space-y-2 w-full">
+              {paginatedMembers
+                .filter((member) => member.teamId === activeTeamId && member.status === "accepted")
+                .map((member) => (
+                  <TableMembers key={member._id} member={member} />
+                ))}
+            </ul>
+            {totalPages > 1 && (
+              <div className="flex gap-2 mt-10 justify-center">
+                <button
+                  onClick={prevPage}
+                  disabled={page === 1}
+                  className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+                >
+                  Prev
+                </button>
+                {[...Array(totalPages)].map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setPage(idx + 1)}
+                    className={`px-3 py-1 rounded ${page === idx + 1 ? "bg-blue-600 text-white" : "bg-gray-200"
+                      }`}
+                  >
+                    {idx + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={nextPage}
+                  disabled={page === totalPages}
+                  className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default TeamPage
+/*
 const TeamPage = () => {
   const {
     teamId,
@@ -268,3 +347,5 @@ const TeamPage = () => {
 };
 
 export default TeamPage;
+
+*/
