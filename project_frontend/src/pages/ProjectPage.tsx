@@ -1,10 +1,11 @@
-import { ProjectModal } from "@/components/ProjectModal"
-import ProjectCard from "@/components/ProjectCard"
+import { ProjectModal } from "@/features/project/components/ProjectModal"
+
 import { SelectContainer } from "@/shared/components/SelectContainer"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useProjectFilter } from "@/hooks/projectDetails/useProjectFilter"
 import { useDashboard } from "@/hooks/useDashboard"
+import ProjectCard from "@/features/project/components/ProjectCard"
 
 
 const ProjectPage = () => {

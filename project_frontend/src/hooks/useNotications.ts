@@ -1,6 +1,6 @@
 import { useEffect,  } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { useAuthStore } from '../stores/auth_store';
+import { useAuthStore } from '../features/auth/store/auth_store';
 import useNotificationStore from '../stores/notification_store';
  
 

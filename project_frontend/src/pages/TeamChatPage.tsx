@@ -1,11 +1,11 @@
 import { useParams } from "react-router";
-import { useAuthStore } from "../stores/auth_store";
+import { useAuthStore } from "../features/auth/store/auth_store";
 import { useState, useEffect } from "react";
 import { useForm } from "../shared/hooks/useForm";
 import useTeamChat from "../hooks/useTeamChat";
 import useMessageStore from "../stores/message_store";
 import { useTeamMemberStore } from "../stores/team_member_store";
-import type { User } from "../shared/types/auth";
+import type { User } from "../features/auth/types/auth";
 import usePrivateChat from "../hooks/usePrivateChat";
 import type { MessageFormValues } from "../shared/types/message";
 import useMessageSound from "../hooks/useMessageSound";

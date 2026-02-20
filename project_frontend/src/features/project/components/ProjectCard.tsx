@@ -1,9 +1,10 @@
 import type { Project } from '@/shared/types/projects'
-import { formatDateShort } from '@/shared/utils/formatDate'
-import { ProgressContainer } from '../shared/components/ProgressContainer'
+
 
 import { icons } from '@/shared/constants/icons'
 import { Link } from 'react-router'
+import { ProgressContainer } from '@/shared/components/ProgressContainer'
+import { formatDateShort } from '@/shared/utils/formatDate'
 type ProjectCardProps = {
     projects: Project[]
     variant?: "grid" | "list"

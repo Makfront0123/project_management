@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router";
 import { useForm } from "../shared/hooks/useForm";
-import { useAuthStore } from "../stores/auth_store";
+import { useAuthStore } from "../features/auth/store/auth_store";
 import { validateResetPassword } from "../shared/utils/validators";
 
 

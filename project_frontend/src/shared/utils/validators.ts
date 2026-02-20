@@ -1,4 +1,4 @@
-import type { ResetPasswordValues } from "../types/auth";
+import type { ResetPasswordValues } from "../../features/auth/types/auth";
 import type { CreateTeamFormValue } from "../types/team";
 
 export function validateLogin(values: { email: string; password: string }) {

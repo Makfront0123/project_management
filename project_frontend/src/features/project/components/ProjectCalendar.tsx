@@ -1,7 +1,7 @@
 import type { Task } from "@/shared/types/task";
-import CalendarGrid from "./ProjectCalendar.ts/CalendarGrid";
+import CalendarGrid from "./CalendarGrid";
 import { formatDateShort } from "@/shared/utils/formatDate";
-import StatusBadge from "../shared/components/StatusBadge";
+import StatusBadge from "../../../shared/components/StatusBadge";
 
 interface Props {
   tasks: Task[];
@@ -27,8 +27,6 @@ const ProjectCalendar = ({ tasks }: Props) => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-      {/* CALENDAR */}
       <div className="lg:col-span-2 bg-background rounded-xl border p-6">
         <h2 className="text-lg font-semibold mb-4">
           Task Calendar
@@ -36,8 +34,6 @@ const ProjectCalendar = ({ tasks }: Props) => {
 
         <CalendarGrid tasks={tasks} />
       </div>
-
-      {/* SIDEBAR */}
       <div className="bg-background rounded-xl border p-6 space-y-4">
         <h2 className="text-lg font-semibold">
           Upcoming Tasks

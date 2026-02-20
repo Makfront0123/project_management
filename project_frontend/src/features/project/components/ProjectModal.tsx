@@ -42,7 +42,6 @@ export const ProjectModal = ({
       description: project?.description ?? "",
     },
 
-    enableReinitialize: true, // 🔥 IMPORTANTE si usas values dinámicos
 
     validate: (values) => {
       const errors: Partial<Record<keyof FormValues, string>> = {};

@@ -1,6 +1,6 @@
+import { LoginForm } from "@/features/auth/components/LoginForm";
+import { useLoginForm } from "@/features/auth/hooks/useLoginForm";
 import { Link } from "react-router";
-import { LoginForm } from "../components/LoginForm";
-import { useLoginForm } from "../hooks/useLoginForm";
 
 const LoginPage = () => {
     const form = useLoginForm();

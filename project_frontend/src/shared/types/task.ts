@@ -1,4 +1,4 @@
-import type { User } from "./auth";
+import type { User } from "../../features/auth/types/auth";
 import type { Tag } from "./tag";
 
 export interface Task {

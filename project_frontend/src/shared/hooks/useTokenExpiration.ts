@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { jwtDecode, type JwtPayload } from "jwt-decode";
-import { useAuthStore } from "@/stores/auth_store";
+import { useAuthStore } from "@/features/auth/store/auth_store";
 
 export function useTokenExpiration() {
   const { token, logout, checkTokenExpiration, restoreSession } = useAuthStore();

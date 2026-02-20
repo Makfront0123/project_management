@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { AppDropdown } from "@/shared/components/AppDropdown"
-import { useAuthStore } from "@/stores/auth_store"
+import { useAuthStore } from "@/features/auth/store/auth_store"
 export function UserDropdown() {
   const { user, logout } = useAuthStore()
 

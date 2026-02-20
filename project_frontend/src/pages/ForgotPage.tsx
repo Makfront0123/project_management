@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { useForm } from "../shared/hooks/useForm";
-import { useAuthStore } from "../stores/auth_store";
+import { useAuthStore } from "../features/auth/store/auth_store";
 import { validateForgotPassword } from "../shared/utils/validators";
 
 const ForgotPage = () => {

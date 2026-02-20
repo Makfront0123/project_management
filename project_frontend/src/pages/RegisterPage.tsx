@@ -1,6 +1,6 @@
+import { RegisterForm } from "@/features/auth/components/RegisterForm";
+import { useRegisterForm } from "@/features/auth/hooks/useRegisterForm";
 import { Link } from "react-router";
-import { RegisterForm } from "../components/RegisterForm";
-import { useRegisterForm } from "../hooks/useRegisterForm";
 
 const RegisterPage = () => {
   const form = useRegisterForm();

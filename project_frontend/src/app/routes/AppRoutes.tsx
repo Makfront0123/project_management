@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router";
-import { useAuthStore } from "../../stores/auth_store";
+import { useAuthStore } from "../../features/auth/store/auth_store";
 import MainLayout from "../../shared/layout/MainLayout";
 import { Loading } from "../../shared/components/Loading";
 import LoginPage from "../../pages/LoginPage";
@@ -13,12 +13,12 @@ import TeamRequestPage from "../../pages/TeamRequestPage";
 import TeamChatPage from "../../pages/TeamChatPage";
 import ProjectDetails from "../../pages/ProjectDetails";
 import TasksPage from "../../pages/TasksPage";
-import VerifyOtpPage from "../../pages/VerifyOtpPage";
 import ForgotPage from "../../pages/ForgotPage";
-import VerifyForgotPage from "../../pages/VerifyForgotPage";
 import { ResetPasswordPage } from "../../pages/ResetPassword";
 import PublicPage from "../../pages/PublicPage";
 import SettingsPage from "@/pages/SettingsPage";
+import VerifyForgotPage from "@/features/auth/components/VerifyForgotPage";
+import VerifyOtpPage from "@/features/auth/components/VerifyOtpPage";
 
 export function AppRoutes() {
   const { token, loadingApp, } = useAuthStore();

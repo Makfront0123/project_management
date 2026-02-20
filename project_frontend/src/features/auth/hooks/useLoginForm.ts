@@ -1,6 +1,7 @@
-import { useForm } from "../shared/hooks/useForm";
-import { useAuthStore } from "../stores/auth_store";
-import { validateLogin } from "../shared/utils/validators";
+import { useForm } from "@/shared/hooks/useForm";
+import { validateLogin } from "@/shared/utils/validators";
+import { useAuthStore } from "../store/auth_store";
+
 
 export function useLoginForm() {
   const { login } = useAuthStore();

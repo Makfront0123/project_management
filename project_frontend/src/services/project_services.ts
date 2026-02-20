@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { NewProject, Project } from "../shared/types/projects";
-import { useAuthStore } from "../stores/auth_store";
+import { useAuthStore } from "../features/auth/store/auth_store";
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 

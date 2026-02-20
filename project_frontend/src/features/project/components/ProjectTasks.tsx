@@ -1,3 +1,4 @@
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import {
     Table,
     TableBody,
@@ -6,10 +7,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import StatusBadge from "@/shared/components/StatusBadge";
 
 import type { Task } from "@/shared/types/task";
-import StatusBadge from "../shared/components/StatusBadge";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+
 import { MoreHorizontal } from "lucide-react";
 
 interface Props {

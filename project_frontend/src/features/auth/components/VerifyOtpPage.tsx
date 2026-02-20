@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import { useAuthStore } from "../stores/auth_store";
+import { useAuthStore } from "../store/auth_store";
+
 
 const VerifyOtpPage = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const VerifyOtpPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!/^\d{6}$/.test(otp)) return; 
+    if (!/^\d{6}$/.test(otp)) return;
 
     setLoadingVerify(true);
     try {

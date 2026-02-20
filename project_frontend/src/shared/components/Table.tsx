@@ -1,4 +1,4 @@
-import { useAuthStore } from "@/stores/auth_store";
+import { useAuthStore } from "@/features/auth/store/auth_store";
 import type { TeamMember } from "@/shared/types/teamMember";
 
 

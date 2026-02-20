@@ -1,7 +1,8 @@
-import { useForm } from "../shared/hooks/useForm";
-import { useAuthStore } from "../stores/auth_store";
+import { useForm } from "@/shared/hooks/useForm";
+import { validateRegister } from "@/shared/utils/validators";
 import { useNavigate } from "react-router";
-import { validateRegister } from "../shared/utils/validators";
+import { useAuthStore } from "../store/auth_store";
+
 
 export function useRegisterForm() {
   const { register } = useAuthStore();

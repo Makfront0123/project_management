@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
-import { useAuthStore } from '../stores/auth_store';
+import { useAuthStore } from '../store/auth_store';
+
 
 const VerifyForgotPage = () => {
   const navigate = useNavigate();

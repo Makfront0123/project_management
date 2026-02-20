@@ -1,4 +1,4 @@
-import { Card } from "./ui/card"
+import { Card } from "../../../components/ui/card"
 import ProjectCard from "./ProjectCard"
 import type { Project } from "@/shared/types/projects"
 import { usePagination } from "@/shared/hooks/usePagination";

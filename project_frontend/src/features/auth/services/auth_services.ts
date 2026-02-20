@@ -1,6 +1,8 @@
-import axios from 'axios'
-import type { AuthResponse, User } from '../shared/types/auth'
-import { useAuthStore } from '../stores/auth_store'
+import axios from "axios";
+import { useAuthStore } from "../store/auth_store";
+import type { AuthResponse, User } from "../types/auth";
+
+
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
