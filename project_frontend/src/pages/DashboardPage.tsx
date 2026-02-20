@@ -6,7 +6,7 @@ import { useDashboard } from "@/hooks/useDashboard"
 import { ProjectModal } from "@/components/ProjectModal"
 import { icons } from "@/core/icons"
 import CreateTeamForm from "@/components/CreateTeamForm"
-import Modal from "@/components/Modal"
+import Modal from "@/shared/components/Modal"
 import { useCreateTeamForm } from "@/hooks/useCreateTeamForm"
 import { useState } from "react"
 

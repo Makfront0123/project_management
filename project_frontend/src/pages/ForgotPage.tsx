@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { useForm } from "../hooks/useForm";
+import { useForm } from "../shared/hooks/useForm";
 import { useAuthStore } from "../stores/auth_store";
 import { validateForgotPassword } from "../utils/validators";
 

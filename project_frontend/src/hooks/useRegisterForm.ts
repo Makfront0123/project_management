@@ -1,4 +1,4 @@
-import { useForm } from "./useForm";
+import { useForm } from "../shared/hooks/useForm";
 import { useAuthStore } from "../stores/auth_store";
 import { useNavigate } from "react-router";
 import { validateRegister } from "../utils/validators";

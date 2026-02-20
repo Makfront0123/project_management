@@ -1,14 +1,14 @@
 import { Navigate, Route } from "react-router";
-import MainLayout from "../components/MainLayout";
-import CreateTeamPage from "../pages/CreateTeamPage";
-import DashboardPage from "../pages/DashboardPage";
-import JoinTeamPage from "../pages/JoinTeamPage";
-import ProjectDetails from "../pages/ProjectDetails";
-import ProjectPage from "../pages/ProjectPage";
-import TasksPage from "../pages/TasksPage";
-import TeamChatPage from "../pages/TeamChatPage";
-import TeamPage from "../pages/TeamPage";
-import TeamRequestPage from "../pages/TeamRequestPage";
+import MainLayout from "../../shared/layout/MainLayout";
+import CreateTeamPage from "../../pages/CreateTeamPage";
+import DashboardPage from "../../pages/DashboardPage";
+import JoinTeamPage from "../../pages/JoinTeamPage";
+import ProjectDetails from "../../pages/ProjectDetails";
+import ProjectPage from "../../pages/ProjectPage";
+import TasksPage from "../../pages/TasksPage";
+import TeamChatPage from "../../pages/TeamChatPage";
+import TeamPage from "../../pages/TeamPage";
+import TeamRequestPage from "../../pages/TeamRequestPage";
 
 
 

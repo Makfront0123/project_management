@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { useAuthStore } from "../stores/auth_store";
 import { useState, useEffect } from "react";
-import { useForm } from "../hooks/useForm";
+import { useForm } from "../shared/hooks/useForm";
 import useTeamChat from "../hooks/useTeamChat";
 import useMessageStore from "../stores/message_store";
 import { useTeamMemberStore } from "../stores/team_member_store";

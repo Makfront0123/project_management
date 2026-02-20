@@ -1,4 +1,4 @@
-import { useForm } from "@/hooks/useForm";
+import { useForm } from "@/shared/hooks/useForm";
 import type { FormValues } from "./ProjectModal";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";

@@ -1,11 +1,10 @@
-import { Outlet } from "react-router"
-import { useNotifications } from "../hooks/useNotications";
-import { Sidebar } from "./Sidebar";
 
- 
 import { icons } from "@/core/icons";
-import { SelectGroups } from "./SelectGroups";
-import { UserDropdown } from "./UserDropdown";
+import { UserDropdown } from "../../components/UserDropdown";
+import { SelectGroups } from "../components/SelectGroups";
+import { useNotifications } from "@/hooks/useNotications";
+import { Sidebar } from "./Sidebar";
+import { Outlet } from "react-router";
 
 const MainLayout = () => {
     useNotifications()

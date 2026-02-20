@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/table";
 
 import type { Task } from "@/types/task";
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "../shared/components/StatusBadge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 

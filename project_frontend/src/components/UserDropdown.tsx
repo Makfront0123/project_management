@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
- 
+import { AppDropdown } from "@/shared/components/AppDropdown"
 import { useAuthStore } from "@/stores/auth_store"
-import { AppDropdown } from "./AppDropdown"
 export function UserDropdown() {
   const { user, logout } = useAuthStore()
 
@@ -18,9 +17,9 @@ export function UserDropdown() {
         </Button>
       }
       items={[
-        { label: "Profile",},
+        { label: "Profile", },
         { label: "Billing", },
-        { label: "Settings"},
+        { label: "Settings" },
         {
           label: "Log out",
           onClick: logout,

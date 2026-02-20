@@ -1,5 +1,5 @@
 import type { Member } from "../../types/teamMember";
-import Modal from "../Modal";
+import Modal from "../../shared/components/Modal";
 
 interface Props {
   isOpen: boolean;

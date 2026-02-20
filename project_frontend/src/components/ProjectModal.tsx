@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { useForm } from "@/hooks/useForm";
+import { useForm } from "@/shared/hooks/useForm";
 import { useProjectWorkflows } from "@/hooks/useProjectWorkflows";
 import type { Project } from "@/types/projects";
 

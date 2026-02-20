@@ -1,7 +1,7 @@
 import { Card } from "./ui/card"
 import ProjectCard from "./ProjectCard"
 import type { Project } from "@/types/projects"
-import { usePagination } from "@/hooks/usePagination";
+import { usePagination } from "@/shared/hooks/usePagination";
 
 interface Props {
   projects: Project[];

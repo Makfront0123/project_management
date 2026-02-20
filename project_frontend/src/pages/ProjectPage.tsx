@@ -1,6 +1,6 @@
 import { ProjectModal } from "@/components/ProjectModal"
 import ProjectCard from "@/components/ProjectCard"
-import { SelectContainer } from "@/components/SelectContainer"
+import { SelectContainer } from "@/shared/components/SelectContainer"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useProjectFilter } from "@/hooks/projectDetails/useProjectFilter"

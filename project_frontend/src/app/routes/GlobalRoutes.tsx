@@ -1,12 +1,12 @@
  
-import LoginPage from "../pages/LoginPage";
-import RegisterPage from "../pages/RegisterPage";
-import ForgotPage from "../pages/ForgotPage";
+import LoginPage from "../../pages/LoginPage";
+import RegisterPage from "../../pages/RegisterPage";
+import ForgotPage from "../../pages/ForgotPage";
  
-import VerifyOtpPage from "../pages/VerifyOtpPage";
-import VerifyForgotPage from "../pages/VerifyForgotPage";
+import VerifyOtpPage from "../../pages/VerifyOtpPage";
+import VerifyForgotPage from "../../pages/VerifyForgotPage";
 import { Navigate, Route } from "react-router";
-import ResetPasswordPage from "../pages/ResetPassword";
+import ResetPasswordPage from "../../pages/ResetPassword";
  
 
  

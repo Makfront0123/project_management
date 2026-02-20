@@ -1,6 +1,6 @@
 import type { Project } from '@/types/projects'
 import { formatDateShort } from '@/utils/formatDate'
-import { ProgressContainer } from './ProgressContainer'
+import { ProgressContainer } from '../shared/components/ProgressContainer'
 
 import { icons } from '@/core/icons'
 import { Link } from 'react-router'

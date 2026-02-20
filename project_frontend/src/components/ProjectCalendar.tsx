@@ -1,7 +1,7 @@
 import type { Task } from "@/types/task";
 import CalendarGrid from "./ProjectCalendar.ts/CalendarGrid";
 import { formatDateShort } from "@/utils/formatDate";
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "../shared/components/StatusBadge";
 
 interface Props {
   tasks: Task[];

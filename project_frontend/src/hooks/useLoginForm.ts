@@ -1,4 +1,4 @@
-import { useForm } from "./useForm";
+import { useForm } from "../shared/hooks/useForm";
 import { useAuthStore } from "../stores/auth_store";
 import { validateLogin } from "../utils/validators";
 

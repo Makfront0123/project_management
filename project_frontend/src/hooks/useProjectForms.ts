@@ -1,4 +1,4 @@
-import { useForm } from "@/hooks/useForm";
+import { useForm } from "@/shared/hooks/useForm";
 import { useProjectStore } from "@/stores/project_store";
 import useTaskStore from "@/stores/task_store";
 import type { Project } from "@/types/projects";

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Modal from "../Modal";
+import Modal from "../../shared/components/Modal";
 import type { RenameAttachmentModalProps } from "../../types/attachment";
 
 const RenameAttachmentModal: React.FC<RenameAttachmentModalProps> = ({
