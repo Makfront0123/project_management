@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useParams } from "react-router";
 
-import { useProjectPermissions } from "../../../hooks/projectDetails/useProjectPermissions";
+import { useProjectPermissions } from "./useProjectPermissions";
 
-import { useTaskManager } from "../../../hooks/projectDetails/useTasksManager";
+import { useTaskManager } from "../../task/hooks/useTasksManager";
 import { useProjectStore } from "@/features/project/store/project_store";
 
 export const useProjectDetails = () => {

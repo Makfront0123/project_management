@@ -1,8 +1,8 @@
 
 import { icons } from "@/shared/constants/icons";
-import { UserDropdown } from "../../components/UserDropdown";
+import { UserDropdown } from "../../features/user/components/UserDropdown";
 import { SelectGroups } from "../components/SelectGroups";
-import { useNotifications } from "@/hooks/useNotications";
+import { useNotifications } from "@/features/notification/hooks/useNotications";
 import { Sidebar } from "./Sidebar";
 import { Outlet } from "react-router";
 

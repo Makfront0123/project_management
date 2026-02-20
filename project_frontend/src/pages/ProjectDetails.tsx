@@ -1,6 +1,6 @@
 import AdminProjectView from "@/features/team/components/AdminProjectView";
 import MemberProjectView from "@/features/team/components/MemberProjectView";
-import { useProjectData } from "@/hooks/projectDetails/useProjectData";
+import { useProjectData } from "@/features/project/hooks/useProjectData";
 import { useProjectModals } from "@/features/project/hooks/useProjectModal";
 import { useTaskWorkflows } from "@/features/task/hooks/useTaskWorkflows";
 import type { Task } from "@/features/task/types/task";

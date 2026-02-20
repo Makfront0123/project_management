@@ -21,9 +21,6 @@ const ProjectCalendar = ({ tasks }: Props) => {
         new Date(b.dueDate!).getTime()
     )
     .slice(0, 5);
-  console.log(tasks);
-
-  console.log(upcomingTasks);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

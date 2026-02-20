@@ -1,5 +1,5 @@
 import type { Project } from "./projects";
-import type { Tag } from "./tag";
+import type { Tag } from "../../features/tag/types/tag";
 import type { Task, TaskFormValues } from "../../features/task/types/task";
 import type { Member } from "../../features/team/types/teamMember";
 

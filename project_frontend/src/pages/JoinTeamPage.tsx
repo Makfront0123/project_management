@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Paginator from "../shared/components/Paginator";
-import { useNotifications } from "../hooks/useNotications";
+import { useNotifications } from "../features/notification/hooks/useNotications";
 import { useTeamMemberStore } from "../features/team/store/team_member_store";
 import { useTeamStore } from "../features/team/store/team_store";
 

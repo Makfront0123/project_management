@@ -12,7 +12,8 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { useForm } from "@/shared/hooks/useForm";
 import { useProjectWorkflows } from "@/features/project/hooks/useProjectWorkflows";
-import type { Project } from "@/shared/types/projects";
+import type { Project } from "../types/projects";
+
 
 
 interface Props {

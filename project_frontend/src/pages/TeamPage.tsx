@@ -3,7 +3,7 @@ import { useTeamPage } from "@/features/team/hooks/useTeamPage"
 import { Button } from "@/components/ui/button"
 import { icons } from "@/shared/constants/icons"
 import { Input } from "@/components/ui/input"
-import { useMembersFilter } from "@/hooks/useMembersFillter"
+import { useMembersFilter } from "@/features/team/hooks/useMembersFillter"
 import { usePagination } from "@/shared/hooks/usePagination"
 import { useState } from "react"
 import Modal from "@/shared/components/Modal"
@@ -128,7 +128,7 @@ const TeamPage = () => {
         isOpen={isInviteOpen}
         onClose={() => setIsInviteOpen(false)}
         title="Invite Team Member"
-      >
+      >d
         <InviteMemberForm
           teamId={activeTeamId}
           onClose={() => setIsInviteOpen(false)}

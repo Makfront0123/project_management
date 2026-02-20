@@ -1,8 +1,9 @@
 
 import type { Task } from "@/features/task/types/task";
-import MemberHeader from "../../../components/projectDetails/MemberHeader";
-import MemberTaskList from "../../../components/projectDetails/MemberTaskList";
+import MemberHeader from "../../project/components/MemberHeader";
+
 import type { Project } from "@/features/project/types/projects";
+import MemberTaskList from "@/features/task/components/MemberTaskList";
 
 interface Props {
   currentProject: Project;

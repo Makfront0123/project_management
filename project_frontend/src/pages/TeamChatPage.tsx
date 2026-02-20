@@ -2,15 +2,15 @@ import { useParams } from "react-router";
 import { useAuthStore } from "../features/auth/store/auth_store";
 import { useState, useEffect } from "react";
 import { useForm } from "../shared/hooks/useForm";
-import useTeamChat from "../hooks/useTeamChat";
-import useMessageStore from "../stores/message_store";
+import useMessageStore from "../features/chat/store/message_store";
 import { useTeamMemberStore } from "../features/team/store/team_member_store";
 import type { User } from "../features/auth/types/auth";
-import usePrivateChat from "../hooks/usePrivateChat";
-import type { MessageFormValues } from "../shared/types/message";
-import useMessageSound from "../hooks/useMessageSound";
+import type { MessageFormValues } from "../features/chat/types/message";
 import { formatDateNumeric } from "../shared/utils/formatDate";
-import { deletePrivateMessages } from "../services/message_services";
+import useMessageSound from "@/features/chat/hooks/useMessageSound";
+import usePrivateChat from "@/features/chat/hooks/usePrivateChat";
+import useTeamChat from "@/features/chat/hooks/useTeamChat";
+import { deletePrivateMessages } from "@/features/chat/services/message_services";
 
 
 
@@ -47,7 +47,7 @@ const TeamChatPage = () => {
             fetchTeamMembers(teamId);
         }
     }, [teamId, fetchTeamMembers]);
-    
+
 
 
     const {

@@ -1,0 +1,46 @@
+import axios from "axios";
+import { useAuthStore } from "../../auth/store/auth_store";
+
+const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
+
+export const createNotification = async (message: string, recipientId: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.post(`${baseUrl}/notifications`, {
+        message,
+        recipient: recipientId,
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+ 
+
+    return response.data;
+};
+
+export const getNotificationsForUser = async ( ) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.get(`${baseUrl}/notifications`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+    return response.data;
+};
+
+export const markNotificationAsRead = async (id: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.patch(
+        `${baseUrl}/notifications/${id}/read`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};

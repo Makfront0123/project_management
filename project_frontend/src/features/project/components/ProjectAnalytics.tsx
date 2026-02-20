@@ -10,7 +10,7 @@ import {
   CartesianGrid,
 } from "recharts";
 
-import { useProjectAnalytics } from "@/hooks/projectAnalytics/useProjectAnalytics";
+import { useProjectAnalytics } from "@/features/project/hooks/useProjectAnalytics";
 import { useProjectStore } from "@/features/project/store/project_store";
 import { useEffect } from "react";
 

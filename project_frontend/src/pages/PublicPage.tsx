@@ -1,9 +1,9 @@
 
 import { Link } from "react-router"
-import Features from "../components/Features"
+import Features from "../shared/components/Features"
 import Footer from "../shared/layout/Footer"
-import Hero from "../components/Hero"
-import HowItWorks from "../components/HowItWorks"
+import Hero from "../shared/components/Hero"
+import HowItWorks from "../shared/components/HowItWorks"
 import { icons } from "../shared/constants/icons"
 
 

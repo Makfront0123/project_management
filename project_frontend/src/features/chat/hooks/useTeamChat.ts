@@ -1,0 +1,76 @@
+import type { User } from "@/features/auth/types/auth";
+import { useCallback, useEffect, useRef } from "react"
+
+import { io, type Socket } from "socket.io-client"
+import useMessageStore from "../store/message_store";
+import type { Message } from "../types/message";
+import useMessageSound from "./useMessageSound";
+
+const useTeamChat = (teamId: string) => {
+    const addMessage = useMessageStore((state) => state.addMessage);
+    const socketRef = useRef<Socket | null>(null)
+    const { playReceivedSound } = useMessageSound();
+
+    useEffect(() => {
+        const socket = io(import.meta.env.VITE_API_SOCKET_URL, {
+            withCredentials: true,
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000,
+            transports: ['polling'],
+        });
+
+        socketRef.current = socket
+
+        socket.emit("joinTeamRoom", teamId);
+
+
+        socket.on("newMessage", (message: Message) => {
+            addMessage(message);
+            playReceivedSound();
+        });
+
+        socket.on("connect", () => {
+
+        });
+
+        socket.on("disconnect", () => {
+
+        });
+
+        return () => {
+            socket.disconnect();
+
+        };
+    }, [addMessage, playReceivedSound, teamId]);
+
+    const sendMessage = useCallback((text: string, sender: User, receiverId?: string | null) => {
+
+        if (!socketRef.current) return;
+
+        if (!sender?.id) {
+            console.error("Falta el ID del usuario, no se puede enviar mensaje");
+            return;
+        }
+        socketRef.current.emit("sendMessage", {
+            text,
+            teamId,
+            sender: {
+                _id: sender.id,
+                name: sender.name,
+                email: sender.email,
+            },
+            receiverId: receiverId || null,
+        });
+
+    }, [teamId]);
+
+
+
+
+    return {
+        sendMessage
+    }
+}
+
+export default useTeamChat;

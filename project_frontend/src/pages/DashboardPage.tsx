@@ -1,8 +1,8 @@
 import { Button } from "../components/ui/button"
 
 import ProjectOverview from "@/features/project/components/ProjectOverview"
-import CardStats from "@/components/CardStasts"
-import { useDashboard } from "@/hooks/useDashboard"
+import CardStats from "@/shared/components/CardStasts"
+
 import { ProjectModal } from "@/features/project/components/ProjectModal"
 import { icons } from "@/shared/constants/icons"
 import CreateTeamForm from "@/features/team/components/CreateTeamForm"
@@ -10,6 +10,7 @@ import Modal from "@/shared/components/Modal"
 import { useState } from "react"
 import MyTasks from "@/features/task/components/MyTasks"
 import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
+import { useDashboard } from "@/features/project/hooks/useDashboard"
 
 const DashboardPage = () => {
 

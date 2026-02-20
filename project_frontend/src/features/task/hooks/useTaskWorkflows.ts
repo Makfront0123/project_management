@@ -1,10 +1,11 @@
 import { useCallback } from "react";
 import type { CompleteTaskParams } from "@/shared/types/workflows";
-import useNotificationStore from "@/stores/notification_store";
+
 import { useTeamMemberStore } from "@/features/team/store/team_member_store";
-import { useTaskAssignments } from "../../../hooks/projectDetails/useTaskAssignments";
-import { useTaskManager } from "../../../hooks/projectDetails/useTasksManager";
+import { useTaskAssignments } from "./useTaskAssignments";
+import { useTaskManager } from "./useTasksManager";
 import type { Task, TaskPriority } from "@/features/task/types/task";
+import useNotificationStore from "@/features/notification/store/notification_store";
 
 interface TaskWorkflows {
     completeTask: (params: CompleteTaskParams) => Promise<void>;
@@ -26,7 +27,7 @@ export const useTaskWorkflows = (): TaskWorkflows => {
     const assignments = useTaskAssignments();
     const { teamMembers } = useTeamMemberStore();
     const { addNotification } = useNotificationStore();
-    
+
 
     const completeTask = useCallback(
         async ({
