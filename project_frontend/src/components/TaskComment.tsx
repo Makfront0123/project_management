@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import type { TaskComment } from "../types/comment";
+import type { TaskComment } from "../shared/types/comment";
 import { useCommentStore } from "../stores/comment_store";
 
 interface TaskCommentsProps {

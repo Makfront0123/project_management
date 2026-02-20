@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import dayjs from "dayjs";
-import type { Task } from "@/types/task";
+import type { Task } from "@/shared/types/task";
 interface Props {
     tasks: Task[];
 }

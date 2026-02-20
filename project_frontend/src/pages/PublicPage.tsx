@@ -4,7 +4,7 @@ import Features from "../components/Features"
 import Footer from "../shared/layout/Footer"
 import Hero from "../components/Hero"
 import HowItWorks from "../components/HowItWorks"
-import { icons } from "../core/icons"
+import { icons } from "../shared/constants/icons"
 
 
 const PublicPage = () => {

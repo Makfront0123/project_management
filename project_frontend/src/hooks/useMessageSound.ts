@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from 'react';
-import { sounds } from '../core/mp3';
+import { sounds } from '../shared/constants/mp3';
 
 
 const useMessageSound = () => {

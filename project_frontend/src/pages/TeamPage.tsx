@@ -1,7 +1,7 @@
 import { useTeamStore } from "@/stores/team_store"
 import { useTeamPage } from "@/hooks/useTeamPage"
 import { Button } from "@/components/ui/button"
-import { icons } from "@/core/icons"
+import { icons } from "@/shared/constants/icons"
 import { Input } from "@/components/ui/input"
 import { useMembersFilter } from "@/hooks/useMembersFillter"
 import { usePagination } from "@/shared/hooks/usePagination"

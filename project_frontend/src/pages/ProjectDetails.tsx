@@ -3,7 +3,7 @@ import MemberProjectView from "@/components/projectDetails/MemberProjectView";
 import { useProjectData } from "@/hooks/projectDetails/useProjectData";
 import { useProjectModals } from "@/hooks/useProjectModal";
 import { useTaskWorkflows } from "@/hooks/useTaskWorkflows";
-import type { Task } from "@/types/task";
+import type { Task } from "@/shared/types/task";
 import { useState } from "react";
 
 const ProjectDetails = () => {

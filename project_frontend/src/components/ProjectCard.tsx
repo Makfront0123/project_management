@@ -1,8 +1,8 @@
-import type { Project } from '@/types/projects'
-import { formatDateShort } from '@/utils/formatDate'
+import type { Project } from '@/shared/types/projects'
+import { formatDateShort } from '@/shared/utils/formatDate'
 import { ProgressContainer } from '../shared/components/ProgressContainer'
 
-import { icons } from '@/core/icons'
+import { icons } from '@/shared/constants/icons'
 import { Link } from 'react-router'
 type ProjectCardProps = {
     projects: Project[]

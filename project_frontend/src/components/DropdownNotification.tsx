@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { icons } from "../core/icons";
+import { icons } from "../shared/constants/icons";
 import useNotificationStore from "../stores/notification_store";
 import { useNavigate } from "react-router";
-import type { NotificationType } from "../types/notification";
+import type { NotificationType } from "../shared/types/notification";
 
 
 const NotificationDropdown = () => {

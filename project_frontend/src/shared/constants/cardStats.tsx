@@ -1,4 +1,4 @@
-import { icons } from "@/core/icons";
+import { icons } from "@/shared/constants/icons";
 
 export const cardStats = [
     {

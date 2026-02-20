@@ -1,6 +1,6 @@
-import type { Attachment } from "@/types/attachment";
-import type { Tag } from "@/types/tag";
-import type { Task } from "@/types/task";
+import type { Attachment } from "@/shared/types/attachment";
+import type { Tag } from "@/shared/types/tag";
+import type { Task } from "@/shared/types/task";
 import { useState } from "react";
 
 

@@ -1,4 +1,4 @@
-import { icons } from "../core/icons";
+import { icons } from "./icons";
 
 export const navLinks = [
     {

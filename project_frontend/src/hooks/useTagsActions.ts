@@ -1,7 +1,7 @@
 import useAttachmentStore from "@/stores/attachment_store";
 import useTagTaskStore from "@/stores/tagTask_store";
 import useTaskAssignamentStore from "@/stores/task_assignament_store";
-import type { ProjectActions } from "@/types/Modal";
+import type { ProjectActions } from "@/shared/types/Modal";
 import { useProjectData } from "./projectDetails/useProjectData";
 
 

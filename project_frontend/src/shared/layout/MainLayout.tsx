@@ -1,5 +1,5 @@
 
-import { icons } from "@/core/icons";
+import { icons } from "@/shared/constants/icons";
 import { UserDropdown } from "../../components/UserDropdown";
 import { SelectGroups } from "../components/SelectGroups";
 import { useNotifications } from "@/hooks/useNotications";

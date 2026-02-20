@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Modal from "../../shared/components/Modal";
-import type { RenameAttachmentModalProps } from "../../types/attachment";
+import type { RenameAttachmentModalProps } from "../../shared/types/attachment";
 
 const RenameAttachmentModal: React.FC<RenameAttachmentModalProps> = ({
   isOpen,

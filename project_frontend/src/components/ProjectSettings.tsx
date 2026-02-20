@@ -1,4 +1,4 @@
-import type { Project } from "@/types/projects";
+import type { Project } from "@/shared/types/projects";
 import { ProjectForm } from "./ProjectForm";
 import { useProjectWorkflows } from "@/hooks/useProjectWorkflows";
 import { Button } from "./ui/button";

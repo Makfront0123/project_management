@@ -1,4 +1,4 @@
-import type { TagListProps } from "../../types/tag";
+import type { TagListProps } from "../../shared/types/tag";
 
 
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 import useMessageStore from '../stores/message_store';
-import type { Message } from '../types/message';
+import type { Message } from '../shared/types/message';
 import useMessageSound from './useMessageSound';
 
 

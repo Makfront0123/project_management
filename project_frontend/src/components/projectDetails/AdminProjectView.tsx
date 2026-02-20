@@ -1,4 +1,4 @@
-import type { AdminProjectViewProp } from "@/types/projects";
+import type { AdminProjectViewProp } from "@/shared/types/projects";
 import AdminHeader from "./AdminHeader";
 import { useProjectTabs } from "@/hooks/useProjectTabs";
 import ProjectTabs from "./ProjectTabs";
@@ -7,7 +7,7 @@ import ProjectCalendar from "../ProjectCalendar";
 import ProjectSettings from "../ProjectSettings";
 import ProjectAnalytics from "../ProjectAnalytics";
 import TaskModal from "./TaskModal";
-import type { TaskFormValues } from "@/types/task";
+import type { TaskFormValues } from "@/shared/types/task";
 
 const AdminProjectView = ({
   currentProject,

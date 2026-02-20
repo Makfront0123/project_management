@@ -4,7 +4,7 @@ import { useTaskWorkflows } from "@/hooks/useTaskWorkflows";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import type { Task, TaskPriority } from "@/types/task";
+import type { Task, TaskPriority } from "@/shared/types/task";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { useTeamMembers } from "@/hooks/useTeamMembers";
 

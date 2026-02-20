@@ -1,4 +1,4 @@
-import type { TaskFilterProps } from "../../types/task";
+import type { TaskFilterProps } from "../../shared/types/task";
 
 export default function TaskFilter({ value, onChange }: TaskFilterProps) {
   return (

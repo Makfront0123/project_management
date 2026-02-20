@@ -1,7 +1,7 @@
 // useNotificationStore.ts
 import { create } from "zustand";
 import {  getNotificationsForUser, markNotificationAsRead } from "../services/notification_services";
-import type { NotificationType } from "../types/notification";
+import type { NotificationType } from "../shared/types/notification";
 
 interface NotificationStore {
     notifications: NotificationType[];

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { TagModalProps } from "../../types/tag";
+import type { TagModalProps } from "../../shared/types/tag";
 
  
 

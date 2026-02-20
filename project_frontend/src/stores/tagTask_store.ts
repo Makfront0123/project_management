@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 import toast from "react-hot-toast";
-import type { TaskTag } from "../types/taskTag";
+import type { TaskTag } from "../shared/types/taskTag";
 import { addTagToTask, removeTagFromTask, getAllTagsOfTask, getTagOfTask } from "../services/tag_task_services";
 
 interface TagTaskStore {

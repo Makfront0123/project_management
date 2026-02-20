@@ -1,5 +1,5 @@
-import { icons } from "@/core/icons";
-import { navLinks } from "@/data/navLinks";
+import { icons } from "@/shared/constants/icons";
+import { navLinks } from "@/shared/constants/navLinks";
 import { NavLink } from "react-router";
 
 

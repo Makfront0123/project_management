@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Tag } from "../types/tag";
+import type { Tag } from "../shared/types/tag";
 import { createTag, deleteTag, getAllTags, updateTag } from "../services/tag_services";
 import toast from "react-hot-toast";
 

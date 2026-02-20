@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import type { Attachment } from "../types/attachment";
+import type { Attachment } from "../shared/types/attachment";
 import { createAttachment, deleteAttachment, getAllAttachments, updateAttachment } from "../services/attachment_services";
 import toast from "react-hot-toast";
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from "@/components/ui/select"
 import { useCreateTeamForm } from "@/hooks/useCreateTeamForm"
-import { icons } from "@/core/icons"
+import { icons } from "@/shared/constants/icons"
 import { useUserTeams } from "@/hooks/useUserTeam"
 import { useTeamWorkflow } from "@/hooks/useTeamWorkflows"
 import CreateTeamForm from "@/components/CreateTeamForm"

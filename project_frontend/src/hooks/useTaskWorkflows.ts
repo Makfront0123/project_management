@@ -1,10 +1,10 @@
 import { useCallback } from "react";
-import type { CompleteTaskParams } from "@/types/workflows";
+import type { CompleteTaskParams } from "@/shared/types/workflows";
 import useNotificationStore from "@/stores/notification_store";
 import { useTeamMemberStore } from "@/stores/team_member_store";
 import { useTaskAssignments } from "./projectDetails/useTaskAssignments";
 import { useTaskManager } from "./projectDetails/useTasksManager";
-import type { Task, TaskPriority } from "@/types/task";
+import type { Task, TaskPriority } from "@/shared/types/task";
 
 interface TaskWorkflows {
     completeTask: (params: CompleteTaskParams) => Promise<void>;

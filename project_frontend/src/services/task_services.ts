@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { TaskInput } from "../types/task";
+import type { TaskInput } from "../shared/types/task";
 import { useAuthStore } from "../stores/auth_store";
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;

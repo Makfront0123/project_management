@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { deleteGlobalMessages, deletePrivateMessages, getGlobalMessages, getPrivateMessages } from "../services/message_services";
-import type { Message } from "../types/message";
+import type { Message } from "../shared/types/message";
 import toast from "react-hot-toast";
 
 interface MessageStore {

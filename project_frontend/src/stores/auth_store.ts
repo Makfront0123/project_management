@@ -4,8 +4,8 @@ import toast from 'react-hot-toast'
 import { jwtDecode } from 'jwt-decode'
 
 import { forgotPassword, loginUser, logoutUser, registerUser, resendForgotPasswordOtp, resendOtp, resetPassword, verifyForgotPasswordOtp, verifyOtp } from '../services/auth_services'
-import { getErrorMessage } from '../utils/getErrorMessage'
-import type { JwtPayload, User } from '../types/auth'
+import { getErrorMessage } from '../shared/utils/getErrorMessage'
+import type { JwtPayload, User } from '../shared/types/auth'
 import { useTeamMemberStore } from './team_member_store'
 import { useTeamStore } from './team_store'
 

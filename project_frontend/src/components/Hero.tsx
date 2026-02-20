@@ -1,4 +1,4 @@
-import { images } from '../core/images'
+import { images } from '../shared/constants/images'
 
 const Hero = () => {
     return (

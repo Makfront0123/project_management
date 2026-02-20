@@ -1,4 +1,4 @@
-import type { Member } from "../../types/teamMember";
+import type { Member } from "../../shared/types/teamMember";
 import Modal from "../../shared/components/Modal";
 
 interface Props {

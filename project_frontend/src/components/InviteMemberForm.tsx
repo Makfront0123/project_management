@@ -1,5 +1,5 @@
 import { useInviteMember } from "@/hooks/useInviteMember"
-import type { Props } from "@/types/Modal"
+import type { Props } from "@/shared/types/Modal"
 import {
     Select,
     SelectContent,

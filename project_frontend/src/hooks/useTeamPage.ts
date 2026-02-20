@@ -1,5 +1,5 @@
 import { getTeamMembers } from "@/services/team_member"
-import type { TeamMember } from "@/types/teamMember"
+import type { TeamMember } from "@/shared/types/teamMember"
 import { useState, useEffect } from "react"
 
 

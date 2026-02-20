@@ -1,4 +1,5 @@
-import { steps } from '../data/steps'
+import { steps } from "@/shared/constants/steps"
+
 
 const HowItWorks = () => {
     return (

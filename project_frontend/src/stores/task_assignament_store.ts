@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { assignTask, completeAssignedTask, getAllUsersAssignedToTask, getTasksToUserAssignments, unassignTask } from "../services/task_assignament_services";
 import toast from "react-hot-toast";
-import type { TaskAssignment } from "../types/task_assignment";
-import { getErrorMessage } from "../utils/getErrorMessage";
+import type { TaskAssignment } from "../shared/types/task_assignment";
+import { getErrorMessage } from "../shared/utils/getErrorMessage";
 
 
 interface TaskStore {

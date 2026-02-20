@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 import { createTask, deleteTask, getTasks, getTasksByUser, updateTask } from "../services/task_services";
-import type { Task, TaskInput } from "../types/task";
+import type { Task, TaskInput } from "../shared/types/task";
 import toast from "react-hot-toast";
 
 

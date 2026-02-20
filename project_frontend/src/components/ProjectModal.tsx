@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { useForm } from "@/shared/hooks/useForm";
 import { useProjectWorkflows } from "@/hooks/useProjectWorkflows";
-import type { Project } from "@/types/projects";
+import type { Project } from "@/shared/types/projects";
 
 
 interface Props {

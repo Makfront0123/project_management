@@ -5,11 +5,11 @@ import { useForm } from "../shared/hooks/useForm";
 import useTeamChat from "../hooks/useTeamChat";
 import useMessageStore from "../stores/message_store";
 import { useTeamMemberStore } from "../stores/team_member_store";
-import type { User } from "../types/auth";
+import type { User } from "../shared/types/auth";
 import usePrivateChat from "../hooks/usePrivateChat";
-import type { MessageFormValues } from "../types/message";
+import type { MessageFormValues } from "../shared/types/message";
 import useMessageSound from "../hooks/useMessageSound";
-import { formatDateNumeric } from "../utils/formatDate";
+import { formatDateNumeric } from "../shared/utils/formatDate";
 import { deletePrivateMessages } from "../services/message_services";
 
 

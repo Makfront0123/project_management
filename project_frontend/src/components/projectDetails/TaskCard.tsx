@@ -1,7 +1,7 @@
 import React from "react";
-import type { TaskAssignment } from "../../types/task_assignment";
-import type { Task } from "../../types/task";
-import type { Attachment } from "../../types/attachment";
+import type { TaskAssignment } from "../../shared/types/task_assignment";
+import type { Task } from "../../shared/types/task";
+import type { Attachment } from "../../shared/types/attachment";
 
 
 interface Props {

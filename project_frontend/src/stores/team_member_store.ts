@@ -1,10 +1,10 @@
 
 import { create } from 'zustand'
 import { acceptRequest, addMember, confirmJoinWithCode, deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, inviteMember, rejectRequest, requestToJoinTeam } from '../services/team_member'
-import type { TeamMember } from '../types/teamMember'
-import type { UserTeamStatus } from '../types/userTeamStatus'
+import type { TeamMember } from '../shared/types/teamMember'
+import type { UserTeamStatus } from '../shared/types/userTeamStatus'
 import { getUserTeamStatus } from '../services/auth_services'
-import { getErrorMessage } from '../utils/getErrorMessage'
+import { getErrorMessage } from '../shared/utils/getErrorMessage'
 import toast from 'react-hot-toast'
 
 type TeamStore = {

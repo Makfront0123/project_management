@@ -2,7 +2,7 @@
 import { useParams } from "react-router";
 import { useForm } from "../../shared/hooks/useForm";
 import useTagStore from "../../stores/tag_store";
-import type { TagFormValues } from "../../types/tag";
+import type { TagFormValues } from "../../shared/types/tag";
 
 
 

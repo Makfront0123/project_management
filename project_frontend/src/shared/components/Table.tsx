@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/stores/auth_store";
-import type { TeamMember } from "@/types/teamMember";
+import type { TeamMember } from "@/shared/types/teamMember";
 
 
 type Props = {

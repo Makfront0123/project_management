@@ -1,4 +1,4 @@
-import type { Project } from "@/types/projects"
+import type { Project } from "@/shared/types/projects"
 import { useMemo, useState } from "react"
 
 

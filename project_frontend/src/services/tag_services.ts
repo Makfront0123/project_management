@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useAuthStore } from "../stores/auth_store";
-import type { Tag } from "../types/tag";
+import type { Tag } from "../shared/types/tag";
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
