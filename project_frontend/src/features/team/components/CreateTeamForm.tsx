@@ -1,4 +1,4 @@
-import { TextInput } from "../shared/components/TextInput"
+import { TextInput } from "../../../shared/components/TextInput"
 
 type CreateTeamPageProps = {
     form: {

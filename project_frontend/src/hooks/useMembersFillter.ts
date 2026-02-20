@@ -1,4 +1,4 @@
-import type { TeamMember } from "@/shared/types/teamMember"
+import type { TeamMember } from "@/features/team/types/teamMember"
 import { useState, useMemo } from "react"
 
 

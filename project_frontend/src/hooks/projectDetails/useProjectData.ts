@@ -3,7 +3,7 @@ import { useProjectStore } from "@/features/project/store/project_store";
 import useTagStore from "@/stores/tag_store";
 import useTaskAssignamentStore from "@/features/task/store/task_assignament_store";
 import useTaskStore from "@/features/task/store/task_store";
-import { useTeamMemberStore } from "@/stores/team_member_store";
+import { useTeamMemberStore } from "@/features/team/store/team_member_store";
 import { useState, useMemo, useEffect } from "react";
 import { useParams } from "react-router";
 

@@ -1,5 +1,5 @@
 import type { ResetPasswordValues } from "../../features/auth/types/auth";
-import type { CreateTeamFormValue } from "../types/team";
+import type { CreateTeamFormValue } from "../../features/team/types/team";
 
 export function validateLogin(values: { email: string; password: string }) {
   const errors: Partial<Record<keyof typeof values, string>> = {};

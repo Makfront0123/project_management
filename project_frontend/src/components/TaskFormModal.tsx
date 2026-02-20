@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import type { Task, TaskPriority } from "@/features/task/types/task";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { useTeamMembers } from "@/hooks/useTeamMembers";
+import { useTeamMembers } from "@/features/team/hooks/useTeamMembers";
 
 interface Props {
     open: boolean;

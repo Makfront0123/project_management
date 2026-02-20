@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from "react"
-import { useTeamMemberStore } from "../stores/team_member_store"
+import { useTeamMemberStore } from "../features/team/store/team_member_store"
 
 import { useProjectStore } from "@/features/project/store/project_store"
 
 import useTaskStore from "@/features/task/store/task_store"
-import { useTeamStore } from "@/stores/team_store"
+import { useTeamStore } from "@/features/team/store/team_store"
 import { useNavigate } from "react-router"
 import { icons } from "@/shared/constants/icons"
-import type { Team } from "@/shared/types/team"
+import type { Team } from "@/features/team/types/team"
 
 export const useDashboard = () => {
     const navigate = useNavigate()

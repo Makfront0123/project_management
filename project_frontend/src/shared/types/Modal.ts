@@ -1,7 +1,7 @@
 import type { Project } from "./projects";
 import type { Tag } from "./tag";
 import type { Task, TaskFormValues } from "../../features/task/types/task";
-import type { Member } from "./teamMember";
+import type { Member } from "../../features/team/types/teamMember";
 
 export interface ActionsProps {
     createTask: () => void;

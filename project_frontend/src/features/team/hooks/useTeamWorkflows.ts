@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
-import { useTeamStore } from "@/stores/team_store"
-import type { Team } from "@/shared/types/team"
+import { useTeamStore } from "@/features/team/store/team_store"
+import type { Team } from "@/features/team/types/team"
 
 type UseTeamWorkflowReturn = {
     teams: Team[]

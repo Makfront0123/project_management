@@ -1,5 +1,5 @@
+import { useAuthStore } from "@/features/auth/store/auth_store";
 import axios from "axios";
-import { useAuthStore } from "../features/auth/store/auth_store";
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
 export const addMember = async (userId: string, teamId: string) => {

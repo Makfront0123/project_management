@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import TeamMemberTable from "../components/TeamMemberTable";
 import { useParams } from "react-router";
-import { useTeamMemberStore } from "../stores/team_member_store";
+import { useTeamMemberStore } from "../features/team/store/team_member_store";
+import TeamMemberTable from "@/features/team/components/TeamMemberTable";
 
 const TeamRequestPage = () => {
     const { teamId } = useParams<{ teamId: string }>();

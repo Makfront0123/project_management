@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useTeamMemberStore } from "@/stores/team_member_store"
+import { useTeamMemberStore } from "@/features/team/store/team_member_store"
 
 export const useInviteMember = (teamId: string) => {
     const teamMemberStore = useTeamMemberStore()

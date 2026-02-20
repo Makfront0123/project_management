@@ -1,4 +1,4 @@
-import { useInviteMember } from "@/hooks/useInviteMember"
+import { useInviteMember } from "@/features/team/hooks/useInviteMember"
 import type { Props } from "@/shared/types/Modal"
 import {
     Select,
@@ -7,10 +7,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 
-import { Input } from "./ui/input"
-import { Button } from "./ui/button"
 
 const InviteMemberForm = ({ teamId, onClose }: Props) => {
     const {
@@ -20,7 +20,7 @@ const InviteMemberForm = ({ teamId, onClose }: Props) => {
         setRole,
         loading,
         inviteMember,
-    } = useInviteMember(teamId??'')
+    } = useInviteMember(teamId ?? '')
 
     const handleSubmit = async () => {
         const success = await inviteMember()

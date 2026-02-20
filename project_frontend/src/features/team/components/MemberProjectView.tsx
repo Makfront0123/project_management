@@ -1,10 +1,11 @@
-import type { Project } from "@/shared/types/projects";
+
 import type { Task } from "@/features/task/types/task";
-import MemberHeader from "./MemberHeader";
-import MemberTaskList from "./MemberTaskList";
+import MemberHeader from "../../../components/projectDetails/MemberHeader";
+import MemberTaskList from "../../../components/projectDetails/MemberTaskList";
+import type { Project } from "@/features/project/types/projects";
 
 interface Props {
-  currentProject: Project ;
+  currentProject: Project;
   tasks: Task[];
   filteredTasks: Task[];
   isLoading: boolean;

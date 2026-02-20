@@ -1,4 +1,4 @@
-import type { TeamMember } from "../shared/types/teamMember";
+import type { TeamMember } from "../types/teamMember";
 
 type Props = {
   member: TeamMember;

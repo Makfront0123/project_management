@@ -1,5 +1,5 @@
-import { useTeamStore } from "@/stores/team_store"
-import { useTeamPage } from "@/hooks/useTeamPage"
+import { useTeamStore } from "@/features/team/store/team_store"
+import { useTeamPage } from "@/features/team/hooks/useTeamPage"
 import { Button } from "@/components/ui/button"
 import { icons } from "@/shared/constants/icons"
 import { Input } from "@/components/ui/input"
@@ -7,11 +7,12 @@ import { useMembersFilter } from "@/hooks/useMembersFillter"
 import { usePagination } from "@/shared/hooks/usePagination"
 import { useState } from "react"
 import Modal from "@/shared/components/Modal"
-import InviteMemberForm from "@/components/InviteMemberForm"
+
 import { MoreHorizontal } from "lucide-react"
-import { useTeamWorkflow } from "@/hooks/useTeamWorkflows"
+import { useTeamWorkflow } from "@/features/team/hooks/useTeamWorkflows"
 import { AppDropdown } from "@/shared/components/AppDropdown"
 import TableMembers from "@/shared/components/Table"
+import InviteMemberForm from "@/features/team/components/InviteMemberForm"
 
 
 const TeamPage = () => {

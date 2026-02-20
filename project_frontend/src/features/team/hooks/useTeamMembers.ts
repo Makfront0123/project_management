@@ -1,4 +1,4 @@
-import { useTeamMemberStore } from "@/stores/team_member_store";
+import { useTeamMemberStore } from "@/features/team/store/team_member_store";
 import { useEffect } from "react";
 
 export const useTeamMembers = (teamId?: string) => {

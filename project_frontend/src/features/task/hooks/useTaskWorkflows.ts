@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import type { CompleteTaskParams } from "@/shared/types/workflows";
 import useNotificationStore from "@/stores/notification_store";
-import { useTeamMemberStore } from "@/stores/team_member_store";
+import { useTeamMemberStore } from "@/features/team/store/team_member_store";
 import { useTaskAssignments } from "../../../hooks/projectDetails/useTaskAssignments";
 import { useTaskManager } from "../../../hooks/projectDetails/useTasksManager";
 import type { Task, TaskPriority } from "@/features/task/types/task";

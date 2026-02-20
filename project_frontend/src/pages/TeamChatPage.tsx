@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "../shared/hooks/useForm";
 import useTeamChat from "../hooks/useTeamChat";
 import useMessageStore from "../stores/message_store";
-import { useTeamMemberStore } from "../stores/team_member_store";
+import { useTeamMemberStore } from "../features/team/store/team_member_store";
 import type { User } from "../features/auth/types/auth";
 import usePrivateChat from "../hooks/usePrivateChat";
 import type { MessageFormValues } from "../shared/types/message";

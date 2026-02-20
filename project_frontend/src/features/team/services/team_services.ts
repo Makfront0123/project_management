@@ -1,6 +1,6 @@
+import { useAuthStore } from '@/features/auth/store/auth_store';
 import axios from 'axios';
-import { useAuthStore } from '../features/auth/store/auth_store';
-import type { PagedTeamsResponse, Team, TeamDashboardResponse, TeamResponse } from '../shared/types/team';
+import type { TeamResponse, PagedTeamsResponse, TeamDashboardResponse, Team } from '../types/team';
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 

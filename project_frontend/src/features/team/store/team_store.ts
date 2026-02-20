@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 
 import { createTeam, deleteTeam, getAllTeams, getTeamDashboard, updateTeam } from '../services/team_services'
-import { getErrorMessage } from '../shared/utils/getErrorMessage'
-import type { Team, TeamDashboardResponse } from '../shared/types/team'
+import { getErrorMessage } from '../../../shared/utils/getErrorMessage'
+import type { Team, TeamDashboardResponse } from '../types/team'
 import toast from 'react-hot-toast'
 import { getUserTeamStatus } from '@/features/auth/services/auth_services'
 

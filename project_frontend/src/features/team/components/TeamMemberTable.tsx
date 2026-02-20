@@ -1,5 +1,7 @@
-import type { TeamMember } from "../shared/types/teamMember";
+import type { TeamMember } from "../types/teamMember";
 import TeamMemberRow from "./TeamMemberRow";
+
+
 
 type Props = {
   members: TeamMember[];

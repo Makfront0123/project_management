@@ -1,14 +1,14 @@
 import { useState } from "react"
 import toast from "react-hot-toast"
-import CreateTeamForm from "../components/CreateTeamForm"
+import CreateTeamForm from "../features/team/components/CreateTeamForm"
 import { getErrorMessage } from "../shared/utils/getErrorMessage"
 import { useForm } from "../shared/hooks/useForm"
-import { createTeam } from "../services/team_services"
 import Modal from "../shared/components/Modal"
-import type { CreateTeamFormValue, TeamResponse } from "../shared/types/team"
+import type { CreateTeamFormValue, TeamResponse } from "../features/team/types/team"
 import { images } from "../shared/constants/images"
 import { useNavigate } from "react-router"
 import { validateCreateTeam } from "../shared/utils/validators"
+import { createTeam } from "@/features/team/services/team_services"
 
 const CreateTeamPage = () => {
     const [modalOpen, setModalOpen] = useState(false)

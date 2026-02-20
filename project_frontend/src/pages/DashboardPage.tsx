@@ -5,11 +5,11 @@ import CardStats from "@/components/CardStasts"
 import { useDashboard } from "@/hooks/useDashboard"
 import { ProjectModal } from "@/features/project/components/ProjectModal"
 import { icons } from "@/shared/constants/icons"
-import CreateTeamForm from "@/components/CreateTeamForm"
+import CreateTeamForm from "@/features/team/components/CreateTeamForm"
 import Modal from "@/shared/components/Modal"
-import { useCreateTeamForm } from "@/hooks/useCreateTeamForm"
 import { useState } from "react"
 import MyTasks from "@/features/task/components/MyTasks"
+import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
 
 const DashboardPage = () => {
 

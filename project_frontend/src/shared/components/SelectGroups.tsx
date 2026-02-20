@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from "@/components/ui/select"
-import { useCreateTeamForm } from "@/hooks/useCreateTeamForm"
+
 import { icons } from "@/shared/constants/icons"
-import { useUserTeams } from "@/hooks/useUserTeam"
-import { useTeamWorkflow } from "@/hooks/useTeamWorkflows"
-import CreateTeamForm from "@/components/CreateTeamForm"
+import { useUserTeams } from "@/features/team/hooks/useUserTeam"
+import { useTeamWorkflow } from "@/features/team/hooks/useTeamWorkflows"
+import CreateTeamForm from "@/features/team/components/CreateTeamForm"
 import Modal from "./Modal"
+import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
 
 export function SelectGroups() {
     const { teamMemberships, isLoading } = useUserTeams()

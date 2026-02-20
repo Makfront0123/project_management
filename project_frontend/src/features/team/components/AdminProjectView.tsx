@@ -1,10 +1,10 @@
 
 import AdminHeader from "./AdminHeader";
 import { useProjectTabs } from "@/features/project/hooks/useProjectTabs";
-import ProjectCalendar from "../../features/project/components/ProjectCalendar";
-import ProjectSettings from "../../features/project/components/ProjectSettings";
-import ProjectAnalytics from "../../features/project/components/ProjectAnalytics";
-import TaskModal from "../../features/task/components/TaskModal";
+import ProjectCalendar from "../../project/components/ProjectCalendar";
+import ProjectSettings from "../../project/components/ProjectSettings";
+import ProjectAnalytics from "../../project/components/ProjectAnalytics";
+import TaskModal from "../../task/components/TaskModal";
 import type { TaskFormValues } from "@/features/task/types/task";
 import ProjectTasks from "@/features/project/components/ProjectTasks";
 import ProjectTabs from "@/features/project/components/ProjectTabs";
