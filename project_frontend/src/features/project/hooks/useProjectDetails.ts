@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useParams } from "react-router";
 
-import { useProjectPermissions } from "./projectDetails/useProjectPermissions";
+import { useProjectPermissions } from "../../../hooks/projectDetails/useProjectPermissions";
 
-import { useTaskManager } from "./projectDetails/useTasksManager";
-import { useProjectStore } from "@/stores/project_store";
+import { useTaskManager } from "../../../hooks/projectDetails/useTasksManager";
+import { useProjectStore } from "@/features/project/store/project_store";
 
 export const useProjectDetails = () => {
     const { projectId, teamId } = useParams<{

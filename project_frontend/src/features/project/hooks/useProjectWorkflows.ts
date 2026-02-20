@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router";
 
-import { useProjectStore } from "@/stores/project_store";
+import { useProjectStore } from "@/features/project/store/project_store";
 import useTagStore from "@/stores/tag_store";
 
 

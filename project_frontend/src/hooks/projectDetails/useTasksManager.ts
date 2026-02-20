@@ -1,4 +1,4 @@
-import useTaskStore from "@/stores/task_store";
+import useTaskStore from "@/features/task/store/task_store";
 import { useEffect } from "react";
 
 export const useTaskManager = (projectId?: string) => {

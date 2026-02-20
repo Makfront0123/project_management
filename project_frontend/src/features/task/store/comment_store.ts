@@ -1,7 +1,7 @@
 // useCommentStore.ts
 import { create } from "zustand";
 import { createComment, deleteComment, getCommentsByTask } from "../services/comments_services";
-import type { TaskComment } from "../shared/types/comment";
+import type { TaskComment } from "../types/comment";
 import toast from "react-hot-toast";
 
 

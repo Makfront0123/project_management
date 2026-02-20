@@ -1,5 +1,5 @@
-import type { ProjectTab } from "@/hooks/useProjectTabs";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
+import type { ProjectTab } from "@/features/project/hooks/useProjectTabs";
 
 interface Props {
     tabs: {

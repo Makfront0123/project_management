@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { useForm } from "@/shared/hooks/useForm";
-import { useProjectWorkflows } from "@/hooks/useProjectWorkflows";
+import { useProjectWorkflows } from "@/features/project/hooks/useProjectWorkflows";
 import type { Project } from "@/shared/types/projects";
 
 

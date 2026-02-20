@@ -1,6 +1,6 @@
 import axios from "axios";
-import type { TaskInput } from "../shared/types/task";
-import { useAuthStore } from "../features/auth/store/auth_store";
+import type { TaskInput } from "../types/task";
+import { useAuthStore } from "../../auth/store/auth_store";
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 export const createTask = async (projectId: string, data: TaskInput) => {

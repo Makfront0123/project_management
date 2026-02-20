@@ -1,3 +1,6 @@
+import MemberTaskItem from "@/features/task/components/MemberTaskItem";
+import type { Props } from "@/shared/types/Modal";
+
 const TaskList = ({
   tasks,
   onEdit,
@@ -7,7 +10,7 @@ const TaskList = ({
   return (
     <div>
       {tasks.map(task => (
-        <TaskItem
+        <MemberTaskItem
           key={task._id}
           task={task}
           onEdit={onEdit}

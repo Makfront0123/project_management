@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useProjectStore } from "@/stores/project_store";
+import { useProjectStore } from "@/features/project/store/project_store";
 
 export const useProjectAnalytics = () => {
   const { analytics, isLoadingAnalytics } = useProjectStore();

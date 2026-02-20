@@ -1,5 +1,6 @@
+import { useAuthStore } from "@/features/auth/store/auth_store";
 import axios from "axios";
-import { useAuthStore } from "../features/auth/store/auth_store";
+
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
@@ -16,14 +17,14 @@ export const assignTask = async (taskId: string, userId: string) => {
 };
 
 export const unassignTask = async (taskId: string, userId: string) => {
- 
+
     const token = useAuthStore.getState().token;
     const response = await axios.delete(`${baseUrl}/tasks/${taskId}/assignments/${userId}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     });
-    
+
     return response.data;
 };
 
@@ -57,6 +58,6 @@ export const completeAssignedTask = async (taskId: string, userId: string) => {
             Authorization: `Bearer ${token}`,
         },
     });
-    
+
     return response.data;
 };

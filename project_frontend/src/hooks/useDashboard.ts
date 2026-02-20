@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react"
 import { useTeamMemberStore } from "../stores/team_member_store"
 
-import { useProjectStore } from "@/stores/project_store"
+import { useProjectStore } from "@/features/project/store/project_store"
 
-import useTaskStore from "@/stores/task_store"
+import useTaskStore from "@/features/task/store/task_store"
 import { useTeamStore } from "@/stores/team_store"
 import { useNavigate } from "react-router"
 import { icons } from "@/shared/constants/icons"

@@ -1,4 +1,4 @@
-import type { Task } from "@/shared/types/task";
+import type { Task } from "@/features/task/types/task";
 import { useMemo } from "react";
 
 export const useFilteredTasks = (tasks: Task[], filter: string) => {

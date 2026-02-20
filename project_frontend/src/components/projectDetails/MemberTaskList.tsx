@@ -1,5 +1,5 @@
-import type { Task } from "@/shared/types/task";
-import MemberTaskItem from "./MemberTaskItem";
+import type { Task } from "@/features/task/types/task";
+import MemberTaskItem from "../../features/task/components/MemberTaskItem";
 
 
 

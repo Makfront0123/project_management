@@ -1,6 +1,5 @@
+import { useAuthStore } from "@/features/auth/store/auth_store";
 import axios from "axios";
-import { useAuthStore } from "../features/auth/store/auth_store";
-
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
 export const getCommentsByTask = async (taskId: string) => {
@@ -15,7 +14,7 @@ export const getCommentsByTask = async (taskId: string) => {
 };
 
 export const createComment = async (taskId: string, comment: string) => {
- 
+
     const token = useAuthStore.getState().token;
     const response = await axios.post(`${baseUrl}/task/${taskId}/comment`, {
         comment,
@@ -24,13 +23,13 @@ export const createComment = async (taskId: string, comment: string) => {
             Authorization: `Bearer ${token}`,
         },
     });
- 
+
     return response.data;
 };
 
 export const deleteComment = async (taskId: string, commentId: string) => {
-    const token = useAuthStore.getState().token;       
-    
+    const token = useAuthStore.getState().token;
+
     const response = await axios.delete(`${baseUrl}/task/${taskId}/comment/${commentId}`, {
         headers: {
             Authorization: `Bearer ${token}`,

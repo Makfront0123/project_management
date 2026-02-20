@@ -1,5 +1,5 @@
-import type { User } from "../../features/auth/types/auth";
-import type { Tag } from "./tag";
+import type { User } from "../../auth/types/auth";
+import type { Tag } from "../../../shared/types/tag";
 
 export interface Task {
     _id: string;

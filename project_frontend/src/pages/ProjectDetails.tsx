@@ -1,9 +1,9 @@
 import AdminProjectView from "@/components/projectDetails/AdminProjectView";
 import MemberProjectView from "@/components/projectDetails/MemberProjectView";
 import { useProjectData } from "@/hooks/projectDetails/useProjectData";
-import { useProjectModals } from "@/hooks/useProjectModal";
-import { useTaskWorkflows } from "@/hooks/useTaskWorkflows";
-import type { Task } from "@/shared/types/task";
+import { useProjectModals } from "@/features/project/hooks/useProjectModal";
+import { useTaskWorkflows } from "@/features/task/hooks/useTaskWorkflows";
+import type { Task } from "@/features/task/types/task";
 import { useState } from "react";
 
 const ProjectDetails = () => {

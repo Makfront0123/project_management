@@ -1,5 +1,5 @@
 import type { Project } from "@/shared/types/projects";
-import type { Task } from "@/shared/types/task";
+import type { Task } from "@/features/task/types/task";
 import MemberHeader from "./MemberHeader";
 import MemberTaskList from "./MemberTaskList";
 

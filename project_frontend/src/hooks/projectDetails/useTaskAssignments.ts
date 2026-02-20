@@ -1,4 +1,4 @@
-import useTaskAssignamentStore from "@/stores/task_assignament_store";
+import useTaskAssignamentStore from "@/features/task/store/task_assignament_store";
 
 export const useTaskAssignments = () => {
     const {

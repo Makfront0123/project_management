@@ -1,5 +1,5 @@
-import type { Task } from '@/shared/types/task'
-import { Card } from './ui/card'
+import { Card } from '@/components/ui/card'
+import type { Task } from '@/features/task/types/task'
 
 interface Props {
     tasks: Task[]

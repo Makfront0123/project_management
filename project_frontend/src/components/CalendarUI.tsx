@@ -1,5 +1,5 @@
 
-import type { Task } from "@/shared/types/task";
+import type { Task } from "@/features/task/types/task";
 import { useMemo, useState } from "react";
 import { Calendar } from "./ui/calendar";
 

@@ -1,8 +1,7 @@
+import type { Attachment } from "@/shared/types/attachment";
+import type { Task } from "@/features/task/types/task";
+import type { TaskAssignment } from "@/features/task/types/task_assignment";
 import React from "react";
-import type { TaskAssignment } from "../../shared/types/task_assignment";
-import type { Task } from "../../shared/types/task";
-import type { Attachment } from "../../shared/types/attachment";
-
 
 interface Props {
     task?: Task;

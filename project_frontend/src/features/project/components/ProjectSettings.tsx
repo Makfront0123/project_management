@@ -1,7 +1,8 @@
-import type { Project } from "@/shared/types/projects";
+
 import { ProjectForm } from "./ProjectForm";
-import { useProjectWorkflows } from "@/hooks/useProjectWorkflows";
+import { useProjectWorkflows } from "@/features/project/hooks/useProjectWorkflows";
 import { Button } from "../../../components/ui/button";
+import type { Project } from "../types/projects";
 
 interface Props {
   project: Project;

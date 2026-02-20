@@ -1,4 +1,4 @@
-import type { Task } from "@/shared/types/task";
+import type { Task } from "@/features/task/types/task";
 
 interface Props {
   task: Task;

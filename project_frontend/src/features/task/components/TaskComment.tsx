@@ -1,7 +1,7 @@
+import type { TaskComment } from "@/features/task/types/comment";
+import { useCommentStore } from "@/features/task/store/comment_store";
 import { useEffect, useState } from "react";
 
-import type { TaskComment } from "../shared/types/comment";
-import { useCommentStore } from "../stores/comment_store";
 
 interface TaskCommentsProps {
     taskId: string;

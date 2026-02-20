@@ -1,5 +1,5 @@
 import { Button } from "../components/ui/button"
-import MyTasks from "@/components/MyTasks"
+
 import ProjectOverview from "@/features/project/components/ProjectOverview"
 import CardStats from "@/components/CardStasts"
 import { useDashboard } from "@/hooks/useDashboard"
@@ -9,6 +9,7 @@ import CreateTeamForm from "@/components/CreateTeamForm"
 import Modal from "@/shared/components/Modal"
 import { useCreateTeamForm } from "@/hooks/useCreateTeamForm"
 import { useState } from "react"
+import MyTasks from "@/features/task/components/MyTasks"
 
 const DashboardPage = () => {
 

@@ -11,7 +11,7 @@ import {
 } from "recharts";
 
 import { useProjectAnalytics } from "@/hooks/projectAnalytics/useProjectAnalytics";
-import { useProjectStore } from "@/stores/project_store";
+import { useProjectStore } from "@/features/project/store/project_store";
 import { useEffect } from "react";
 
 type StatCardProps = {

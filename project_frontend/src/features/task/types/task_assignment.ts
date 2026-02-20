@@ -1,4 +1,4 @@
-import type { User } from "../../features/auth/types/auth";
+import type { User } from "../../auth/types/auth";
 import type { Task } from "./task";
 
 

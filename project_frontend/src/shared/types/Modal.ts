@@ -1,6 +1,6 @@
 import type { Project } from "./projects";
 import type { Tag } from "./tag";
-import type { Task, TaskFormValues } from "./task";
+import type { Task, TaskFormValues } from "../../features/task/types/task";
 import type { Member } from "./teamMember";
 
 export interface ActionsProps {

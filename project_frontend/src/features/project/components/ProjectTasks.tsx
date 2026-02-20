@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import StatusBadge from "@/shared/components/StatusBadge";
 
-import type { Task } from "@/shared/types/task";
+import type { Task } from "@/features/task/types/task";
 
 import { MoreHorizontal } from "lucide-react";
 

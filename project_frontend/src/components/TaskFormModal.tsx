@@ -1,10 +1,10 @@
 import { useForm } from "@/shared/hooks/useForm";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
-import { useTaskWorkflows } from "@/hooks/useTaskWorkflows";
+import { useTaskWorkflows } from "@/features/task/hooks/useTaskWorkflows";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import type { Task, TaskPriority } from "@/shared/types/task";
+import type { Task, TaskPriority } from "@/features/task/types/task";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { useTeamMembers } from "@/hooks/useTeamMembers";
 
