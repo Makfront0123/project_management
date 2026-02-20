@@ -4,11 +4,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog";
+} from "@/shared/components/ui/dialog";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
+import { Textarea } from "@/shared/components/ui/textarea";
 
 import { useForm } from "@/shared/hooks/useForm";
 import { useProjectWorkflows } from "@/features/project/hooks/useProjectWorkflows";
@@ -33,7 +33,7 @@ export const ProjectModal = ({
   teamId,
   project,
 }: Props) => {
-  const { createProject, updateProject } = useProjectWorkflows();
+  const { createProject } = useProjectWorkflows();
 
   const isEditing = !!project;
 
@@ -56,10 +56,12 @@ export const ProjectModal = ({
 
     onSubmit: async (values) => {
       if (isEditing && project) {
-        await updateProject(project._id, {
-          name: values.name,
-          description: values.description,
-        });
+        /*
+        
+         await updateProject(project._id, {
+           name: values.name,
+           description: values.description,
+         });*/
       } else {
         await createProject({
           name: values.name,

@@ -1,6 +1,6 @@
 
 import type { Project } from "@/features/project/types/projects";
-import { Button } from "../../../components/ui/button";
+import { Button } from "../../../shared/components/ui/button";
 
 
 

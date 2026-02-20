@@ -42,7 +42,7 @@ export const useTaskActions = (): ProjectActions => {
 
     const updateAttachment = (attachmentId: string, file: File) => {
         if (!teamId) return;
-        updateAttachmentStore(attachmentId, file, teamId);
+        //updateAttachmentStore(attachmentId, file, teamId);
     };
 
     return {

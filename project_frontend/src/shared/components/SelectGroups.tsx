@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from "@/components/ui/select"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from "@/shared/components/ui/select"
 
 import { icons } from "@/shared/constants/icons"
 import { useUserTeams } from "@/features/team/hooks/useUserTeam"

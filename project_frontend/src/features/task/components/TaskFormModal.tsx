@@ -1,11 +1,11 @@
 import { useForm } from "@/shared/hooks/useForm";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../../components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../../shared/components/ui/dialog";
 import { useTaskWorkflows } from "@/features/task/hooks/useTaskWorkflows";
-import { Input } from "../../../components/ui/input";
-import { Button } from "../../../components/ui/button";
-import { Textarea } from "../../../components/ui/textarea";
+import { Input } from "../../../shared/components/ui/input";
+import { Button } from "../../../shared/components/ui/button";
+import { Textarea } from "../../../shared/components/ui/textarea";
 import type { Task, TaskPriority } from "@/features/task/types/task";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../shared/components/ui/select";
 import { useTeamMembers } from "@/features/team/hooks/useTeamMembers";
 
 interface Props {

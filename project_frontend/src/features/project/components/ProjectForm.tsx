@@ -1,5 +1,5 @@
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/shared/components/ui/input";
+import { Textarea } from "@/shared/components/ui/textarea";
 import { useForm } from "@/shared/hooks/useForm";
 import { Button } from "react-day-picker";
 import type { FormValues } from "./ProjectModal";

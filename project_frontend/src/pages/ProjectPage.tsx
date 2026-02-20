@@ -1,8 +1,8 @@
 import { ProjectModal } from "@/features/project/components/ProjectModal"
 
 import { SelectContainer } from "@/shared/components/SelectContainer"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/shared/components/ui/button"
+import { Input } from "@/shared/components/ui/input"
 import { useProjectFilter } from "@/features/project/hooks/useProjectFilter"
 
 import ProjectCard from "@/features/project/components/ProjectCard"

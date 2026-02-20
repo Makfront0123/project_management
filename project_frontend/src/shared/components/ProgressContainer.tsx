@@ -1,6 +1,6 @@
 "use client"
-import { Field, FieldLabel } from "@/components/ui/field"
-import { Progress } from "@/components/ui/progress"
+import { Field, FieldLabel } from "@/shared/components/ui/field"
+import { Progress } from "@/shared/components/ui/progress"
 
 export function ProgressContainer({ progress = 66 }: { progress?: number }) {
     return (

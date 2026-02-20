@@ -6,7 +6,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/shared/components/ui/select"
 import type { StatusFilter } from "@/features/project/hooks/useProjectFilter"
 
 type SelectContainerProps = {

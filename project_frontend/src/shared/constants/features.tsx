@@ -1,4 +1,4 @@
-import { icons } from "../shared/constants/icons";
+import { icons } from "./icons";
 
 export const features = [
     {

@@ -1,4 +1,4 @@
-import { Button } from "../components/ui/button"
+import { Button } from "../shared/components/ui/button"
 
 import ProjectOverview from "@/features/project/components/ProjectOverview"
 import CardStats from "@/shared/components/CardStasts"

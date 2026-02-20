@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/components/ui/button"
 import { AppDropdown } from "@/shared/components/AppDropdown"
 import { useAuthStore } from "@/features/auth/store/auth_store"
 export function UserDropdown() {
