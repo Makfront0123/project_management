@@ -2,12 +2,13 @@ import { create } from 'zustand'
 import { getUserTeamStatus } from '../services/auth_services'
 import { createTeam, deleteTeam, getAllTeams, getTeamDashboard, updateTeam } from '../services/team_services'
 import { getErrorMessage } from '../utils/getErrorMessage'
-import type { Team, TeamDashboardResponse} from '../types/team'
+import type { Team, TeamDashboardResponse } from '../types/team'
 import toast from 'react-hot-toast'
 
 
 
 type TeamStore = {
+  reset(): unknown
   teams: Team[]
   dashboard: TeamDashboardResponse | null
   activeTeamId: string | null;
@@ -35,6 +36,15 @@ export const useTeamStore = create<TeamStore>((set) => ({
   limit: 4,
   totalPages: 1,
   totalTeams: 0,
+  reset: () =>
+    set({
+      teams: [],
+      activeTeamId: null,
+      dashboard: null,
+      page: 1,
+      totalPages: 1,
+      totalTeams: 0,
+    }),
   fetchTeams: async () => {
     set({ isLoading: true })
     try {

@@ -21,8 +21,6 @@ export const ProjectForm = ({
 }: ProjectFormProps) => {
     const form = useForm<FormValues>({
         initialValues,
-        enableReinitialize: true,
-
         validate: (values) => {
             const errors: Partial<Record<keyof FormValues, string>> = {};
 

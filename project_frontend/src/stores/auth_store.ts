@@ -6,6 +6,8 @@ import { jwtDecode } from 'jwt-decode'
 import { forgotPassword, loginUser, logoutUser, registerUser, resendForgotPasswordOtp, resendOtp, resetPassword, verifyForgotPasswordOtp, verifyOtp } from '../services/auth_services'
 import { getErrorMessage } from '../utils/getErrorMessage'
 import type { JwtPayload, User } from '../types/auth'
+import { useTeamMemberStore } from './team_member_store'
+import { useTeamStore } from './team_store'
 
 
 
@@ -110,16 +112,21 @@ export const useAuthStore = create<AuthStore>()(
         set({ loadingAction: true });
         try {
           const data = await logoutUser();
+
+          useTeamStore.getState().reset();
+          useTeamMemberStore.getState().reset();
+
           set({ user: null, token: null, loadingAction: false });
-          toast.success(data.message);
           localStorage.removeItem("auth-store");
+
+          toast.success(data.message);
           return data.message;
+
         } catch (error: unknown) {
           set({ user: null, token: null, loadingAction: false });
           throw new Error(getErrorMessage(error));
         }
       },
-
       checkTokenExpiration: () => {
         const token = get().token;
         if (token) {

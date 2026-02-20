@@ -1,28 +1,16 @@
-
 import AdminProjectView from "@/components/projectDetails/AdminProjectView";
 import MemberProjectView from "@/components/projectDetails/MemberProjectView";
 import { useProjectData } from "@/hooks/projectDetails/useProjectData";
-import { useProjectForm } from "@/hooks/useProjectForms";
 import { useProjectModals } from "@/hooks/useProjectModal";
-import { useTaskActions } from "@/hooks/useTagsActions";
+import { useTaskWorkflows } from "@/hooks/useTaskWorkflows";
 import type { Task } from "@/types/task";
 import { useState } from "react";
-
-
-
-
 
 const ProjectDetails = () => {
   const data = useProjectData();
   const ui = useProjectModals();
-  const actions = useTaskActions();
-  const form = useProjectForm(
-    data.projectId,
-    data.teamId,
-    ui.editingTask,
-    false,
-    data.currentProject
-  );
+  const actions = useTaskWorkflows();
+
 
   const [selectedCommentTask, setSelectedCommentTask] = useState<Task | null>(null);
   const [filter, setFilter] = useState<"all" | "open" | "completed">("all");
@@ -81,7 +69,12 @@ const ProjectDetails = () => {
       <AdminProjectView
         currentProject={data.currentProject}
         tasks={filteredTasks}
-        deleteTask={actions.deleteTask}
+        deleteTask={(taskId: string) =>
+          actions.deleteTask(taskId, data?.currentProject?._id ?? '')
+        }
+        updateTask={(taskId: string, data: Partial<Task>) =>
+          actions.updateTask(taskId, data)
+        }
         setEditingTask={ui.setEditingTask}
         editingTask={ui.editingTask}
         setIsModalOpen={ui.setIsModalOpen}
@@ -92,7 +85,7 @@ const ProjectDetails = () => {
 
   return (
     <MemberProjectView
-      data={data}
+      data={data.currentProject}
       ui={ui}
       actions={actions}
       pendingAssignments={pendingAssignments}

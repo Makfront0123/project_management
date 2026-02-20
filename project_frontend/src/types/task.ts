@@ -14,11 +14,11 @@ export interface Task {
     createdAt: string;
 }
 
-export type TaskFormValues = {
-    id: string;
-    name: string;
-    description: string;
-};
+export interface TaskFormValues {
+  id?: string;
+  name: string;
+  description: string;
+}
 export type TaskPriority = "low" | "medium" | "high" | "urgent";
 
 export type TaskInput = {

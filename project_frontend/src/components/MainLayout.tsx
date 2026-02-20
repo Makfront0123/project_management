@@ -2,9 +2,10 @@ import { Outlet } from "react-router"
 import { useNotifications } from "../hooks/useNotications";
 import { Sidebar } from "./Sidebar";
 
-import { DropdownMenuOptions } from "./DropdownMenu";
+ 
 import { icons } from "@/core/icons";
 import { SelectGroups } from "./SelectGroups";
+import { UserDropdown } from "./UserDropdown";
 
 const MainLayout = () => {
     useNotifications()
@@ -18,7 +19,7 @@ const MainLayout = () => {
                         <SelectGroups />
                         <div className="flex items-center gap-x-5">
                             <img src={icons.notifications} alt="Logo" className="size-10 p-2 border-2 cursor-pointer hover:opacity-70 rounded-sm" />
-                            <DropdownMenuOptions />
+                            <UserDropdown />
                         </div>
                     </header>
                     <Outlet />

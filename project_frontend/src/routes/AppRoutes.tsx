@@ -18,6 +18,7 @@ import ForgotPage from "../pages/ForgotPage";
 import VerifyForgotPage from "../pages/VerifyForgotPage";
 import { ResetPasswordPage } from "../pages/ResetPassword";
 import PublicPage from "../pages/PublicPage";
+import SettingsPage from "@/pages/SettingsPage";
 
 export function AppRoutes() {
   const { token, loadingApp, } = useAuthStore();
@@ -50,6 +51,7 @@ export function AppRoutes() {
           <Route path="team/:teamId/requests" element={<TeamRequestPage />} />
           <Route path="team/:teamId/chat" element={<TeamChatPage />} />
           <Route path="tasks" element={<TasksPage />} />
+          <Route path="settings" element={<SettingsPage />} />
           <Route path="team/:teamId/project/:projectId" element={<ProjectDetails />} />
           <Route index element={<Navigate to="/dashboard" />} />
           <Route path="*" element={<Navigate to="/dashboard" />} />

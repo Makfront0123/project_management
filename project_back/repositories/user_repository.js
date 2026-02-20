@@ -12,6 +12,10 @@ class UserRepository {
         return await User.findByIdAndUpdate(id, { $set: data }, { new: true });
     }
 
+    async getUserByEmail(email) {
+        return await User.findOne({ email });
+    }
+
     async deleteUser(id) {
         return await User.findByIdAndDelete(id);
     }

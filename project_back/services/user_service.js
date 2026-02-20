@@ -19,6 +19,9 @@ class UserService {
     async getUserTeamStatus(id) {
         return await userRepo.getUserTeamStatus(id);
     }
+    async getUserByEmail(email) {
+        return await userRepo.getUserByEmail(email);
+    }
 }
 
 export default new UserService();

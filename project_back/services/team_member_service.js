@@ -6,6 +6,9 @@ class TeamMemberService {
 
     return await teamMemberRepo.addMember({ teamId, userId, role, status });
   }
+  async findMember(teamId, userId) {
+    return await teamMemberRepo.findMember(teamId, userId);
+  }
   async removeMember({ teamId, userId, role }) {
     return await teamMemberRepo.removeMember({ teamId, userId, role });
   }
@@ -38,8 +41,11 @@ class TeamMemberService {
   async getAdminsOfTeam(teamId) {
     return await teamMemberRepo.getAdminsOfTeam(teamId);
   }
-   
-  
+
+  async findPendingMember(teamId, userId) {
+    return await teamMemberRepo.findPendingMember(teamId, userId);
+  }
+
 }
 
 export default new TeamMemberService();

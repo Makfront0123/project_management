@@ -85,7 +85,8 @@ export interface ProjectActions {
 
 export interface Props {
     currentProject: Project;
-
+    teamId?: string | null;
+    onClose: () => void;
     tasks: Task[];
     filteredTasks: Task[];
 

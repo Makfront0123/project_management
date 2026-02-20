@@ -1,6 +1,9 @@
 import teamMemberService from "../services/team_member_service.js";
 import teamService from "../services/team_service.js";
 import notificationService from "../services/notification_service.js";
+import userService from "../services/user_service.js";
+import { sendEmail } from "../utils/sendEmail.js";
+import { generateInviteToken } from "../utils/GenerateInviteToken.js";
 export const addMemberToTeam = async (req, res) => {
     try {
         const { teamId } = req.params;
@@ -52,7 +55,7 @@ export const acceptRequestToJoinTeam = async (req, res) => {
             return res.status(400).json({ message: "Only pending requests can be accepted." });
         }
 
-        
+
         const updated = await teamMemberService.updateMemberStatus(teamId, userId, { status: "accepted" });
 
         const notificationMessage = `${req.user.name} accepted your request to join the team`;
@@ -254,14 +257,9 @@ export const getTeamCode = async (req, res) => {
 export const confirmJoinWithCode = async (req, res) => {
     try {
         const { teamId } = req.params;
-        const { code } = req.body;
-
-        console.log("teamId:", teamId);
-
-        const verified = await teamService.getConfirmationCode(teamId);
-        if (!verified) return res.status(404).json({ message: "Verification code not found" });
-
-        if (verified.code !== code) return res.status(400).json({ message: "Invalid code" });
+        const teamMember = await teamMemberService.findPendingMember(teamId, req.user.id);
+        if (!teamMember) return res.status(404).json({ message: "Member not found" });
+        if (teamMember.status !== "pending") return res.status(400).json({ message: "Member is not pending" });
 
         res.status(201).json({ message: "Verificacion Exitosa" });
     } catch (error) {
@@ -289,4 +287,78 @@ export const getPendingMembersOfTeam = async (req, res) => {
     }
 };
 
+export const acceptInviteByToken = async (req, res) => {
+    try {
+        const { token } = req.params;
 
+        const decoded = jwt.verify(token, process.env.JWT_INVITE_SECRET);
+
+        const { teamId, userId } = decoded;
+
+        const member = await teamMemberService.getMemberOfTeam(teamId, userId);
+
+        if (!member) {
+            return res.status(404).json({ message: "Invitation not found" });
+        }
+
+        if (member.status !== "pending") {
+            return res.status(400).json({ message: "Invitation already processed" });
+        }
+
+        member.status = "accepted";
+        await member.save();
+
+        res.status(200).json({ message: "Invitation accepted successfully" });
+
+    } catch (error) {
+        res.status(400).json({ message: "Invalid or expired token" });
+    }
+};
+
+export const inviteMemberToTeam = async (req, res) => {
+    try {
+        const { teamId } = req.params;
+        const { email, role } = req.body;
+
+        const user = await userService.getUserByEmail(email);
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+
+        const team = await teamService.getTeamById(teamId);
+        if (!team) {
+            return res.status(400).json({ message: "Team not found" });
+        }
+
+        const existingMember = await teamMemberService.findMember(teamId, user.id);
+        if (existingMember) {
+            return res.status(400).json({ message: "User already invited or member of this team" });
+        }
+
+        console.log("team.creator:", team.creator);
+        console.log("req.user.id:", req.user.id);
+        if (String(team.creator._id) !== String(req.user.id)) {
+            return res.status(403).json({ message: "You cannot invite users to this team" });
+        }
+        const teamMember = await teamMemberService.addMember({
+            teamId,
+            userId: user.id,
+            role,
+            status: "pending",
+        });
+
+        const token = generateInviteToken({
+            teamId,
+            userId: user.id,
+        });
+
+        const inviteLink = `${process.env.CLIENT_URL}/accept-invite/${token}`;
+
+        await sendEmail({ to: user.email, subject: "You have been invited to a team", text: `You have been invited to join the team ${team.name}. Click the link below to accept the invitation ${inviteLink}` });
+
+        res.status(201).json({ message: "Invitation sent", member: teamMember });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

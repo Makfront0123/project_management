@@ -1,0 +1,69 @@
+import { useInviteMember } from "@/hooks/useInviteMember"
+import type { Props } from "@/types/Modal"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+
+
+import { Input } from "./ui/input"
+import { Button } from "./ui/button"
+
+const InviteMemberForm = ({ teamId, onClose }: Props) => {
+    const {
+        email,
+        setEmail,
+        role,
+        setRole,
+        loading,
+        inviteMember,
+    } = useInviteMember(teamId??'')
+
+    const handleSubmit = async () => {
+        const success = await inviteMember()
+        if (success) onClose()
+    }
+
+    return (
+        <div className="space-y-4">
+            <div>
+                <label className="text-sm font-medium">Email</label>
+                <Input
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="user@email.com"
+                />
+            </div>
+
+            <div>
+                <label className="text-sm font-medium">Role</label>
+                <Select
+                    value={role}
+                    onValueChange={(v) =>
+                        setRole(v as "admin" | "member")
+                    }
+                >
+                    <SelectTrigger>
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="member">Member</SelectItem>
+                        <SelectItem value="admin">Admin</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <Button
+                className="w-full"
+                disabled={loading}
+                onClick={handleSubmit}
+            >
+                {loading ? "Inviting..." : "Send Invitation"}
+            </Button>
+        </div>
+    )
+}
+export default InviteMemberForm

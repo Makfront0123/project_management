@@ -128,3 +128,17 @@ export const getAllMembersOfTeam = async (teamId: string) => {
 
     return response.data;
 };
+
+export const inviteMember = async (teamId: string, email: string, role: "admin" | "member") => {
+    const token = useAuthStore.getState().token
+    const response = await axios.post(`${baseUrl}/teams/${teamId}/invite`, {
+        email,
+        role,
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    return response.data;
+};

@@ -55,6 +55,14 @@ class TeamMemberRepository {
     return await TeamMember.find({ teamId });
   }
 
+  async findPendingMember(teamId, userId) {
+    return await TeamMember.findOne({ teamId, userId, status: 'pending' });
+  }
+
+  async findMember(teamId, userId) {
+    return await TeamMember.findOne({ teamId, userId });
+  }
+
 
 }
 

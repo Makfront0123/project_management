@@ -8,7 +8,7 @@ interface Props {
 }
 
 const ProjectSettings = ({ project }: Props) => {
-  const { updateProject } = useProjectWorkflows();
+  const { updateProject, deleteProject } = useProjectWorkflows();
 
   if (!project) return null;
   console.log(project);
@@ -23,10 +23,14 @@ const ProjectSettings = ({ project }: Props) => {
             name: project.name,
             description: project.description,
           }}
-          onSubmit={updateProject}
-          submitLabel="Save Changes"
+          onSubmit={(values) =>
+            updateProject({
+              projectId: project._id,
+              teamId: project.teamId,
+              ...values,
+            })
+          }
         />
-        {/* DANGER ZONE */}
         <div className="border border-red-300 rounded-xl p-6 bg-red-50 space-y-4 min-w-2xl">
 
           <div>
@@ -40,7 +44,9 @@ const ProjectSettings = ({ project }: Props) => {
 
           <Button
             variant="destructive"
-          
+            onClick={() =>
+              deleteProject(project._id, project.teamId)
+            }
           >
             Delete Project
           </Button>
