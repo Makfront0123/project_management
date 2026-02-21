@@ -1,5 +1,5 @@
 import Team from "../models/Team.js";
-
+import mongoose from "mongoose";
 class TeamRepository {
     async getAllTeams(page = 1, limit = 4) {
         const skip = (page - 1) * limit;
@@ -20,7 +20,12 @@ class TeamRepository {
 
     }
     async getTeamById(id) {
-        return await Team.findById(id).populate("creator", "name email");
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return null;
+        }
+
+        return await Team.findById(id)
+            .populate("creator", "name email");
     }
 
     async updateTeam(id, data) {

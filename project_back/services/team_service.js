@@ -4,6 +4,7 @@ import notificationRepo from "../repositories/notification_repository.js";
 import teamMemberRepo from "../repositories/team_member_repository.js";
 import messageRepo from "../repositories/message_repository.js";
 import taskRepo from "../repositories/task_repository.js";
+import Project from "../models/Project.js";
 class TeamService {
     async getAllTeams(page = 1, limit = 4) {
         return await teamRepo.getAllTeams(page, limit);
@@ -20,6 +21,10 @@ class TeamService {
         return await teamRepo.updateTeam(id, data);
     }
 
+    async getProjectsByTeamId(teamId) {
+        return Project.find({ teamId });
+    }
+
     async deleteTeam(id) {
         const team = await teamRepo.getTeamById(id);
         if (!team) throw new Error("Team not found");
@@ -27,15 +32,10 @@ class TeamService {
         await teamMemberRepo.deleteMembersByTeamId(id);
 
 
-        const projectData = await projectRepo.getAllProjects(id);
+        const projects = await projectRepo.getProjectsByTeamId(id);
 
-
-        const projectsToDelete = projectData.projects;
-
-        if (Array.isArray(projectsToDelete)) {
-            for (const project of projectsToDelete) {
-                await projectRepo.deleteProjectCascade(id, project._id);
-            }
+        for (const project of projects) {
+            await projectRepo.deleteProjectCascade(id, project._id);
         }
         await notificationRepo.deleteByTeamId(id);
         await messageRepo.deleteAllMessages(team._id);

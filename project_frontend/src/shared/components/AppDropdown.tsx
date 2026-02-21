@@ -4,7 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 type DropdownItem = {
     label: string
     shortcut?: string
-    onClick?: () => void
+    onClick?: (event: React.MouseEvent) => void
     variant?: "default" | "destructive"
 }
 

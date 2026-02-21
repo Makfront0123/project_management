@@ -30,14 +30,14 @@ export const MessageRepository = {
   },
 
   deleteAllMessages: async (teamId) => {
-   
+
     await Message.deleteMany({ teamId });
- 
+
     const team = await Team.findById(teamId).select("members");
-    if (!team) return;
+    if (!team || !Array.isArray(team.members) || team.members.length === 0) return;
 
     const memberIds = team.members.map(m => m.toString());
- 
+
     await Message.deleteMany({
       $or: memberIds.flatMap((id1) =>
         memberIds

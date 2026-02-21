@@ -176,24 +176,22 @@ class ProjectRepository {
     async deleteProjectCascade(teamId, projectId) {
         const project = await this.getProjectById(teamId, projectId);
         if (!project) return;
-        const tasks = await Task.find({ projectId });
+
+        const tasks = await Task.find({ projectId }) ?? [];
         const taskIds = tasks.map(t => t._id);
 
+        if (taskIds.length) {
+            await taskAssignmentRepo.deleteByTaskId(taskIds);
+            await tagTaskRepo.deleteByTaskId(taskIds);
+            await attachmentRepo.deleteByTaskId(taskIds);
+        }
 
-        await taskAssignmentRepo.deleteByTaskId(taskIds);
         await commentRepo.deleteByProjectId(projectId);
         await tagRepo.deleteByTeamId(teamId);
-        await tagTaskRepo.deleteByTaskId(taskIds);
-        await attachmentRepo.deleteByTaskId(taskIds);
         await taskRepo.deleteByProjectId(projectId);
         await notificationRepo.deleteByProjectId(projectId);
 
-
-
-
-        const deletedProject = await Project.findByIdAndDelete(projectId);
-
-        return deletedProject;
+        return await Project.findByIdAndDelete(projectId);
     }
     async getProjectsWithStatsByUser(teamIds) {
         return Project.aggregate([
@@ -314,6 +312,11 @@ class ProjectRepository {
         ]);
 
 
+
+    }
+
+    async getProjectsByTeamId(teamId) {
+        return await Project.find({ teamId });
     }
 }
 

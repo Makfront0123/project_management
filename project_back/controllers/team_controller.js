@@ -70,14 +70,15 @@ export const updateTeam = async (req, res) => {
 export const deleteTeam = async (req, res) => {
     try {
         const teamId = req.params.teamId;
-        console.log(teamId);
         const team = await teamService.deleteTeam(teamId);
+
         res.status(200).json({
             message: "Team deleted successfully",
             team,
         });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
 
+    } catch (error) {
+        console.error("DELETE TEAM ERROR:", error.stack);
+        res.status(500).json({ message: error.message });
     }
-}
+};
