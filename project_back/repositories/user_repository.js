@@ -19,9 +19,17 @@ class UserRepository {
     async deleteUser(id) {
         return await User.findByIdAndDelete(id);
     }
+    async getUserTeamStatus(userId) {
+        return await TeamMember
+            .find({ userId, status: "accepted" })
+            .populate("teamId");
+    }
 
-    async getUserTeamStatus(id) {
-        return await TeamMember.find({ userId: id,status:"accepted" }).populate("teamId");
+    async countTeamMembers(teamId) {
+        return await TeamMember.countDocuments({
+            teamId,
+            status: "accepted"
+        });
     }
 }
 

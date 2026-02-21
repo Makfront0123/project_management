@@ -8,7 +8,7 @@ import DashboardPage from "../../pages/DashboardPage";
 import ProjectPage from "../../pages/ProjectPage";
 import CreateTeamPage from "../../pages/CreateTeamPage";
 import JoinTeamPage from "../../pages/JoinTeamPage";
-import TeamPage from "../../pages/TeamPage";
+import TeamMembersPage from "../../pages/TeamMembersPage";
 import TeamRequestPage from "../../pages/TeamRequestPage";
 import TeamChatPage from "../../pages/TeamChatPage";
 import ProjectDetails from "../../pages/ProjectDetails";
@@ -19,6 +19,7 @@ import PublicPage from "../../pages/PublicPage";
 import SettingsPage from "@/pages/SettingsPage";
 import VerifyForgotPage from "@/features/auth/components/VerifyForgotPage";
 import VerifyOtpPage from "@/features/auth/components/VerifyOtpPage";
+import TeamPage from "@/pages/TeamPage";
 
 export function AppRoutes() {
   const { token, loadingApp, } = useAuthStore();
@@ -47,7 +48,8 @@ export function AppRoutes() {
           <Route path="projects" element={<ProjectPage />} />
           <Route path="create-team" element={<CreateTeamPage />} />
           <Route path="join-team" element={<JoinTeamPage />} />
-          <Route path="team-members" element={<TeamPage />} />
+          <Route path="team" element={<TeamPage />} />
+          <Route path="team-members" element={<TeamMembersPage />} />
           <Route path="team/:teamId/requests" element={<TeamRequestPage />} />
           <Route path="team/:teamId/chat" element={<TeamChatPage />} />
           <Route path="tasks" element={<TasksPage />} />

@@ -3,7 +3,7 @@ import { useProjectStore } from "@/features/project/store/project_store";
 
 export const useProjectAnalytics = () => {
   const { analytics, isLoadingAnalytics } = useProjectStore();
-
+  console.log("useProjectAnalytics", analytics);
   const tasksByStatus = useMemo(() => {
     if (!analytics) return [];
 

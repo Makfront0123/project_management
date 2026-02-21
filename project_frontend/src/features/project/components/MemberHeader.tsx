@@ -1,10 +1,12 @@
-import type { Project } from "@/shared/types/projects";
+import type { Project } from "../types/projects";
+
 
 interface Props {
     project: Project;
 }
 
 const MemberHeader = ({ project }: Props) => {
+    console.log(project);
     return (
         <div className="bg-white rounded-xl p-4 shadow">
 

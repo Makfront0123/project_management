@@ -42,26 +42,23 @@ export const deleteUser = async (req, res) => {
 export const getUserTeamStatus = async (req, res) => {
     try {
         const userId = req.user.id;
+
         const teams = await userService.getUserTeamStatus(userId);
 
-        if (!teams || teams.length === 0) {
+        if (!teams.length) {
             return res.status(200).json({
                 message: "You are not part of any team",
                 teams: []
             });
         }
 
-        res.status(200).json({
-            teams: teams
-                .filter(teamMember => teamMember.teamId) 
-                .map((teamMember) => ({
-                    teamId: teamMember.teamId._id,
-                    name: teamMember.teamId.name,
-                    role: teamMember.role
-                }))
+        return res.status(200).json({
+            teams
         });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({
+            message: error.message
+        });
     }
-}
+};

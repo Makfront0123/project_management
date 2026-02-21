@@ -1,16 +1,15 @@
 import { Button } from "../shared/components/ui/button"
-
 import ProjectOverview from "@/features/project/components/ProjectOverview"
 import CardStats from "@/shared/components/CardStasts"
-
 import { ProjectModal } from "@/features/project/components/ProjectModal"
-import { icons } from "@/shared/constants/icons"
 import CreateTeamForm from "@/features/team/components/CreateTeamForm"
 import Modal from "@/shared/components/Modal"
 import { useState } from "react"
 import MyTasks from "@/features/task/components/MyTasks"
 import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
 import { useDashboard } from "@/features/project/hooks/useDashboard"
+import { TeamNotFound } from "@/features/team/components/TeamNotFound"
+import { useActiveTeamRole } from "@/features/team/hooks/useActiveTeamRole"
 
 const DashboardPage = () => {
 
@@ -30,6 +29,8 @@ const DashboardPage = () => {
   const createTeamForm = useCreateTeamForm(() =>
     setIsModalOpen(false)
   )
+
+  const { isAdmin } = useActiveTeamRole()
   return (
     <div className="flex flex-col w-full min-h-screen bg-white">
       <div className="flex items-center justify-between w-full p-10">
@@ -42,9 +43,17 @@ const DashboardPage = () => {
             Here's a list of your teams
           </p>
         </div>
-        <Button onClick={() => setIsCreateOpen(true)}>
-          New Project
-        </Button>
+        {activeTeamId && isAdmin && (
+          <Button onClick={() => setIsCreateOpen(true)}>
+            New Project
+          </Button>
+        )}
+
+        {!activeTeamId && (
+          <Button onClick={() => setIsModalOpen(true)}>
+            Create Team
+          </Button>
+        )}
       </div>
       <div className="flex items-center justify-evenly w-full">
         {stats.map((stat) => (
@@ -68,23 +77,7 @@ const DashboardPage = () => {
           />
 
         </div>
-          : <div className="flex flex-col items-center gap-3 bg-gray-50 rounded-sm p-10 mx-10 min-h-[40vh]">
-            <img src={icons.sidebar01} alt="" />
-            <span>No workspace found</span>
-            <p>Create a new workspace to get started</p>
-            <Button
-              onClick={() => setIsModalOpen(true)}
-              value="create"
-              className="cursor-pointer flex items-center opacity-50 text-gray-400"
-            >
-              <img
-                src={icons.add}
-                alt="Add"
-                className="w-4 h-4"
-              />
-              Create new team
-            </Button>
-          </div>
+          : <TeamNotFound onCreate={() => setIsModalOpen(true)} />
       }
       <ProjectModal
         open={isCreateOpen}

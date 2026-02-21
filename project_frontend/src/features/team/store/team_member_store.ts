@@ -23,6 +23,7 @@ type TeamStore = {
     rejectRequest: (userId: string, teamId: string) => Promise<void>
     addMember: (userId: string, teamId: string) => Promise<void>
     confirmJoinWithCode: (teamId: string, code: string) => Promise<void>
+    addMembership: (membership: UserTeamStatus) => void
     getTeamCode: (teamId: string) => Promise<string>
     inviteMember: (teamId: string, email: string, role: "admin" | "member") => Promise<void>
 }
@@ -213,6 +214,10 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
         }
     },
 
+    addMembership: (membership: UserTeamStatus) =>
+    set((state) => ({
+        teamMemberships: [...state.teamMemberships, membership]
+    }))
 
 
 

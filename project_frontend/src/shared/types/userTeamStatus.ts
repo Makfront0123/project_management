@@ -4,6 +4,8 @@ export type UserTeamStatus = {
   description: string
   role: string
   status: string
+  createdAt: string
+  members: number
   userId: string
   user?: {
     name?: string

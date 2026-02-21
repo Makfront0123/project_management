@@ -23,6 +23,8 @@ const MemberProjectView = ({
 }: Props) => {
   if (isLoading) return <div>Cargando...</div>;
 
+  console.log('MemberProjectView', currentProject);
+
   return (
     <div className="w-full h-full flex flex-col gap-6 p-4">
 

@@ -9,14 +9,15 @@ import Modal from "./Modal"
 import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
 
 export function SelectGroups() {
-    const { teamMemberships, isLoading } = useUserTeams()
+    const { teamMemberships, isLoading, refetch } = useUserTeams()
     const { activeTeamId, setActiveTeam } = useTeamWorkflow()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const createTeamForm = useCreateTeamForm(() =>
+    const createTeamForm = useCreateTeamForm(() => {
+        refetch()
         setIsModalOpen(false)
-    )
+    })
     useEffect(() => {
         if (!activeTeamId && teamMemberships.length) {
             setActiveTeam(teamMemberships[0].teamId)

@@ -5,6 +5,7 @@ import { getErrorMessage } from '../../../shared/utils/getErrorMessage'
 import type { Team, TeamDashboardResponse } from '../types/team'
 import toast from 'react-hot-toast'
 import { getUserTeamStatus } from '@/features/auth/services/auth_services'
+import { useTeamMemberStore } from './team_member_store'
 
 
 
@@ -68,12 +69,15 @@ export const useTeamStore = create<TeamStore>((set) => ({
 
       set((state) => ({
         teams: [...state.teams, team],
+        activeTeamId: team._id,
         isLoading: false
       }))
 
+      // 🔥 traer memberships reales del backend
+      await useTeamMemberStore.getState().getUserTeamStatus()
+
       return message
     } catch (error) {
-      console.error("Error creating team:", error)
       set({ isLoading: false })
       throw new Error(getErrorMessage(error))
     }
@@ -138,19 +142,30 @@ export const useTeamStore = create<TeamStore>((set) => ({
   },
   deleteTeam: async (id: string) => {
     set({ isLoading: true })
+
     try {
       const { message } = await deleteTeam(id)
-      set((state) => ({
-        teams: state.teams.filter((t) => t._id !== id),
-        isLoading: false,
-      }))
-      toast.success(message)
+
+      set((state) => {
+        const updatedTeams = state.teams.filter((t) => t._id !== id)
+
+        const newActiveTeam =
+          state.activeTeamId === id
+            ? updatedTeams[0]?._id ?? null
+            : state.activeTeamId
+
+        return {
+          teams: updatedTeams,
+          activeTeamId: newActiveTeam,
+          isLoading: false,
+        }
+      })
+      await useTeamMemberStore.getState().getUserTeamStatus()
+
       return message
     } catch (error) {
-      console.error("Error deleting team:", error)
       set({ isLoading: false })
       throw new Error(getErrorMessage(error))
     }
   }
-
 }))

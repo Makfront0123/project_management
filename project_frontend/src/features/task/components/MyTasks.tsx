@@ -23,7 +23,7 @@ const MyTasks = ({ tasks, loading }: Props) => {
         )
     }
     return (
-        <Card className='rounded-sm w-full min-h-[58vh]  gap-x-5'>
+        <Card className='rounded-sm w-full min-h-[58vh]  gap-x-5 p-5'>
             <h3 className="font-semibold text-lg">
                 Tareas Pendientes
             </h3>
@@ -40,11 +40,7 @@ const MyTasks = ({ tasks, loading }: Props) => {
                     </p>
                 </div>
             ))}
-            <div className="flex justify-center">
-                <button className="bg-blue-600 text-white px-8 py-2 rounded-xl cursor-pointer hover:scale-105 transition-all">
-                    Crear nueva tarea
-                </button>
-            </div>
+           
         </Card>
     )
 }

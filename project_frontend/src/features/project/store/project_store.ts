@@ -10,8 +10,8 @@ import {
   getProjectsByTeam,
   getProjectAnalytics,
 } from "../services/project_services";
+import type { NewProject, Project } from "../types/projects";
 
-import type { Project, NewProject } from "../../../shared/types/projects";
 type ProjectStore = {
   projects: Project[];
   currentProject: Project | null;

@@ -85,15 +85,15 @@ const ProjectDetails = () => {
 
   return (
     <MemberProjectView
-      data={data.currentProject}
-      ui={ui}
-      actions={actions}
-      pendingAssignments={pendingAssignments}
-      completedAssignments={completedAssignments}
-      selectedCommentTask={selectedCommentTask}
-      setSelectedCommentTask={setSelectedCommentTask}
-      filter={filter}
-      setFilter={setFilter}
+      currentProject={data.currentProject}
+      tasks={data.tasks}
+      filteredTasks={filteredTasks}
+      isLoading={data.isLoadingProject}
+      updateTaskStatus={actions.updateTaskStatus}
+      openComments={(taskId) => {
+        const task = data.tasks.find(t => t._id === taskId)
+        setSelectedCommentTask(task ?? null)
+      }}
     />
   );
 };

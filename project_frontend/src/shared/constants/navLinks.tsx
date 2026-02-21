@@ -14,9 +14,15 @@ export const navLinks = [
         badge: null,
     },
     {
-        name: "Team",
+        name: "Members",
         icon: icons.sidebar03,
         path: "/team-members",
+        badge: null,
+    },
+    {
+        name: "Teams",
+        icon: icons.sidebar04,
+        path: "/team",
         badge: null,
     },
 ];
