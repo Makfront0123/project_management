@@ -26,6 +26,7 @@ type TeamStore = {
     addMembership: (membership: UserTeamStatus) => void
     getTeamCode: (teamId: string) => Promise<string>
     inviteMember: (teamId: string, email: string, role: "admin" | "member") => Promise<void>
+    updateMembershipTeamName: (teamId: string, name: string, description: string) => void
 }
 
 export const useTeamMemberStore = create<TeamStore>((set) => ({
@@ -65,6 +66,15 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
             set({ isLoading: false });
         }
     },
+
+    updateMembershipTeamName: (teamId, name, description) =>
+        set((state) => ({
+            teamMemberships: state.teamMemberships.map((m) =>
+                m.teamId === teamId
+                    ? { ...m, name, description }
+                    : m
+            ),
+        })),
 
     fetchTeamMembers: async (teamId: string) => {
         set({ isLoading: true })
@@ -215,9 +225,9 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
     },
 
     addMembership: (membership: UserTeamStatus) =>
-    set((state) => ({
-        teamMemberships: [...state.teamMemberships, membership]
-    }))
+        set((state) => ({
+            teamMemberships: [...state.teamMemberships, membership]
+        }))
 
 
 

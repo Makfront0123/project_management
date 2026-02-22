@@ -25,7 +25,7 @@ export const RegisterForm = ({ form }: RegisterFormProps) => {
     return (
         <form
             onSubmit={form.handleSubmit}
-            className="flex flex-col items-center justify-center mt-8 gap-y-6"
+            className="flex flex-col items-center justify-center min-w-2xl mt-8 gap-y-6"
         >
             <TextInput
                 label="Name"

@@ -122,10 +122,15 @@ export const useTeamStore = create<TeamStore>((set) => ({
     }
   },
   updateTeam: async (data: Partial<Team>, teamId: string) => {
-
     set({ isLoading: true })
     try {
       const { team, message } = await updateTeam(teamId, data)
+
+      useTeamMemberStore.getState().updateMembershipTeamName(
+        team._id,
+        team.name,
+        team.description
+      )
       set((state) => ({
         teams: state.teams.map((t) =>
           t._id === team._id ? team : t

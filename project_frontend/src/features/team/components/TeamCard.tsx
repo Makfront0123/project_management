@@ -6,7 +6,7 @@ import {
     CardTitle,
 } from "@/shared/components/ui/card"
 import { Badge } from "@/shared/components/ui/badge"
-import { AppDropdown } from "@/shared/components/AppDropdown"
+import { AppDropdown, type DropdownItem } from "@/shared/components/AppDropdown"
 
 interface TeamCardProps {
     name: string
@@ -16,6 +16,8 @@ interface TeamCardProps {
     onClick?: () => void
     onEdit?: () => void
     onDelete?: () => void
+    onLeave?: () => void
+    isAdmin?: boolean
 }
 
 export function TeamCard({
@@ -26,7 +28,37 @@ export function TeamCard({
     onClick,
     onEdit,
     onDelete,
+    onLeave,
+    isAdmin
 }: TeamCardProps) {
+    const dropdownItems: DropdownItem[] =
+        isAdmin
+            ? [
+                {
+                    label: "Edit",
+                    onClick: (e: React.MouseEvent) => {
+                        e.stopPropagation()
+                        onEdit?.()
+                    },
+                },
+                {
+                    label: "Delete",
+                    variant: "destructive",
+                    onClick: (e: React.MouseEvent) => {
+                        e.stopPropagation()
+                        onDelete?.()
+                    },
+                },
+            ]
+            : [
+                {
+                    label: "Leave Team",
+                    onClick: (e: React.MouseEvent) => {
+                        e.stopPropagation()
+                        onLeave?.()
+                    },
+                },
+            ]
     return (
         <Card
             onClick={onClick}
@@ -48,23 +80,7 @@ export function TeamCard({
                                     onClick={(e) => e.stopPropagation()}
                                 />
                             }
-                            items={[
-                                {
-                                    label: "Edit",
-                                    onClick: (e) => {
-                                        e?.stopPropagation?.()
-                                        onEdit?.()
-                                    },
-                                },
-                                {
-                                    label: "Delete",
-                                    variant: "destructive",
-                                    onClick: (e) => {
-                                        e?.stopPropagation?.()
-                                        onDelete?.()
-                                    },
-                                },
-                            ]}
+                            items={dropdownItems}
                         />
                     </div>
                 </div>

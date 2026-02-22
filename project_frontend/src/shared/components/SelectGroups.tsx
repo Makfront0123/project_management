@@ -38,7 +38,7 @@ export function SelectGroups() {
     return (
         <>
             <Select
-                value={activeTeamId ?? ""}
+                value={activeTeamId ?? undefined}
                 onValueChange={handleChange}
             >
                 <SelectTrigger className="w-full max-w-56 border border-gray-300 bg-white text-sm px-3 py-2 rounded-md shadow-sm hover:border-gray-400 focus:ring-2 focus:ring-primary/40 transition">

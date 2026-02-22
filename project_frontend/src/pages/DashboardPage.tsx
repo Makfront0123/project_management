@@ -10,6 +10,7 @@ import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
 import { useDashboard } from "@/features/project/hooks/useDashboard"
 import { TeamNotFound } from "@/features/team/components/TeamNotFound"
 import { useActiveTeamRole } from "@/features/team/hooks/useActiveTeamRole"
+import TeamActivity from "@/features/team/components/TeamActivity"
 
 const DashboardPage = () => {
 
@@ -71,10 +72,14 @@ const DashboardPage = () => {
             loading={projectsLoading}
           />
 
-          <MyTasks
-            tasks={tasks}
-            loading={tasksLoading}
-          />
+          {isAdmin ? (
+            <TeamActivity teamId={activeTeamId} />
+          ) : (
+            <MyTasks
+              tasks={tasks}
+              loading={tasksLoading}
+            />
+          )}
 
         </div>
           : <TeamNotFound onCreate={() => setIsModalOpen(true)} />

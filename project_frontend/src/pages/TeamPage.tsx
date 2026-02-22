@@ -1,7 +1,9 @@
 import CreateTeamForm from "@/features/team/components/CreateTeamForm"
+import { EditTeamModal } from "@/features/team/components/EditTeamModal"
 import { TeamCard } from "@/features/team/components/TeamCard"
 import TeamDeleteModal from "@/features/team/components/TeamDeleteModal"
 import { TeamNotFound } from "@/features/team/components/TeamNotFound"
+import { useActiveTeamRole } from "@/features/team/hooks/useActiveTeamRole"
 import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
 import { useTeamActions } from "@/features/team/hooks/useTeamActions"
 import { useTeamWorkflow } from "@/features/team/hooks/useTeamWorkflows"
@@ -15,18 +17,19 @@ import { useNavigate } from "react-router"
 
 const TeamPage = () => {
     const { teamMemberships } = useUserTeams()
-    const { setActiveTeam, activeTeamId, deleteTeam } = useTeamWorkflow()
+    const { setActiveTeam, deleteTeam } = useTeamWorkflow()
     const navigate = useNavigate()
 
     const {
         selectedTeam,
         isDeleteOpen,
-        isEditOpen,
         openDelete,
         closeDelete,
         openEdit,
         closeEdit,
+        isEditOpen
     } = useTeamActions()
+    const { isAdmin } = useActiveTeamRole()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -41,7 +44,7 @@ const TeamPage = () => {
 
     return (
         <>
-            {!activeTeamId ? (
+            {teamMemberships.length === 0 ? (
                 <div className="mt-20">
                     <TeamNotFound onCreate={() => setIsModalOpen(true)} />
                 </div>
@@ -67,6 +70,7 @@ const TeamPage = () => {
                                 onClick={() => handleSelectTeam(team.teamId)}
                                 onEdit={() => openEdit(team)}
                                 onDelete={() => openDelete(team)}
+                                isAdmin={isAdmin}
                             />
                         ))}
                     </div>
@@ -76,9 +80,12 @@ const TeamPage = () => {
             <Modal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                title="Create new workspace"
+                title="Create new team"
             >
-                <CreateTeamForm form={createTeamForm} />
+                <CreateTeamForm
+                    form={createTeamForm}
+
+                />
             </Modal>
             <TeamDeleteModal
                 isOpen={isDeleteOpen}
@@ -87,17 +94,12 @@ const TeamPage = () => {
                 teamName={selectedTeam?.name}
                 onConfirm={deleteTeam}
             />
-            <Modal
+            <EditTeamModal
                 isOpen={isEditOpen}
                 onClose={closeEdit}
-                title="Edit Team"
-            >
-                {selectedTeam && (
-                    <CreateTeamForm
-                        form={createTeamForm}
-                    />
-                )}
-            </Modal>
+                team={selectedTeam}
+            />
+
         </>
     )
 }

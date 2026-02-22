@@ -5,15 +5,7 @@ interface Props {
     tasks: Task[]
     loading: boolean
 }
-const MyTasks = ({ tasks, loading }: Props) => {
-    
-    if (loading) {
-        return (
-            <Card className='rounded-sm w-full'>
-                Loading tasks...
-            </Card>
-        )
-    }
+const MyTasks = ({ tasks }: Props) => {
 
     if (!tasks.length) {
         return (
@@ -40,7 +32,7 @@ const MyTasks = ({ tasks, loading }: Props) => {
                     </p>
                 </div>
             ))}
-           
+
         </Card>
     )
 }

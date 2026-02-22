@@ -1,36 +1,21 @@
 import { useCallback, useEffect, useState } from "react"
-import { useTeamStore } from "@/features/team/store/team_store"
-import type { Team } from "@/features/team/types/team"
+import { useTeamStore } from "../store/team_store"
+import type { Team } from "../types/team"
 
-type UseTeamWorkflowReturn = {
-    teams: Team[]
-    activeTeamId: string | null
-    setActiveTeam: (id: string) => void
-    isLoading: boolean
-    totalPages: number
-    totalTeams: number
 
-    fetchTeams: () => Promise<void>
-    createTeam: (name: string, description: string) => Promise<string>
-    updateTeam: (data: Partial<Team>, teamId: string) => Promise<string>
-    deleteTeam: (teamId: string) => Promise<string>
-    getTeamDashboard: (teamId: string) => Promise<void>
-}
+export const useTeamWorkflow = () => {
+    const teams = useTeamStore(s => s.teams)
+    const activeTeamId = useTeamStore(s => s.activeTeamId)
+    const setActiveTeam = useTeamStore(s => s.setActiveTeam)
+    const isLoading = useTeamStore(s => s.isLoading)
+    const totalPages = useTeamStore(s => s.totalPages)
+    const totalTeams = useTeamStore(s => s.totalTeams)
 
-export const useTeamWorkflow = (): UseTeamWorkflowReturn => {
-    const {
-        teams,
-        activeTeamId,
-        setActiveTeam,
-        isLoading,
-        totalPages,
-        totalTeams,
-        fetchTeams: fetchTeamsStore,
-        createTeam: createTeamStore,
-        updateTeam: updateTeamStore,
-        deleteTeam: deleteTeamStore,
-        getTeamDashboard: getTeamDashboardStore,
-    } = useTeamStore()
+    const fetchTeamsStore = useTeamStore(s => s.fetchTeams)
+    const createTeamStore = useTeamStore(s => s.createTeam)
+    const updateTeamStore = useTeamStore(s => s.updateTeam)
+    const deleteTeamStore = useTeamStore(s => s.deleteTeam)
+    const getTeamDashboardStore = useTeamStore(s => s.getTeamDashboard)
 
     const [dashboardLoading, setDashboardLoading] = useState(false)
 
@@ -87,5 +72,6 @@ export const useTeamWorkflow = (): UseTeamWorkflowReturn => {
         updateTeam,
         deleteTeam,
         getTeamDashboard,
+        dashboardLoading,
     }
 }

@@ -1,7 +1,7 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuShortcut, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu"
 
 
-type DropdownItem = {
+export type DropdownItem = {
     label: string
     shortcut?: string
     onClick?: (event: React.MouseEvent) => void
