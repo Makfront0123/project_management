@@ -1,11 +1,11 @@
 import express from "express";
-import { addMemberToTeam, requestToJoinTeam, rejectRequestToJoinTeam, getAllMembersOfTeam, getTeamCode, getPendingMembersOfTeam, inviteMemberToTeam,getPendingRequests, getMemberOfTeam, confirmJoinWithCode, deleteMembersOfTeam, deleteMemberOfTeam, acceptRequestToJoinTeam, acceptInviteByToken } from "../controllers/team_member_controller.js";
+import { addMemberToTeam, requestToJoinTeam, rejectRequestToJoinTeam, getAllMembersOfTeam, getInviteDetailsByToken, getTeamCode, getPendingMembersOfTeam, inviteMemberToTeam, getPendingRequests, getMemberOfTeam, confirmJoinWithCode, deleteMembersOfTeam, deleteMemberOfTeam, acceptRequestToJoinTeam, acceptInviteByToken } from "../controllers/team_member_controller.js";
 import { isTeamMember } from "../middlewares/isTeamMember_middleware.js";
 import authenticate from "../middlewares/auth_middleware.js";
 import { isTeamAdmin } from "../middlewares/admin_middleware.js";
 
 const router = express.Router();
- 
+
 
 router.post("/teams/:teamId/join-requests", authenticate, requestToJoinTeam);
 router.delete("/teams/:teamId/join-requests/:userId", authenticate, isTeamAdmin, rejectRequestToJoinTeam);
@@ -21,8 +21,9 @@ router.get("/teams/:teamId/pending-members", authenticate, isTeamAdmin, getPendi
 router.get("/teams/:teamId/code", authenticate, getTeamCode);
 
 router.get("/teams/accept-invite/:token", acceptInviteByToken);
-router.post("/teams/:teamId/invite", authenticate, isTeamAdmin,inviteMemberToTeam);
- 
+router.get("/teams/invite-details/:token", getInviteDetailsByToken);
+router.post("/teams/:teamId/invite", authenticate, isTeamAdmin, inviteMemberToTeam);
+
 
 
 

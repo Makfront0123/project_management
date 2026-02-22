@@ -20,6 +20,7 @@ import SettingsPage from "@/pages/SettingsPage";
 import VerifyForgotPage from "@/features/auth/components/VerifyForgotPage";
 import VerifyOtpPage from "@/features/auth/components/VerifyOtpPage";
 import TeamPage from "@/pages/TeamPage";
+import AcceptInvitePage from "@/pages/AcceptInvitePage";
 
 export function AppRoutes() {
   const { token, loadingApp, } = useAuthStore();
@@ -32,6 +33,7 @@ export function AppRoutes() {
     <Routes>
 
       <Route path="/" element={<PublicPage />} />
+      <Route path="/accept-invite/:token" element={<AcceptInvitePage />} />
       {!token ? (
         <>
           <Route path="/login" element={<LoginPage />} />
