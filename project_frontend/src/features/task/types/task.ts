@@ -1,4 +1,4 @@
-import type { User } from "../../auth/types/auth";
+import type { TeamMember } from "@/features/team/types/teamMember";
 import type { Tag } from "../../tag/types/tag";
 
 export interface Task {
@@ -9,17 +9,20 @@ export interface Task {
     status: string;
     priority: TaskPriority;
     dueDate: string;
-    assignedUsers?: User[];
+    assignedUsers?: TeamMember[];
     tags?: Tag[];
     createdAt: string;
 }
 
-export interface TaskFormValues {
-  id?: string;
-  name: string;
-  description: string;
-}
 export type TaskPriority = "low" | "medium" | "high" | "urgent";
+
+export interface TaskFormValues {
+    name: string;
+    description: string;
+    priority: TaskPriority;
+    dueDate?: string;
+    assignedUserId?: string | null;
+}
 
 export type TaskInput = {
     name?: string;

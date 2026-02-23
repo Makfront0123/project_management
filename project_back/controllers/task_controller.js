@@ -10,6 +10,7 @@ export const createTask = async (req, res) => {
             description,
             priority,
             assignedUserId,
+            dueDate,
         } = req.body;
 
         const task = await taskService.createTask({
@@ -18,15 +19,14 @@ export const createTask = async (req, res) => {
             projectId,
             priority,
             status: "open",
+            dueDate,
         });
-        if (assignedUserId) {
 
-            await TaskAssignment.create({
-                taskId: task._id,
-                userId: assignedUserId,
-                assignedBy: req.user.id,
-            });
-        }
+        await TaskAssignment.create({
+            taskId: task._id,
+            userId: assignedUserId,
+            assignedBy: req.user.id,
+        });
 
         res.status(201).json({
             message: "Task created",

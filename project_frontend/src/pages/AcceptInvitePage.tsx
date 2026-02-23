@@ -46,8 +46,6 @@ const AcceptInvitePage = () => {
             const encodedInviteToken = encodeURIComponent(inviteToken ?? '')
             const url = `${baseUrl}/teams/accept-invite/${encodedInviteToken}`
             const res = await axios.get(`${url}`)
-            console.log("Accepted invite:", res.data)
-            console.log("url:", `${url}`)
             toast.success("Invitation accepted!")
             navigate(`/team/${res.data.teamId}`)
         } catch (err) {

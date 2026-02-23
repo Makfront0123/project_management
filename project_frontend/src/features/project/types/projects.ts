@@ -1,5 +1,8 @@
 
-import type { Task } from "./task";
+import type { useTaskForm } from "@/features/task/hooks/useTaskForm";
+import type { Task } from "@/features/task/types/task";
+import type { TeamMember } from "@/features/team/types/teamMember";
+
 
 export interface Project {
   _id: string;
@@ -42,12 +45,12 @@ export type ProjectForm = {
 export interface AdminProjectViewProp {
   currentProject: Project;
   tasks: Task[];
+  acceptedMembers: TeamMember[];
   deleteTask: (taskId: string) => Promise<void>;
-  updateTask: (taskId: string, data: Partial<Task>) => Promise<void>;
-
-  editingTask: Task | null;
+  updateTask: (taskId: string, data: Partial<Task>) => void;
   setEditingTask: (task: Task | null) => void;
-
+  editingTask: Task | null;
   setIsModalOpen: (open: boolean) => void;
   isModalOpen: boolean;
+  taskForm: ReturnType<typeof useTaskForm>;
 }

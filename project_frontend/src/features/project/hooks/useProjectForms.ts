@@ -1,8 +1,9 @@
 import { useForm } from "@/shared/hooks/useForm";
 import { useProjectStore } from "@/features/project/store/project_store";
 import useTaskStore from "@/features/task/store/task_store";
-import type { Project } from "@/shared/types/projects";
+
 import type { Task } from "@/features/task/types/task";
+import type { Project } from "../types/projects";
 
 
 export const useProjectForm = (

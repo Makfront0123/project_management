@@ -5,10 +5,12 @@ import ProjectCalendar from "../../project/components/ProjectCalendar";
 import ProjectSettings from "../../project/components/ProjectSettings";
 import ProjectAnalytics from "../../project/components/ProjectAnalytics";
 import TaskModal from "../../task/components/TaskModal";
-import type { TaskFormValues } from "@/features/task/types/task";
 import ProjectTasks from "@/features/project/components/ProjectTasks";
 import ProjectTabs from "@/features/project/components/ProjectTabs";
 import type { AdminProjectViewProp } from "@/features/project/types/projects";
+import { useState } from "react";
+import Modal from "@/shared/components/Modal";
+import { Button } from "@/shared/components/ui/button";
 
 const AdminProjectView = ({
   currentProject,
@@ -17,14 +19,12 @@ const AdminProjectView = ({
   setEditingTask,
   editingTask,
   setIsModalOpen,
-  isModalOpen
+  isModalOpen,
+  acceptedMembers,
+  taskForm
 }: AdminProjectViewProp) => {
-
   const tabs = useProjectTabs();
-  const emptyTaskForm: TaskFormValues = {
-    name: "",
-    description: "",
-  };
+  const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
 
   return (
     <div className="w-full h-full flex flex-col gap-6 p-4">
@@ -39,11 +39,18 @@ const AdminProjectView = ({
 
       <TaskModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          taskForm.reset();
+          setIsModalOpen(false);
+        }}
         isEditing={!!editingTask}
-        values={editingTask ?? emptyTaskForm}
-        errors={{}}
-        isSubmitting={false} handleChange={() => { }} handleSubmit={() => { }} />
+        values={taskForm.values}
+        errors={taskForm.errors}
+        isSubmitting={taskForm.isSubmitting}
+        handleChange={taskForm.handleChange}
+        handleSubmit={taskForm.handleSubmit}
+        teamMembers={acceptedMembers}
+      />
 
       <ProjectTabs tabs={tabs} />
 
@@ -56,9 +63,42 @@ const AdminProjectView = ({
               setEditingTask(task);
               setIsModalOpen(true);
             }}
-            onDelete={deleteTask}
+            onDelete={(taskId) => {
+              setTaskToDelete(taskId);
+            }}
           />
         )}
+        <Modal
+          isOpen={!!taskToDelete}
+          onClose={() => setTaskToDelete(null)}
+          title="Eliminar tarea"
+          footer={
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setTaskToDelete(null)}
+              >
+                Cancelar
+              </Button>
+
+              <Button
+                className="bg-red-600 hover:bg-red-700 text-white"
+                onClick={() => {
+                  if (taskToDelete) {
+                    deleteTask(taskToDelete);
+                  }
+                  setTaskToDelete(null);
+                }}
+              >
+                Eliminar
+              </Button>
+            </div>
+          }
+        >
+          <p className="text-sm text-gray-600">
+            Esta acción no se puede deshacer.
+          </p>
+        </Modal>
 
         {tabs.isAnalytics && <ProjectAnalytics />}
         {tabs.isSettings && <ProjectSettings project={currentProject} />}
