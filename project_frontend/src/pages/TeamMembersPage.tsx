@@ -34,7 +34,7 @@ const TeamMembersPage = () => {
 
   return (
     <>
-      <div className="flex flex-col w-full min-h-screen bg-white p-10">
+      <div className="flex flex-col w-full min-h-screen bg-white dark:bg-black p-10">
         <div className="flex items-center justify-between w-full">
           <div>
             <h2 className="text-2xl font-bold">Team</h2>

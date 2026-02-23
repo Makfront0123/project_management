@@ -55,7 +55,7 @@ const ProjectPage = () => {
           <TeamNotFound onCreate={() => setIsModalOpen(true)} />
         </div>
       ) : (
-        <div className="flex flex-col w-full h-screen p-10 bg-white">
+        <div className="flex flex-col w-full h-screen p-10 bg-white dark:bg-black">
           <div className="flex items-center justify-between w-full">
             <div>
               <h2 className="text-2xl font-bold">Projects</h2>

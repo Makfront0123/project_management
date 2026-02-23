@@ -45,7 +45,7 @@ const Modal = ({
       aria-modal="true"
     >
       <div
-        className={`bg-white rounded-xl shadow-lg w-[90%] max-w-md p-6 relative animate-fadeIn ${className}`}
+        className={`bg-white dark:bg-black rounded-xl shadow-lg w-[90%] max-w-md p-6 relative animate-fadeIn ${className}`}
       >
         {showCloseButton && (
           <button

@@ -13,7 +13,7 @@ const TableMembers = ({ member, onDelete }: Props) => {
     const isSelfAdmin = member.role === 'admin' && member.userId._id === currentUserId;
 
     return (
-        <table className="flex flex-col animate-slide-in-left w-full border-collapse border border-gray-300 rounded-lg shadow-sm mt-10">
+        <table className="flex flex-col animate-slide-in-left w-full border-collapse border overflow-hidden border-gray-300 rounded-lg shadow-sm mt-10">
             <thead className="border-b border-gray-300 bg-gray-200 w-full p-3">
                 <tr className="flex justify-between font-semibold [&>th]:text-black">
                     <th className="w-1/5 text-left">Name</th>
@@ -24,7 +24,7 @@ const TableMembers = ({ member, onDelete }: Props) => {
                 </tr>
             </thead>
             <tbody>
-                <tr className="flex justify-between items-center mt-2 text-black p-3">
+                <tr className="flex justify-between items-center text-black p-3 dark:bg-gray-700 bg-white">
                     <td className="w-1/5">{member.userId.name}</td>
                     <td className="w-1/5">{member.userId.email}</td>
                     <td className="w-1/5">{member.role}</td>

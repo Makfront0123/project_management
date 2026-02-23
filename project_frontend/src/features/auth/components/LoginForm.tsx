@@ -26,6 +26,7 @@ export const LoginForm = ({ form }: LoginFormProps) => {
             <TextInput
                 label="Email"
                 name="email"
+                textColor="text-black"
                 placeholder="Enter your email"
                 value={form.values.email}
                 error={form.errors.email}
@@ -36,6 +37,7 @@ export const LoginForm = ({ form }: LoginFormProps) => {
                 label="Password"
                 name="password"
                 type="password"
+                textColor="text-black"
                 placeholder="Enter your password"
                 value={form.values.password}
                 error={form.errors.password}

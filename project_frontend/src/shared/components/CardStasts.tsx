@@ -25,7 +25,7 @@ const CardStats = ({
                         {title}
                     </h2>
 
-                    <p className="text-black font-extrabold text-xl">
+                    <p className="text-black dark:text-white font-extrabold text-xl">
                         {value}
                     </p>
                 </div>

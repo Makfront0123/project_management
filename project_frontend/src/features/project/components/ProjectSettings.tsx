@@ -32,10 +32,10 @@ const ProjectSettings = ({ project }: Props) => {
             })
           }
         />
-        <div className="border border-red-300 rounded-xl p-6 bg-red-50 space-y-4 min-w-2xl">
+        <div className="border border-red-300 rounded-xl p-6 bg-white dark:bg-black space-y-4 min-w-2xl">
 
           <div>
-            <h3 className="text-lg font-semibold text-red-600">
+            <h3 className="text-lg font-semibold text-red-600 dark:text-white">
               Danger Zone
             </h3>
             <p className="text-sm text-red-500">

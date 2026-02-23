@@ -33,7 +33,7 @@ const DashboardPage = () => {
 
   const { isAdmin } = useActiveTeamRole()
   return (
-    <div className="flex flex-col w-full min-h-screen bg-white">
+    <div className="flex flex-col w-full min-h-screen bg-white dark:bg-black">
       <div className="flex items-center justify-between w-full p-10">
         <div>
           <h2 className="text-2xl font-bold">
