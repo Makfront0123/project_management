@@ -2,12 +2,13 @@ import CreateTeamForm from "@/features/team/components/CreateTeamForm"
 import { EditTeamModal } from "@/features/team/components/EditTeamModal"
 import { TeamCard } from "@/features/team/components/TeamCard"
 import TeamDeleteModal from "@/features/team/components/TeamDeleteModal"
+import TeamLeaveModal from "@/features/team/components/TeamLeaveModal"
 import { TeamNotFound } from "@/features/team/components/TeamNotFound"
-import { useActiveTeamRole } from "@/features/team/hooks/useActiveTeamRole"
 import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
 import { useTeamActions } from "@/features/team/hooks/useTeamActions"
 import { useTeamWorkflow } from "@/features/team/hooks/useTeamWorkflows"
 import { useUserTeams } from "@/features/team/hooks/useUserTeam"
+import { leaveTeam } from "@/features/team/services/team_member"
 import Modal from "@/shared/components/Modal"
 import { Button } from "@/shared/components/ui/button"
 import { icons } from "@/shared/constants/icons"
@@ -27,9 +28,12 @@ const TeamPage = () => {
         closeDelete,
         openEdit,
         closeEdit,
-        isEditOpen
+        isEditOpen,
+        openLeave,
+        closeLeave,
+        isLeaveOpen,
     } = useTeamActions()
-    const { isAdmin } = useActiveTeamRole()
+
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -70,7 +74,8 @@ const TeamPage = () => {
                                 onClick={() => handleSelectTeam(team.teamId)}
                                 onEdit={() => openEdit(team)}
                                 onDelete={() => openDelete(team)}
-                                isAdmin={isAdmin}
+                                onLeave={() => openLeave(team)}
+                                isAdmin={team.role === "admin"}
                             />
                         ))}
                     </div>
@@ -93,6 +98,13 @@ const TeamPage = () => {
                 teamId={selectedTeam?.teamId ?? null}
                 teamName={selectedTeam?.name}
                 onConfirm={deleteTeam}
+            />
+            <TeamLeaveModal
+                isOpen={isLeaveOpen}
+                onClose={closeLeave}
+                teamId={selectedTeam?.teamId ?? null}
+                teamName={selectedTeam?.name}
+                onConfirm={leaveTeam}
             />
             <EditTeamModal
                 isOpen={isEditOpen}

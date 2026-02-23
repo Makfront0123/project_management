@@ -1,8 +1,8 @@
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { useForm } from "@/shared/hooks/useForm";
-import { Button } from "react-day-picker";
 import type { FormValues } from "./ProjectModal";
+import { Button } from "@/shared/components/ui/button";
 
 
 interface ProjectFormProps {
@@ -36,7 +36,7 @@ export const ProjectForm = ({
     });
 
     return (
-        <form onSubmit={form.handleSubmit} className="space-y-4 border border-gray-200 rounded-lg p-6">
+        <form onSubmit={form.handleSubmit} className="space-y-4 border min-w-[70vh] border-gray-200 rounded-lg p-6">
             <h1 className="font-bold">Project Details</h1>
             <div>
                 <label className="block text-sm font-medium">Project name</label>
@@ -63,7 +63,7 @@ export const ProjectForm = ({
                 />
             </div>
 
-            <Button type="submit" disabled={form.isSubmitting}>
+            <Button type="submit" disabled={form.isSubmitting} className="mx-auto flex container">
                 {form.isSubmitting ? "Saving..." : submitLabel}
             </Button>
 

@@ -1,6 +1,6 @@
 
 import { create } from 'zustand'
-import { acceptRequest, addMember, confirmJoinWithCode, deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, inviteMember, rejectRequest, requestToJoinTeam } from '../services/team_member'
+import { acceptRequest, addMember, confirmJoinWithCode, deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, inviteMember, leaveTeam, rejectRequest, requestToJoinTeam } from '../services/team_member'
 import type { TeamMember } from '../types/teamMember'
 import type { UserTeamStatus } from '../../../shared/types/userTeamStatus'
 import { getErrorMessage } from '../../../shared/utils/getErrorMessage'
@@ -27,6 +27,7 @@ type TeamStore = {
     getTeamCode: (teamId: string) => Promise<string>
     inviteMember: (teamId: string, email: string, role: "admin" | "member") => Promise<void>
     updateMembershipTeamName: (teamId: string, name: string, description: string) => void
+    leaveTeam: (teamId: string) => Promise<void>
 }
 
 export const useTeamMemberStore = create<TeamStore>((set) => ({
@@ -49,6 +50,20 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
         } catch (error) {
             console.error("Error fetching user teams:", error)
             set({ isLoading: false })
+        }
+    },
+    leaveTeam: async (teamId: string) => {
+        set({ isLoading: true });
+        try {
+            const data = await leaveTeam(teamId);
+            toast.success(data.message);
+            const updatedMembers = await getTeamMembers(teamId);
+            set({ teamMembers: updatedMembers, isLoading: false });
+        } catch (error) {
+            const errorMsg = getErrorMessage(error);
+            toast.error(errorMsg);
+            console.error("Error deleting member:", error);
+            set({ isLoading: false });
         }
     },
 

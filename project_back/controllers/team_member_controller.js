@@ -37,7 +37,34 @@ export const addMemberToTeam = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+export const leaveTeam = async (req, res) => {
+    try {
+        const { teamId } = req.params;
+        const userId = req.user.id;
 
+        const member = await teamMemberService.getMemberOfTeam(teamId, userId);
+        if (!member) {
+            return res.status(404).json({ message: "You are not part of this team" });
+        }
+
+        if (member.role === "admin") {
+            const admins = await teamMemberService.getAdminsOfTeam(teamId);
+
+            if (admins.length === 1) {
+                return res.status(400).json({
+                    message: "You are the only admin. Transfer ownership before leaving."
+                });
+            }
+        }
+
+        await teamMemberService.removeMember({ teamId, userId });
+
+        res.status(200).json({ message: "You left the team successfully" });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 export const acceptRequestToJoinTeam = async (req, res) => {
     try {
         const { teamId, userId } = req.params;
@@ -301,9 +328,9 @@ export const acceptInviteByToken = async (req, res) => {
             return res.status(400).json({ message: "Invalid invitation" });
         }
 
-         await teamMemberService.updateMemberStatus(teamId, userId, {
-             status: "accepted"
-         });
+        await teamMemberService.updateMemberStatus(teamId, userId, {
+            status: "accepted"
+        });
 
         res.status(200).json({ message: "Invitation accepted", teamId });
 

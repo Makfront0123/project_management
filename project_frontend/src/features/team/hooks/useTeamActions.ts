@@ -6,6 +6,17 @@ export const useTeamActions = () => {
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
+  const [isLeaveOpen, setIsLeaveOpen] = useState(false)
+
+  const openLeave = (team: UserTeamStatus) => {
+    setSelectedTeam(team)
+    setIsLeaveOpen(true)
+  }
+
+  const closeLeave = () => {
+    setIsLeaveOpen(false)
+    setSelectedTeam(null)
+  }
 
   const openDelete = (team: UserTeamStatus) => {
     setSelectedTeam(team)
@@ -31,9 +42,12 @@ export const useTeamActions = () => {
     selectedTeam,
     isDeleteOpen,
     isEditOpen,
+    isLeaveOpen,
     openDelete,
     closeDelete,
     openEdit,
     closeEdit,
+    openLeave,
+    closeLeave,
   }
 }
