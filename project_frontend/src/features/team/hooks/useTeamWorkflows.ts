@@ -16,9 +16,12 @@ export const useTeamWorkflow = () => {
     const updateTeamStore = useTeamStore(s => s.updateTeam)
     const deleteTeamStore = useTeamStore(s => s.deleteTeam)
     const getTeamDashboardStore = useTeamStore(s => s.getTeamDashboard)
+    const leaveTeamStore = useTeamStore(s => s.leaveTeam)
 
     const [dashboardLoading, setDashboardLoading] = useState(false)
-
+    const leaveTeam = async (teamId: string) => {
+        await leaveTeamStore(teamId)
+    }
     const fetchTeams = useCallback(async () => {
         await fetchTeamsStore()
     }, [fetchTeamsStore])
@@ -72,6 +75,7 @@ export const useTeamWorkflow = () => {
         updateTeam,
         deleteTeam,
         getTeamDashboard,
+        leaveTeam,
         dashboardLoading,
     }
 }

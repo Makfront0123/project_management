@@ -15,8 +15,8 @@ export const useUserTeams = () => {
     )
 
     useEffect(() => {
-        getUserTeamStatus()
-    }, [getUserTeamStatus])
+        useTeamMemberStore.getState().getUserTeamStatus()
+    }, [])
 
     return {
         teamMemberships,

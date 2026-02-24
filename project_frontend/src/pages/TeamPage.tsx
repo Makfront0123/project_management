@@ -8,7 +8,7 @@ import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
 import { useTeamActions } from "@/features/team/hooks/useTeamActions"
 import { useTeamWorkflow } from "@/features/team/hooks/useTeamWorkflows"
 import { useUserTeams } from "@/features/team/hooks/useUserTeam"
-import { leaveTeam } from "@/features/team/services/team_member"
+
 import Modal from "@/shared/components/Modal"
 import { Button } from "@/shared/components/ui/button"
 import { icons } from "@/shared/constants/icons"
@@ -18,7 +18,7 @@ import { useNavigate } from "react-router"
 
 const TeamPage = () => {
     const { teamMemberships } = useUserTeams()
-    const { setActiveTeam, deleteTeam } = useTeamWorkflow()
+    const { setActiveTeam, deleteTeam, leaveTeam } = useTeamWorkflow()
     const navigate = useNavigate()
 
     const {
@@ -67,7 +67,7 @@ const TeamPage = () => {
                         {teamMemberships.map((team) => (
                             <TeamCard
                                 key={team.teamId}
-                                name={team.name}
+                                name={team.team.name}
                                 role={team.role}
                                 createdAt={team.createdAt}
                                 members={team.members}

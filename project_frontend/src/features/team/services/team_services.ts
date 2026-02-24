@@ -86,3 +86,15 @@ export const deleteTeam = async (id: string) => {
 
   return response.data;
 };
+
+
+export const leaveTeam = async (teamId: string) => {
+  const token = useAuthStore.getState().token
+  const response = await axios.delete(`${baseUrl}/teams/${teamId}/leave`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return response.data;
+};

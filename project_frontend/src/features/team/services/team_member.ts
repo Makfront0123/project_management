@@ -142,14 +142,3 @@ export const inviteMember = async (teamId: string, email: string, role: "admin" 
 
     return response.data;
 };
-
-export const leaveTeam = async (teamId: string) => {
-    const token = useAuthStore.getState().token
-    const response = await axios.delete(`${baseUrl}/teams/${teamId}/leave`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-
-    return response.data;
-};

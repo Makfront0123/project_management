@@ -1,13 +1,11 @@
 import { create } from 'zustand'
 
-import { createTeam, deleteTeam, getAllTeams, getTeamDashboard, updateTeam } from '../services/team_services'
+import { createTeam, deleteTeam, getAllTeams, getTeamDashboard, leaveTeam, updateTeam } from '../services/team_services'
 import { getErrorMessage } from '../../../shared/utils/getErrorMessage'
 import type { Team, TeamDashboardResponse } from '../types/team'
 import toast from 'react-hot-toast'
 import { getUserTeamStatus } from '@/features/auth/services/auth_services'
 import { useTeamMemberStore } from './team_member_store'
-
-
 
 type TeamStore = {
   reset(): unknown
@@ -26,6 +24,7 @@ type TeamStore = {
   updateTeam: (data: Partial<Team>, teamId: string) => Promise<string>
   deleteTeam: (id: string) => Promise<string>
   getTeamDashboard: (teamId: string) => Promise<void>
+  leaveTeam: (teamId: string) => Promise<void>
 }
 
 export const useTeamStore = create<TeamStore>((set) => ({
@@ -47,6 +46,38 @@ export const useTeamStore = create<TeamStore>((set) => ({
       totalPages: 1,
       totalTeams: 0,
     }),
+  leaveTeam: async (teamId: string) => {
+    set({ isLoading: true });
+
+    try {
+      const { message } = await leaveTeam(teamId);
+
+      // 1️⃣ Actualizar teams
+      set((state) => {
+        const updatedTeams = state.teams.filter(t => t._id !== teamId);
+
+        return {
+          teams: updatedTeams,
+          activeTeamId:
+            state.activeTeamId === teamId
+              ? updatedTeams[0]?._id ?? null
+              : state.activeTeamId,
+          isLoading: false,
+        };
+      });
+
+      useTeamMemberStore.setState((state) => ({
+        teamMemberships: state.teamMemberships.filter(
+          (m) => m.teamId !== teamId
+        )
+      }));
+
+      toast.success(message);
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+      set({ isLoading: false });
+    }
+  },
   fetchTeams: async () => {
     set({ isLoading: true })
     try {

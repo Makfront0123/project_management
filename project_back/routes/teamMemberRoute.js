@@ -1,5 +1,5 @@
 import express from "express";
-import { addMemberToTeam, requestToJoinTeam, rejectRequestToJoinTeam, leaveTeam, getAllMembersOfTeam, getInviteDetailsByToken, getTeamCode, getPendingMembersOfTeam, inviteMemberToTeam, getPendingRequests, getMemberOfTeam, confirmJoinWithCode, deleteMembersOfTeam, deleteMemberOfTeam, acceptRequestToJoinTeam, acceptInviteByToken } from "../controllers/team_member_controller.js";
+import { addMemberToTeam, requestToJoinTeam, rejectRequestToJoinTeam,getAllMembersOfTeam, getInviteDetailsByToken, getTeamCode, getPendingMembersOfTeam, inviteMemberToTeam, getPendingRequests, getMemberOfTeam, confirmJoinWithCode, deleteMembersOfTeam, deleteMemberOfTeam, acceptRequestToJoinTeam, acceptInviteByToken } from "../controllers/team_member_controller.js";
 import { isTeamMember } from "../middlewares/isTeamMember_middleware.js";
 import authenticate from "../middlewares/auth_middleware.js";
 import { isTeamAdmin } from "../middlewares/admin_middleware.js";
@@ -23,8 +23,6 @@ router.get("/teams/:teamId/code", authenticate, getTeamCode);
 router.get("/teams/accept-invite/:token", acceptInviteByToken);
 router.get("/teams/invite-details/:token", getInviteDetailsByToken);
 router.post("/teams/:teamId/invite", authenticate, isTeamAdmin, inviteMemberToTeam);
-
-router.delete("/teams/:teamId/leave", authenticate, isTeamMember, leaveTeam);
 
 
 export default router;

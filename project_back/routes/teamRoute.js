@@ -1,5 +1,7 @@
+
 import express from "express";
-import { createTeam, getAllTeams, getTeam, updateTeam, deleteTeam, getTeamDashboard } from "../controllers/team_controller.js";
+import { createTeam, getAllTeams, getTeam, updateTeam, deleteTeam, getTeamDashboard, leaveTeam } from "../controllers/team_controller.js";
+import { isTeamMember } from "../middlewares/isTeamMember_middleware.js";
 
 import { isTeamAdmin } from "../middlewares/admin_middleware.js";
 import authenticate from "../middlewares/auth_middleware.js";
@@ -12,5 +14,5 @@ router.get("/teams/:id", authenticate, getTeam);
 router.get("/teams/:teamId/dashboard", authenticate, getTeamDashboard);
 router.put("/teams/:teamId", authenticate, isTeamAdmin, updateTeam);
 router.delete("/teams/:teamId", authenticate, isTeamAdmin, deleteTeam);
-
+router.delete("/teams/:teamId/leave", authenticate, isTeamMember, leaveTeam);
 export default router;
