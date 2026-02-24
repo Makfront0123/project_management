@@ -3,6 +3,7 @@ export type Team = {
   name: string;
   description: string;
   code: string;
+  image: string;
   creator: {
     _id: string;
     name: string;
@@ -21,6 +22,7 @@ export interface PagedTeamsResponse {
 export type CreateTeamFormValue = {
   name: string
   description: string
+  image: File | null
 }
 
 

@@ -21,7 +21,7 @@ type TeamStore = {
   totalPages: number
   totalTeams: number
   fetchTeams: () => Promise<void>
-  createTeam: (name: string, description: string) => Promise<string>
+  createTeam: (name: string, description: string, image: File | null) => Promise<string>
   getAllTeams: (page?: number, limit?: number) => Promise<void>
   updateTeam: (data: Partial<Team>, teamId: string) => Promise<string>
   deleteTeam: (id: string) => Promise<string>
@@ -62,18 +62,16 @@ export const useTeamStore = create<TeamStore>((set) => ({
     }
   },
 
-  createTeam: async (name, description) => {
+  createTeam: async (name, description, image) => {
     set({ isLoading: true })
     try {
-      const { team, message } = await createTeam(name, description)
+      const { team, message } = await createTeam(name, description, image)
 
       set((state) => ({
         teams: [...state.teams, team],
         activeTeamId: team._id,
         isLoading: false
       }))
-
-      // 🔥 traer memberships reales del backend
       await useTeamMemberStore.getState().getUserTeamStatus()
 
       return message

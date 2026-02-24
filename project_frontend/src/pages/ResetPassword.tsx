@@ -37,12 +37,12 @@ export const ResetPasswordPage = () => {
     });
 
     return (
-        <section className="min-h-screen flex items-center justify-center bg-gray-100">
+        <section className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-black">
             <form
                 onSubmit={handleSubmit}
                 className="bg-white shadow-lg rounded-xl p-8 max-w-md w-full"
             >
-                <h1 className="text-2xl font-bold text-center mb-4">
+                <h1 className="text-2xl font-bold text-center mb-4 text-black">
                     Reset Password
                 </h1>
                 <p className="text-gray-600 text-sm mb-6 text-center">
@@ -55,7 +55,7 @@ export const ResetPasswordPage = () => {
                     value={values.password}
                     onChange={handleChange}
                     placeholder="New password"
-                    className="w-full p-3 border border-gray-300 rounded mb-2"
+                    className="w-full p-3 border border-gray-300 rounded mb-2 text-black"
                 />
                 {errors.password && (
                     <p className="text-red-500 text-sm mb-2">{errors.password}</p>
@@ -67,7 +67,7 @@ export const ResetPasswordPage = () => {
                     value={values.confirmPassword}
                     onChange={handleChange}
                     placeholder="Confirm password"
-                    className="w-full p-3 border border-gray-300 rounded mb-2"
+                    className="w-full p-3 border text-black border-gray-300 rounded mb-2"
                 />
                 {errors.confirmPassword && (
                     <p className="text-red-500 text-sm mb-4">{errors.confirmPassword}</p>
@@ -76,7 +76,7 @@ export const ResetPasswordPage = () => {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+                    className="w-full bg-black text-white py-3 rounded hover:bg-black/80 transition"
                 >
                     {isSubmitting ? "Resetting..." : "Reset Password"}
                 </button>

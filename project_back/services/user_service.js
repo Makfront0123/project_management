@@ -29,7 +29,7 @@ class UserService {
 
                     return {
                         teamId: tm.teamId._id,
-                        name: tm.teamId.name,
+                        team: tm.teamId, // 👈 AGREGA ESTO
                         role: tm.role,
                         createdAt: tm.teamId.createdAt,
                         members: membersCount

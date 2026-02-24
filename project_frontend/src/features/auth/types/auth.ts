@@ -20,7 +20,7 @@ export type User = {
   id: string
   email: string
   name: string
-  image?: string
+  image?: string | "https://tse4.mm.bing.net/th/id/OIP.z2F78QVOUPcyHRhXTYGSyAHaHa?pid=Api&P=0&h=180"
 }
 
 

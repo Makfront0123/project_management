@@ -3,6 +3,7 @@ import type { Project } from "../types/projects";
 import ProjectCard from "./ProjectCard"
 
 import { usePagination } from "@/shared/hooks/usePagination";
+import { ProjectCardSkeleton } from "./ProjectCardSkeleton";
 
 interface Props {
   projects: Project[];
@@ -21,8 +22,9 @@ const ProjectOverview = ({ projects, loading }: Props) => {
 
   if (loading) {
     return (
-      <Card className="p-6 min-w-3xl">
-        Loading projects...
+      <Card className="p-6 min-w-3xl space-y-4">
+        <ProjectCardSkeleton />
+        <ProjectCardSkeleton />
       </Card>
     );
   }

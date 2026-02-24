@@ -7,7 +7,7 @@ interface TeamNotFoundProp {
 
 export function TeamNotFound({ onCreate }: TeamNotFoundProp) {
     return (
-        <div className="flex flex-col items-center gap-3 bg-gray-50 rounded-sm p-10 mx-10 min-h-[40vh]">
+        <div className="flex flex-col items-center gap-3 bg-gray-50 dark:bg-black dark:border-gray-100/20 dark:border-2 rounded-lg p-10 mx-10 min-h-[40vh]">
             <img src={icons.sidebar01} alt="No workspace" />
 
             <span className="text-lg font-medium">

@@ -30,6 +30,7 @@ export const RegisterForm = ({ form }: RegisterFormProps) => {
             <TextInput
                 label="Name"
                 name="name"
+                textColor="text-black"
                 placeholder="Enter your name"
                 value={form.values.name}
                 error={form.errors.name}
@@ -38,6 +39,7 @@ export const RegisterForm = ({ form }: RegisterFormProps) => {
             <TextInput
                 label="Email"
                 name="email"
+                textColor="text-black"
                 placeholder="Enter your email"
                 value={form.values.email}
                 error={form.errors.email}
@@ -69,7 +71,7 @@ export const RegisterForm = ({ form }: RegisterFormProps) => {
             <button
                 type="submit"
                 disabled={form.isSubmitting}
-                className="bg-[#4e38f5] hover:bg-[#4e38f5]/80 text-white duration-200 font-bold py-3 cursor-pointer w-full rounded-md"
+                className="bg-black hover:bg-black/80 text-white duration-200 font-bold py-3 cursor-pointer w-full rounded-md"
             >
                 Register
             </button>

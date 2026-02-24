@@ -6,13 +6,14 @@ const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
 export const createTeam = async (
   name: string,
-  description: string
+  description: string,
+  image: File | null
 ): Promise<TeamResponse> => {
   const token = useAuthStore.getState().token;
 
   const response = await axios.post<TeamResponse>(
     `${baseUrl}/teams`,
-    { name, description },
+    { name, description, image },
     {
       headers: {
         Authorization: `Bearer ${token}`,

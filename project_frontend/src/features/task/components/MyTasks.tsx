@@ -1,11 +1,19 @@
 import { Card } from '@/shared/components/ui/card'
 import type { Task } from '@/features/task/types/task'
+import { TaskCardSkeleton } from './TaskCardSkeleton'
 
 interface Props {
     tasks: Task[]
     loading: boolean
 }
-const MyTasks = ({ tasks }: Props) => {
+const MyTasks = ({ tasks, loading }: Props) => {
+    if (loading) {
+        return (
+            <Card className="p-6 w-full flex flex-col items-center justify-center text-gray-400">
+                <TaskCardSkeleton />
+            </Card>
+        )
+    }
 
     if (!tasks.length) {
         return (

@@ -29,12 +29,12 @@ const ForgotPage = () => {
     });
 
     return (
-        <section className="min-h-screen flex items-center justify-center bg-gray-100">
+        <section className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-black">
             <form
                 onSubmit={handleSubmit}
                 className="bg-white shadow-md rounded-xl p-8 max-w-md w-full"
             >
-                <h1 className="text-2xl font-bold mb-4 text-center">
+                <h1 className="text-2xl font-bold mb-4 text-center text-black">
                     Forgot Password
                 </h1>
                 <p className="text-gray-600 text-sm mb-6 text-center">
@@ -46,7 +46,7 @@ const ForgotPage = () => {
                     name="email"
                     value={values.email}
                     onChange={handleChange}
-                    className={`w-full p-3 border ${errors.email ? "border-red-500" : "border-gray-300"
+                    className={`w-full p-3 border text-black ${errors.email ? "border-red-500" : "border-gray-300"
                         } rounded mb-2`}
                     placeholder="your@email.com"
                 />
@@ -57,7 +57,7 @@ const ForgotPage = () => {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+                    className="w-full bg-black text-white py-3 rounded hover:opacity-80 transition"
                 >
                     {isSubmitting ? "Sending..." : "Send OTP"}
                 </button>

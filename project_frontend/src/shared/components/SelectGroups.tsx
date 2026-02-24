@@ -7,6 +7,7 @@ import { useTeamWorkflow } from "@/features/team/hooks/useTeamWorkflows"
 import CreateTeamForm from "@/features/team/components/CreateTeamForm"
 import Modal from "./Modal"
 import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
+import { generateAvatar } from "../utils/generateAvatar"
 
 export function SelectGroups() {
     const { teamMemberships, isLoading, refetch } = useUserTeams()
@@ -41,10 +42,10 @@ export function SelectGroups() {
                 value={activeTeamId ?? undefined}
                 onValueChange={handleChange}
             >
-                <SelectTrigger className="w-full max-w-56 border border-gray-300 bg-white text-sm px-3 py-2 rounded-md shadow-sm hover:border-gray-400 focus:ring-2 focus:ring-primary/40 transition">
+                <SelectTrigger className="w-full max-w-56 border overflow-hidden border-gray-300 bg-white text-sm px-0 py-2 rounded-md shadow-sm hover:border-gray-400 focus:ring-2 focus:ring-primary/40 transition">
                     <SelectValue placeholder="Selecciona un workspace" />
                 </SelectTrigger>
-                <SelectContent className="bg-white shadow-xl">
+                <SelectContent className="bg-white dark:bg-black shadow-xl ">
                     <SelectGroup>
                         <SelectLabel className="text-md text-black font-medium border-b border-gray-300 px-3 py-4">
                             Teams
@@ -54,9 +55,14 @@ export function SelectGroups() {
                             <SelectItem
                                 key={team.teamId}
                                 value={team.teamId}
-                                className="cursor-pointer"
+                                className="cursor-pointer flex items-center gap-x-4"
                             >
-                                {team.name}
+                                <img
+                                    src={team?.team?.image || generateAvatar(team.team.name)}
+                                    alt={team.name}
+                                    className="w-10 h-10 rounded-md"
+                                />
+                                <span className="dark:text-white text-black">{team.team.name}</span>
                             </SelectItem>
                         ))}
 

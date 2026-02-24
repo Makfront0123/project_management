@@ -6,6 +6,7 @@ import { useTeamWorkflow } from "./useTeamWorkflows"
 type FormValues = {
     name: string
     description: string
+    image: File | null
 }
 
 export const useCreateTeamForm = (onSuccess?: () => void) => {
@@ -15,6 +16,7 @@ export const useCreateTeamForm = (onSuccess?: () => void) => {
         initialValues: {
             name: "",
             description: "",
+            image: null,
         },
         validate: (values) => {
             const errors: Partial<Record<keyof FormValues, string>> = {}
@@ -23,7 +25,7 @@ export const useCreateTeamForm = (onSuccess?: () => void) => {
             return errors
         },
         onSubmit: async (values) => {
-            await createTeam(values.name, values.description)
+            await createTeam(values.name, values.description, values.image)
             onSuccess?.()
         },
     })

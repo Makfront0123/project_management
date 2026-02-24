@@ -24,8 +24,8 @@ export const useTeamWorkflow = () => {
     }, [fetchTeamsStore])
 
     const createTeam = useCallback(
-        async (name: string, description: string) => {
-            return await createTeamStore(name, description)
+        async (name: string, description: string, image: File | null) => {
+            return await createTeamStore(name, description, image)
         },
         [createTeamStore]
     )

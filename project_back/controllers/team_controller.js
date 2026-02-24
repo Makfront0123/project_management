@@ -6,13 +6,14 @@ export const createTeam = async (req, res) => {
     try {
         const userId = req.user.id;
 
-        const { name, description } = req.body;
+        const { name, description, image } = req.body;
         const code = await generateUniqueCode();
 
         const teamData = {
             name,
             description,
             code,
+            image,
             creator: userId,
         };
 

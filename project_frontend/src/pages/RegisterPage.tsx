@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 const RegisterPage = () => {
   const form = useRegisterForm();
-
+  console.log(form)
   return (
     <section className="min-h-screen w-full bg-[#faf9f6] dark:bg-gray-900 relative flex md:flex-row flex-col items-start justify-center">
       <div

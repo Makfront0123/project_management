@@ -38,12 +38,12 @@ const VerifyForgotPage = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gray-100">
+    <section className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-black">
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-lg rounded-xl p-8 max-w-md w-full"
       >
-        <h1 className="text-2xl font-bold text-center mb-4">
+        <h1 className="text-2xl font-bold text-center mb-4 text-black">
           Verify Forgot Password
         </h1>
         <p className="text-gray-600 text-sm mb-6 text-center">
@@ -57,7 +57,7 @@ const VerifyForgotPage = () => {
           maxLength={6}
           pattern="\d{6}"
           required
-          className="w-full p-3 border border-gray-300 rounded mb-4 text-center text-lg tracking-widest"
+          className="w-full p-3 border text-black border-gray-300 rounded mb-4 text-center text-lg tracking-widest"
           placeholder="______"
           disabled={isVerifying}
         />
@@ -66,7 +66,7 @@ const VerifyForgotPage = () => {
           type="submit"
           disabled={isVerifying}
           className={`w-full py-3 rounded transition
-            ${isVerifying ? 'bg-blue-400 cursor-not-allowed text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+            ${isVerifying ? 'bg-black cursor-not-allowed text-white' : 'bg-black hover:bg-black/70 text-white'}`}
         >
           {isVerifying ? "Verifying..." : "Verify"}
         </button>
@@ -75,7 +75,7 @@ const VerifyForgotPage = () => {
           type="button"
           onClick={handleResend}
           disabled={isVerifying}
-          className="w-full mt-4 text-blue-600 hover:underline text-sm"
+          className="w-full mt-4 text-black hover:underline text-sm"
         >
           Resend Code
         </button>

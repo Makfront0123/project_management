@@ -22,14 +22,22 @@ export const useForm = <T>({
             HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
         >
     ) => {
-        const { name, value } = e.target;
+        const { name, value, type } = e.target as HTMLInputElement;
 
-        setValues((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        if (type === "file") {
+            const file = (e.target as HTMLInputElement).files?.[0] || null;
+
+            setValues((prev) => ({
+                ...prev,
+                [name]: file,
+            }));
+        } else {
+            setValues((prev) => ({
+                ...prev,
+                [name]: value,
+            }));
+        }
     };
-
     const handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
     ) => {

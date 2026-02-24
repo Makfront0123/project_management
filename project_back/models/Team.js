@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 const teamSchema = new mongoose.Schema({
     name: String,
     description: String,
+    image: {
+        type: String,
+        required: false
+    },
     code: {
         type: String,
         required: true,
@@ -12,7 +16,7 @@ const teamSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    
+
 }, { timestamps: true })
 
 export default mongoose.model("Team", teamSchema)

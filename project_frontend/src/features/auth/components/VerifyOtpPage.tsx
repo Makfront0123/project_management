@@ -37,12 +37,12 @@ const VerifyOtpPage = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gray-100">
+    <section className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-black">
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-lg rounded-xl p-8 max-w-md w-full"
       >
-        <h1 className="text-2xl font-bold text-center mb-4">Verify Your Email</h1>
+        <h1 className="text-2xl font-bold text-center mb-4 text-black">Verify Your Email</h1>
         <p className="text-gray-600 text-sm mb-6 text-center">
           Enter the 6-digit code sent to your email
         </p>
@@ -52,14 +52,14 @@ const VerifyOtpPage = () => {
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
           maxLength={6}
-          className="w-full p-3 border border-gray-300 rounded mb-4 text-center text-lg tracking-widest"
+          className="w-full p-3 border border-gray-300 rounded mb-4 text-center text-black font-medium text-lg tracking-widest"
           placeholder="______"
         />
 
         <button
           type="submit"
           disabled={loadingVerify}
-          className={`w-full bg-blue-600 text-white py-3 rounded transition 
+          className={`w-full bg-black text-white py-3 rounded transition 
             ${loadingVerify ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"}`}
         >
           {loadingVerify ? "Verifying..." : "Verify"}
@@ -69,7 +69,7 @@ const VerifyOtpPage = () => {
           type="button"
           disabled={loadingResend}
           onClick={handleResend}
-          className={`w-full mt-4 text-blue-600 hover:underline text-sm 
+          className={`w-full mt-4 text-black hover:underline text-sm 
             ${loadingResend ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           {loadingResend ? "Resending..." : "Resend Code"}
