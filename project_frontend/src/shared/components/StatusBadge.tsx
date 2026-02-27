@@ -8,7 +8,7 @@ const StatusBadge = ({ status }: { status: string }) => {
   return (
     <span
       className={`px-2 py-1 rounded text-xs ${
-        colors[status] ?? "bg-gray-100"
+        colors[status] ?? "bg-gray-100 dark:bg-gray-800"
       }`}
     >
       {status}

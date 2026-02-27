@@ -1,51 +1,63 @@
 import type { Task } from "@/features/task/types/task";
+import { Link } from "react-router";
+
 
 interface Props {
   task: Task;
+  projectId: string;
   onStatusChange: (id: string, status: string) => void;
   onOpenComments: (id: string) => void;
 }
 
 const MemberTaskItem = ({
   task,
-  onStatusChange,
-  onOpenComments,
+  projectId,
 }: Props) => {
+
   return (
-    <div className="bg-white rounded-xl p-4 shadow flex justify-between items-center">
+    <div
+      className="
+      bg-white dark:bg-gray-900
+      rounded-xl
+      p-5
+      shadow-sm
+      border
+      hover:shadow-md
+      transition
+      flex flex-col gap-4
+    "
+    >
+      {/* HEADER */}
+      <Link
+        to={`/projects/${projectId}/tasks/${task._id}`} className="flex justify-between items-start">
+        <div>
 
-      <div>
-        <h3 className="font-semibold">
-          {task.name}
-        </h3>
+          <h1 className="font-semibold text-lg hover:underline">{task.name}</h1>
 
-        <p className="text-sm text-gray-500">
-          {task.description}
-        </p>
-      </div>
+          <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+            {task.description}
+          </p>
+        </div>
 
-      <div className="flex items-center gap-3">
-
-        {/* Estado */}
-        <select
-          value={task.status}
-          onChange={(e) =>
-            onStatusChange(task._id, e.target.value)
-          }
-          className="border rounded px-2 py-1"
+        <span
+          className={`
+            text-xs px-2 py-1 rounded font-medium uppercase
+            ${task.priority === "high" && "bg-red-100 text-red-600"}
+            ${task.priority === "medium" && "bg-yellow-100 text-yellow-600"}
+            ${task.priority === "low" && "bg-green-100 text-green-600"}
+          `}
         >
-          <option value="pending">Pendiente</option>
-          <option value="in_progress">En progreso</option>
-          <option value="done">Hecho</option>
-        </select>
+          {task.priority}
+        </span>
+      </Link>
 
-        {/* Comentarios */}
-        <button
-          onClick={() => onOpenComments(task._id)}
-          className="text-blue-600 text-sm hover:underline"
-        >
-          Comentarios
-        </button>
+      {/* FOOTER */}
+      <div className="flex items-center justify-between">
+
+        {/* due date */}
+        <span className="text-xs text-gray-400">
+          Due: {new Date(task.dueDate).toLocaleDateString()}
+        </span>
 
       </div>
     </div>

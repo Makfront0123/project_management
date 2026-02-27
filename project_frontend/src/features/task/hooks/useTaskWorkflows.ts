@@ -6,7 +6,6 @@ import { useTaskAssignments } from "./useTaskAssignments";
 import { useTaskManager } from "./useTasksManager";
 import type { Task, TaskPriority } from "@/features/task/types/task";
 import useNotificationStore from "@/features/notification/store/notification_store";
-
 interface TaskWorkflows {
     completeTask: (params: CompleteTaskParams) => Promise<void>;
     deleteTask: (taskId: string, projectId: string) => Promise<void>;
@@ -23,11 +22,17 @@ interface CreateTaskParams {
 }
 
 export const useTaskWorkflows = (): TaskWorkflows => {
-    const tasks = useTaskManager();
+
+    const {
+        tasks,
+        createTask,
+        updateTask,
+        deleteTask
+    } = useTaskManager();
+
     const assignments = useTaskAssignments();
     const { teamMembers } = useTeamMemberStore();
     const { addNotification } = useNotificationStore();
-
 
     const completeTask = useCallback(
         async ({
@@ -36,11 +41,12 @@ export const useTaskWorkflows = (): TaskWorkflows => {
             projectId,
             teamId,
         }: CompleteTaskParams): Promise<void> => {
+
             await assignments.completeAssignedTask(taskId, userId);
 
             await assignments.getTasksToUserAssignments(projectId);
 
-            const completedTask = tasks.tasks.find(
+            const completedTask = tasks.find(
                 (t) => t._id === taskId
             );
 
@@ -66,30 +72,31 @@ export const useTaskWorkflows = (): TaskWorkflows => {
                 metadata: { teamId },
                 type: "task-completion",
             });
+
         },
         [
             assignments,
-            tasks.tasks,
+            tasks,
             teamMembers,
             addNotification,
         ]
     );
 
-    const deleteTask = useCallback(
+    const handleDeleteTask = useCallback(
         async (taskId: string, projectId: string): Promise<void> => {
-            await tasks.deleteTask(taskId, projectId);
+            await deleteTask(taskId, projectId);
         },
-        [tasks]
+        [deleteTask]
     );
 
-    const updateTask = useCallback(
+    const handleUpdateTask = useCallback(
         async (taskId: string, data: Partial<Task>): Promise<void> => {
-            await tasks.updateTask(taskId, data, data.projectId ?? '');
+            await updateTask(taskId, data, data.projectId ?? '');
         },
-        [tasks]
+        [updateTask]
     );
 
-    const createTask = useCallback(
+    const handleCreateTask = useCallback(
         async ({
             name,
             description,
@@ -98,7 +105,7 @@ export const useTaskWorkflows = (): TaskWorkflows => {
             assignedUserId,
         }: CreateTaskParams): Promise<void> => {
 
-            await tasks.createTask(projectId, {
+            await createTask(projectId, {
                 name,
                 description,
                 priority,
@@ -106,12 +113,13 @@ export const useTaskWorkflows = (): TaskWorkflows => {
             });
 
         },
-        [tasks]
+        [createTask]
     );
+
     return {
         completeTask,
-        deleteTask,
-        createTask,
-        updateTask
+        deleteTask: handleDeleteTask,
+        updateTask: handleUpdateTask,
+        createTask: handleCreateTask
     };
 };

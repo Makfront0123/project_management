@@ -1,4 +1,4 @@
-import TaksAssignment from "../models/TaksAssignment.js";
+import TaskAssignment from "../models/TaksAssignment.js";
 import Task from "../models/Task.js";
 
 import mongoose from "mongoose";
@@ -157,6 +157,31 @@ class TaskRepository {
             },
         ]);
     }
+
+    async getTasksByUserAndProject(userId, projectId) {
+
+        return TaskAssignment.aggregate([
+            {
+                $match: { userId: new mongoose.Types.ObjectId(userId) }
+            },
+            {
+                $lookup: {
+                    from: "tasks",
+                    localField: "taskId",
+                    foreignField: "_id",
+                    as: "task"
+                }
+            },
+            { $unwind: "$task" },
+            {
+                $match: { "task.projectId": new mongoose.Types.ObjectId(projectId) }
+            },
+            {
+                $replaceRoot: { newRoot: "$task" }
+            }
+        ]);
+    }
 }
+
 
 export default new TaskRepository();

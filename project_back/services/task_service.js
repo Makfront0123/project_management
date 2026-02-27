@@ -68,6 +68,10 @@ class TaskService {
         return await taskRepo.getTasksByUser(userId);
     }
 
+    async getTasksByUserAndProject(userId, projectId) {
+        return await taskRepo.getTasksByUserAndProject(userId, projectId);
+    }
+
 }
 
 export default new TaskService();

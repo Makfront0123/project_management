@@ -21,6 +21,7 @@ import VerifyForgotPage from "@/features/auth/components/VerifyForgotPage";
 import VerifyOtpPage from "@/features/auth/components/VerifyOtpPage";
 import TeamPage from "@/pages/TeamPage";
 import AcceptInvitePage from "@/pages/AcceptInvitePage";
+import TaskDetailsPage from "@/pages/TaskDetailsPage";
 
 export function AppRoutes() {
   const { token, loadingApp, } = useAuthStore();
@@ -55,8 +56,12 @@ export function AppRoutes() {
           <Route path="team/:teamId/requests" element={<TeamRequestPage />} />
           <Route path="team/:teamId/chat" element={<TeamChatPage />} />
           <Route path="tasks" element={<TasksPage />} />
+          <Route
+            path="projects/:projectId/tasks/:taskId"
+            element={<TaskDetailsPage />}
+          />
           <Route path="settings" element={<SettingsPage />} />
-          <Route path="team/:teamId/project/:projectId" element={<ProjectDetails />} />
+          <Route path="projects/:teamId/:projectId" element={<ProjectDetails />} />
           <Route index element={<Navigate to="/dashboard" />} />
           <Route path="*" element={<Navigate to="/dashboard" />} />
         </Route>

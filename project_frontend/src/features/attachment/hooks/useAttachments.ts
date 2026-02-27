@@ -6,19 +6,34 @@ export const useAttachments = (teamId?: string) => {
         getAllAttachmentsForTasks,
         updateAttachment,
         deleteAttachment,
+        createAttachment
     } = useAttachmentStore();
 
-    const removeAttachment = async (id: string, taskId: string) => {
+    const removeAttachment = async (attachmentId: string, taskId: string) => {
         if (!teamId) return;
 
-        await deleteAttachment(id, teamId);
+        await deleteAttachment(attachmentId, teamId);
+        await getAllAttachmentsForTasks([taskId], teamId);
+    };
+
+    const uploadAttachment = async (file: File, taskId: string) => {
+        if (!teamId) return;
+
+        await createAttachment(taskId, teamId, file);
+        await getAllAttachmentsForTasks([taskId], teamId);
+    };
+
+    const replaceAttachment = async (attachmentId: string, file: File, taskId: string) => {
+        if (!teamId) return;
+
+        await updateAttachment(attachmentId, teamId, file);
         await getAllAttachmentsForTasks([taskId], teamId);
     };
 
     return {
         attachmentsByTask,
-        getAllAttachmentsForTasks,
-        updateAttachment,
-        removeAttachment,
+        uploadAttachment,
+        replaceAttachment,
+        removeAttachment
     };
 };

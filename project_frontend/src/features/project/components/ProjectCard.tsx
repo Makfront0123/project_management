@@ -16,7 +16,7 @@ const ProjectCard = ({ projects, variant = "grid" }: ProjectCardProps) => {
             {projects.map((project) => (
                 <Link
                     key={project._id}
-                    to={`/team/${project.teamId}/project/${project._id}`}
+                    to={`/projects/${project.teamId}/${project._id}`}
                     className={`
             p-4 border rounded-md cursor-pointer
             flex justify-between gap-4

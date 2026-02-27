@@ -47,6 +47,20 @@ export const getAllTasksByProject = async (req, res) => {
     }
 }
 
+export const getTaskByUserByProject = async (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const userId = req.user.id;
+
+        const tasks = await taskService.getTasksByUserAndProject(userId, projectId);
+
+        res.status(200).json(tasks);
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const getTask = async (req, res) => {
     try {
         const { projectId, taskId } = req.params;

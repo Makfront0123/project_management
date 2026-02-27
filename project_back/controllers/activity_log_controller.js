@@ -1,11 +1,10 @@
-export const logAction = () => {
-    res.send("logAction");
-}
+import Activity from "../models/ActivityLog.js";
+export const getTaskActivities = async (req, res) => {
+    const { taskId } = req.params;
 
-export const getLogsByUser = () => {
-    res.send("getLogsByUser");
-}
+    const activities = await Activity.find({ taskId })
+        .populate("user", "name")
+        .sort({ createdAt: -1 });
 
-export const getLogsByTask = () => {
-    res.send("getLogsByTask");
-}
+    res.json({ activities });
+};

@@ -1,14 +1,14 @@
-import type { TaskComment } from "@/features/task/types/comment";
-import { useCommentStore } from "@/features/task/store/comment_store";
 import { useEffect, useState } from "react";
-
+import { useCommentStore } from "../store/comment_store";
 
 interface TaskCommentsProps {
     taskId: string;
 }
 
 const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
-    const { comments, getCommentsByTask, createComment, deleteComment } = useCommentStore();
+    const { comments, getCommentsByTask, createComment, deleteComment } =
+        useCommentStore();
+
     const [commentText, setCommentText] = useState("");
 
     useEffect(() => {
@@ -17,9 +17,9 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
 
     const handleAddComment = async () => {
         if (!commentText.trim()) return;
+
         await createComment(taskId, commentText);
         setCommentText("");
-        await getCommentsByTask(taskId);
     };
 
     const handleDeleteComment = async (commentId: string) => {
@@ -28,48 +28,125 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
     };
 
     return (
-        <div className="mt-4 bg-white border-t pt-4">
-            <h4 className="text-md font-semibold mb-2">Comments</h4>
+        <div
+            className="
+      w-full
+      border
+      rounded-xl
+      bg-white
+      dark:bg-gray-900
+      flex
+      flex-col
+      p-6
+      gap-6
+    "
+        >
+            {/* HEADER */}
+            <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-lg">Comments</h3>
+                <span className="text-xs text-gray-400">
+                    {comments.length} comments
+                </span>
+            </div>
 
-            <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-                {comments.map((c: TaskComment) => (
+            {/* COMMENTS LIST */}
+            <div
+                className="
+        flex
+        flex-col
+        gap-4
+        max-h-[400px]
+        overflow-y-auto
+        pr-2
+      "
+            >
+                {comments.length === 0 && (
+                    <p className="text-sm text-gray-400">
+                        No comments yet. Start the discussion.
+                    </p>
+                )}
+
+                {comments.map((c) => (
                     <div
                         key={c._id}
-                        className="flex justify-between items-start text-sm bg-gray-50 p-2 rounded"
+                        className="
+            border
+            rounded-lg
+            p-3
+            bg-gray-50
+            dark:bg-gray-800
+            flex
+            flex-col
+            gap-1
+          "
                     >
-                        <div>
-                            <p className="text-gray-800">{c.comment}</p>
-                            <p className="text-gray-400 text-xs">
+                        {/* USER */}
+                        <div className="flex justify-between items-center text-xs text-gray-400">
+                            <span className="font-medium text-gray-600">
+                                {c.userId?.name ?? "User"}
+                            </span>
+
+                            <span>
                                 {new Date(c.createdAt).toLocaleString()}
-                            </p>
+                            </span>
                         </div>
-                        <button
-                            onClick={() => handleDeleteComment(c._id)}
-                            className="text-red-500 text-xs hover:underline"
-                        >
-                            Delete
-                        </button>
+
+                        {/* COMMENT */}
+                        <p className="text-sm text-gray-700 dark:text-gray-200">
+                            {c.comment}
+                        </p>
+
+                        {/* ACTIONS */}
+                        <div className="flex justify-end">
+                            <button
+                                onClick={() => handleDeleteComment(c._id)}
+                                className="text-xs text-red-500 hover:underline"
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>
 
-            <div className="mt-3 flex gap-2">
-                <input
+            {/* INPUT */}
+            <div className="flex gap-3 items-end border-t pt-4">
+                <textarea
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
-                    className="flex-1 border rounded p-2 text-sm"
-                    placeholder="Escribe un comentario..."
+                    rows={1}
+                    placeholder="Write a comment..."
+                    className="
+            flex-1
+            border
+            rounded-lg
+            p-3
+            text-sm
+            resize-none
+            focus:outline-none
+            focus:ring-2
+            focus:ring-blue-500
+          "
                 />
+
                 <button
                     onClick={handleAddComment}
-                    className="bg-blue-600 text-white px-3 py-1 text-sm rounded"
+                    className="
+            bg-blue-600
+            text-white
+            px-4
+            py-2
+            rounded-lg
+            text-sm
+            hover:bg-blue-700
+            transition
+          "
                 >
-                    Add comment
+                    Comment
                 </button>
             </div>
         </div>
     );
-
 };
 
 export default TaskComments;

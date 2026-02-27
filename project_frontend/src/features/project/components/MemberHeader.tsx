@@ -6,18 +6,9 @@ interface Props {
 }
 
 const MemberHeader = ({ project }: Props) => {
-    console.log(project);
     return (
-        <div className="bg-white rounded-xl p-4 shadow">
-
-            <h2 className="text-xl font-bold">
-                {project.name}
-            </h2>
-
-            <p className="text-gray-600 text-sm">
-                {project.description}
-            </p>
-
+        <div className="rounded-sm p-4 shadow">
+            <span className="text-2xl font-bold text-white">Task Pending</span>
         </div>
     );
 };

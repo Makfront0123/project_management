@@ -7,11 +7,15 @@ import { useState } from "react";
 import { useProjectPermissions } from "@/features/project/hooks/useProjectPermissions";
 import { useTaskForm } from "@/features/task/hooks/useTaskForm";
 import { useTaskWorkflows } from "@/features/task/hooks/useTaskWorkflows";
+import TaskComments from "@/features/task/components/TaskComment";
+import { TaskCardSkeleton } from "@/features/task/components/TaskCardSkeleton";
+import { useFilteredTasks } from "@/features/task/hooks/useFilteredTasks";
 
 const ProjectDetails = () => {
   const data = useProjectData();
   const ui = useProjectModals();
   const permissions = useProjectPermissions(data.currentProject?.teamId);
+
   const taskForm = useTaskForm(
     data.currentProject?._id,
     ui.editingTask,
@@ -20,31 +24,29 @@ const ProjectDetails = () => {
       ui.setEditingTask(null);
     }
   );
+
   const { deleteTask } = useTaskWorkflows();
 
-  const handleDeleteTask = (taskId: string) => {
+  const [filter, setFilter] = useState<"all" | "open" | "completed">("all");
+  const [selectedCommentTask, setSelectedCommentTask] = useState<Task | null>(null);
+  const handleDeleteTask = async (taskId: string): Promise<void> => {
     if (!data.currentProject?._id) return;
-    deleteTask(taskId, data.currentProject._id);
+
+    await deleteTask(taskId, data.currentProject._id);
   };
 
-  const [selectedCommentTask, setSelectedCommentTask] = useState<Task | null>(null);
-  const [filter, setFilter] = useState<"all" | "open" | "completed">("all");
+  const tasksToShow = data.isAdmin
+    ? data.tasks
+    : data.userTasks;
 
-  const filteredTasks = data.tasks.filter((task) => {
-    if (filter === "open") return task.status === "open";
-    if (filter === "completed") return task.status === "completed";
-    return true;
-  });
-
-
+  const filteredTasks = useFilteredTasks(tasksToShow, filter);
   if (data.isLoadingProject || !data.currentProject || !data.tasksLoaded) {
     return (
-      <div className="w-full h-screen flex items-center justify-center text-gray-500">
-        Loading Project...
+      <div className="p-10">
+        <TaskCardSkeleton />
       </div>
     );
   }
-
 
   if (data.isAdmin) {
     return (
@@ -52,7 +54,7 @@ const ProjectDetails = () => {
         currentProject={data.currentProject}
         tasks={filteredTasks}
         acceptedMembers={permissions.acceptedMembers}
-        taskForm={taskForm}   // ✅ FIX
+        taskForm={taskForm}
         setEditingTask={ui.setEditingTask}
         editingTask={ui.editingTask}
         setIsModalOpen={ui.setIsModalOpen}
@@ -63,125 +65,23 @@ const ProjectDetails = () => {
   }
 
   return (
-    <MemberProjectView
-      currentProject={data.currentProject}
-      tasks={data.tasks}
-      filteredTasks={filteredTasks}
-      isLoading={data.isLoadingProject}
-      updateTaskStatus={() => { }}
-      openComments={(taskId) => {
-        const task = data.tasks.find(t => t._id === taskId)
-        setSelectedCommentTask(task ?? null)
-      }}
-    />
-  );
-};
-
-export default ProjectDetails;
-
-
-/*
-const ProjectDetails = () => {
-  const data = useProjectData();
-  const ui = useProjectModals();
-  const permissions = useProjectPermissions(data.currentProject?.teamId);
-  const taskForm = useTaskForm(
-    data.currentProject?._id,
-    ui.editingTask,
-    () => {
-      ui.setIsModalOpen(false);
-      ui.setEditingTask(null);
-    }
-  );
-  const { deleteTask } = useTaskWorkflows();
-
-  const handleDeleteTask = (taskId: string) => {
-    if (!data.currentProject?._id) return;
-    deleteTask(taskId, data.currentProject._id);
-  };
-
-  const [selectedCommentTask, setSelectedCommentTask] = useState<Task | null>(null);
-  const [filter, setFilter] = useState<"all" | "open" | "completed">("all");
-
-  const filteredTasks = data.tasks.filter((task) => {
-    if (filter === "open") return task.status === "open";
-    if (filter === "completed") return task.status === "completed";
-    return true;
-  });
-
-  const filteredAssignments = data.taskAssignments.filter((assignment) => {
-    const taskId =
-      typeof assignment.taskId === "string"
-        ? assignment.taskId
-        : assignment.taskId?._id;
-
-    const task = data.tasks.find((t) => t._id === taskId);
-    if (!task) return false;
-
-    if (filter === "open") return task.status === "open";
-    if (filter === "completed") return task.status === "completed";
-    return true;
-  });
-
-  const pendingAssignments = filteredAssignments.filter((assignment) => {
-    const taskId =
-      typeof assignment.taskId === "string"
-        ? assignment.taskId
-        : assignment.taskId?._id;
-
-    const task = data.tasks.find((t) => t._id === taskId);
-    return task?.status !== "completed";
-  });
-
-  const completedAssignments = filteredAssignments.filter((assignment) => {
-    const taskId =
-      typeof assignment.taskId === "string"
-        ? assignment.taskId
-        : assignment.taskId?._id;
-
-    const task = data.tasks.find((t) => t._id === taskId);
-    return task?.status === "completed";
-  });
-
-  if (data.isLoadingProject || !data.currentProject || !data.tasksLoaded) {
-    return (
-      <div className="w-full h-screen flex items-center justify-center text-gray-500">
-        Loading Project...
-      </div>
-    );
-  }
-
-
-  if (data.isAdmin) {
-    return (
-      <AdminProjectView
+    <>
+      <MemberProjectView
         currentProject={data.currentProject}
-        tasks={filteredTasks}
-        acceptedMembers={permissions.acceptedMembers}
-        taskForm={taskForm}   // ✅ FIX
-        setEditingTask={ui.setEditingTask}
-        editingTask={ui.editingTask}
-        setIsModalOpen={ui.setIsModalOpen}
-        isModalOpen={ui.isModalOpen}
-        deleteTask={handleDeleteTask}
+        tasks={data.userTasks}
+        isLoading={data.isLoadingProject}
+        updateTaskStatus={() => { }}
+        openComments={(taskId) => {
+          const task = tasksToShow.find((t: Task) => t._id === taskId);
+          setSelectedCommentTask(task ?? null);
+        }}
       />
-    );
-  }
 
-  return (
-    <MemberProjectView
-      currentProject={data.currentProject}
-      tasks={data.tasks}
-      filteredTasks={filteredTasks}
-      isLoading={data.isLoadingProject}
-      updateTaskStatus={() => { }}
-      openComments={(taskId) => {
-        const task = data.tasks.find(t => t._id === taskId)
-        setSelectedCommentTask(task ?? null)
-      }}
-    />
+      {selectedCommentTask && (
+        <TaskComments taskId={selectedCommentTask._id} />
+      )}
+    </>
   );
 };
 
 export default ProjectDetails;
-*/

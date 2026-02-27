@@ -1,18 +1,16 @@
 import useTaskStore from "@/features/task/store/task_store";
-import { useEffect } from "react";
+export const useTaskManager = () => {
 
-export const useTaskManager = (projectId?: string) => {
-    const { tasks, getTasks, createTask, updateTask, deleteTask } = useTaskStore();
-
-    useEffect(() => {
-        if (!projectId) return;
-        getTasks(projectId);
-    }, [projectId, getTasks]);
-
+    const tasks = useTaskStore(state => state.tasks)
+    const userTasks = useTaskStore(state => state.userTasks)
+    const createTask = useTaskStore(state => state.createTask)
+    const updateTask = useTaskStore(state => state.updateTask)
+    const deleteTask = useTaskStore(state => state.deleteTask) 
     return {
         tasks,
+        userTasks,
         createTask,
         updateTask,
-        deleteTask,
-    };
-};
+        deleteTask
+    }
+}

@@ -47,7 +47,6 @@ export interface AdminProjectViewProp {
   tasks: Task[];
   acceptedMembers: TeamMember[];
   deleteTask: (taskId: string) => Promise<void>;
-  updateTask: (taskId: string, data: Partial<Task>) => void;
   setEditingTask: (task: Task | null) => void;
   editingTask: Task | null;
   setIsModalOpen: (open: boolean) => void;

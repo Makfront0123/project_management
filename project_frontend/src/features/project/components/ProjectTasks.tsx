@@ -60,7 +60,7 @@ const ProjectTasks = ({ tasks = [], onEdit, onDelete }: Props) => {
                             </TableCell>
 
                             <TableCell>
-                                <span className="px-3 py-1 font-normal rounded-md text-sm bg-gray-200">{task.priority}</span>
+                                <span className="px-3 py-1 font-normal rounded-md text-sm bg-gray-200 dark:bg-gray-700">{task.priority}</span>
                             </TableCell>
 
                             <TableCell>

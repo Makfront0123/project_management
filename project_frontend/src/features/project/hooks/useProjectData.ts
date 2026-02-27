@@ -42,12 +42,36 @@ export const useProjectData = () => {
     [teamMembers]
   );
 
+  const userTasks = useMemo(() => {
+    if (!taskAssignments?.length) return [];
+
+    const assignedTaskIds = taskAssignments.map(a => a.taskId._id);
+
+    return tasks.filter(task => assignedTaskIds.includes(task._id));
+  }, [taskAssignments, tasks]);
+
   useEffect(() => {
-    const fetchData = async () => {
+    if (!projectId || !teamId || !tasksLoaded) return;
+
+    const fetchAssignments = async () => {
+      if (isAdmin) {
+        for (const task of tasks) {
+          await getAllUsersAssignedToTask(task._id, teamId);
+        }
+      } else {
+        await getTasksToUserAssignments(projectId);
+      }
+    };
+
+    fetchAssignments();
+  }, [isAdmin, projectId, teamId, tasksLoaded, tasks, getAllUsersAssignedToTask, getTasksToUserAssignments]);
+  useEffect(() => {
+    const fetchProjectData = async () => {
       if (!projectId || !teamId) return;
 
       await getUserTeamStatus();
       await getProject(projectId, teamId);
+
       const loadedTasks = await getTasks(projectId);
 
       for (const task of loadedTasks) {
@@ -57,20 +81,11 @@ export const useProjectData = () => {
       await fetchTeamMembers(teamId);
       await getAllTags(teamId);
 
-      if (isAdmin) {
-        for (const task of loadedTasks) {
-          await getAllUsersAssignedToTask(task._id, teamId);
-        }
-      } else {
-        await getTasksToUserAssignments(projectId);
-      }
-
       setTasksLoaded(true);
     };
 
-    fetchData();
-  }, [fetchTeamMembers, getAllAttachmentsForTasks, getAllTags, getAllUsersAssignedToTask, getProject, getTasks, getTasksToUserAssignments, getUserTeamStatus, isAdmin, projectId, teamId]);
-
+    fetchProjectData();
+  }, [fetchTeamMembers, getAllAttachmentsForTasks, getAllTags, getProject, getTasks, getUserTeamStatus, projectId, teamId]);
   return {
     projectId,
     teamId,
@@ -85,5 +100,6 @@ export const useProjectData = () => {
     isAdmin,
     acceptedMembers,
     tasksLoaded,
+    userTasks,
   };
 };
