@@ -2,28 +2,43 @@ import { ActivityFeed } from "@/features/activity/components/ActivityFeed";
 import { useActivity } from "@/features/activity/hooks/useActivity";
 import AttachmentUploader from "@/features/attachment/components/AttachmentUploader";
 import { useAttachments } from "@/features/attachment/hooks/useAttachments";
+import { useAuthStore } from "@/features/auth/store/auth_store";
 import TaskComments from "@/features/task/components/TaskComment";
+import { useTask } from "@/features/task/hooks/useTaks";
 import { useTaskWorkflows } from "@/features/task/hooks/useTaskWorkflows";
-import useTaskStore from "@/features/task/store/task_store";
 import { useTeamWorkflow } from "@/features/team/hooks/useTeamWorkflows";
+import { usePagination } from "@/shared/hooks/usePagination";
 
 import { Link, useParams } from "react-router";
 
 const TaskDetailsPage = () => {
-    const { taskId } = useParams();
+    const { taskId, projectId } = useParams();
 
-    const { tasks } = useTaskStore();
+    const task = useTask(projectId, taskId);
 
+    const { completeTask } = useTaskWorkflows();
+    const { user } = useAuthStore();
     const { activeTeamId } = useTeamWorkflow();
-    const { completeTask } = useTaskWorkflows()
+    const handleCompleteTask = async (taskId: string) => {
+        if (!user || !activeTeamId || !projectId) return;
 
+        await completeTask({
+            taskId,
+            userId: user.id,
+            projectId,
+            teamId: activeTeamId
+        });
+    };
     const {
-        uploadAttachment, removeAttachment, replaceAttachment
-    } = useAttachments(activeTeamId ?? '')
-
-    const task = tasks.find(t => t._id === taskId);
+        uploadAttachment,
+        replaceAttachment,
+        removeAttachment
+    } = useAttachments(activeTeamId ?? "", task?._id)
 
     const { activities } = useActivity(task?._id);
+    const { items, page, totalPages, nextPage, prevPage } =
+        usePagination(activities, 10);
+
 
     if (!task) {
         return <p>Task not found</p>;
@@ -56,8 +71,6 @@ const TaskDetailsPage = () => {
                         <p className="text-gray-500 mb-6">
                             {task.description}
                         </p>
-
-                        {/* attachments */}
                         <section className="mb-8">
                             <h3 className="font-semibold mb-2">
                                 Attachments
@@ -68,7 +81,7 @@ const TaskDetailsPage = () => {
                                 onUpload={uploadAttachment}
                                 onUpdate={replaceAttachment}
                                 onDelete={removeAttachment}
-                                onComplete={completeTask}
+                                onComplete={handleCompleteTask}
                             />
                         </section>
 
@@ -79,8 +92,22 @@ const TaskDetailsPage = () => {
                         <TaskComments taskId={task._id} />
                     </section>
                 </div>
-                <div className="flex flex-col w-full py-30 rounded-lg bg-black border-1 border-gray-600">
-                    <ActivityFeed activities={activities} />
+                <div className="flex flex-col w-full py-10 rounded-lg bg-black border-1 border-gray-600">
+                    <ActivityFeed activities={items} />
+                    <div className="flex justify-between px-4 pt-36">
+                        <button onClick={prevPage} disabled={page === 1}>
+                            Prev
+                        </button>
+
+                        <span className="text-sm">
+                            {page} / {totalPages}
+                        </span>
+
+                        <button onClick={nextPage} disabled={page === totalPages}>
+                            Next
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>

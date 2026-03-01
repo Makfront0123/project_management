@@ -5,20 +5,23 @@ class AttachmentService {
         return await attachmentRepo.createAttachment(data);
     }
 
-    async getAllAttachments( taskId, teamId) {
-        return await attachmentRepo.getAllAttachments( taskId, teamId);
+    async getAllAttachments(taskId, teamId) {
+        return await attachmentRepo.getAllAttachments(taskId, teamId);
     }
 
+    async getByTaskAndUser(taskId, userId) {
+        return await attachmentRepo.getByTaskAndUser(taskId, userId);
+    }
     async getAttachmentById(attachmentId, teamId) {
         return await attachmentRepo.getAttachmentById(attachmentId, teamId);
     }
 
     async updateAttachment(attachmentId, teamId, data) {
-        return await attachmentRepo.updateAttachment(attachmentId,teamId ,data);
+        return await attachmentRepo.updateAttachment(attachmentId, teamId, data);
     }
 
-    async deleteAttachment(attachmentId,teamId) {
-        return await attachmentRepo.deleteAttachment(attachmentId,teamId);
+    async deleteAttachment(attachmentId, teamId) {
+        return await attachmentRepo.deleteAttachment(attachmentId, teamId);
     }
 }
 

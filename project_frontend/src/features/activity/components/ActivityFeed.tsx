@@ -7,6 +7,7 @@ interface Props {
 }
 
 export const ActivityFeed = ({ activities }: Props) => {
+ 
     if (!activities.length) {
         return (
             <div className="text-sm text-muted-foreground p-4">

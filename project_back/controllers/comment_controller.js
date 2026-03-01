@@ -3,7 +3,8 @@ import Task from "../models/Task.js";
 import TeamMember from "../models/TeamMember.js";
 import taskService from "../services/task_service.js";
 import projectService from "../services/project_service.js";
-import TaskAssignment from "../models/TaksAssignment.js";
+import TaskAssignment from "../models/TaskAssignment.js";
+import Activity from "../models/ActivityLog.js";
 export const createComment = async (req, res) => {
   try {
     const { taskId } = req.params;
@@ -28,6 +29,7 @@ export const createComment = async (req, res) => {
       status: "accepted",
     });
 
+
     if (!teamMember) {
       return res.status(403).json({ message: "Not a member of the team" });
     }
@@ -47,6 +49,13 @@ export const createComment = async (req, res) => {
       taskId,
       userId,
       projectId: project._id,
+    });
+
+    await Activity.create({
+      taskId: task._id,
+      user: req.user.id,
+      type: "comment-created",
+      message: "Comment created",
     });
 
     res.status(201).json({
@@ -121,6 +130,12 @@ export const deleteComment = async (req, res) => {
   try {
     const { taskId, commentId } = req.params;
     await commentService.deleteComment(commentId, taskId);
+    await Activity.create({
+      taskId: task._id,
+      user: req.user.id,
+      type: "comment-deleted",
+      message: "Comment deleted",
+    });
     res.status(200).json({ message: "Comment deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

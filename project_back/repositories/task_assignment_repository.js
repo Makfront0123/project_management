@@ -1,4 +1,4 @@
-import TaskAssignment from "../models/TaksAssignment.js";
+import TaskAssignment from "../models/TaskAssignment.js";
 import TeamMember from "../models/TeamMember.js";
 import mongoose from "mongoose";
 

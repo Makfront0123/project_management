@@ -3,7 +3,7 @@ import projectService from "./project_service.js";
 import Attachment from "../models/Attachment.js";
 import TagTask from "../models/TaskTag.js";
 import Comment from "../models/Comment.js";
-import TaskAssignment from "../models/TaksAssignment.js";
+import TaskAssignment from "../models/TaskAssignment.js";
 class TaskService {
     async createTask(data) {
         return await taskRepo.createTask(data);

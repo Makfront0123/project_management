@@ -15,6 +15,21 @@ export const createTask = async (projectId: string, data: TaskInput) => {
     return response.data;
 };
 
+export const getTask = async (projectId: string, taskId: string) => {
+    const token = useAuthStore.getState().token;
+
+    const response = await axios.get(
+        `${baseUrl}/projects/${projectId}/tasks/${taskId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};
+
 export const getTasks = async (projectId: string) => {
     const token = useAuthStore.getState().token
     const response = await axios.get(`${baseUrl}/projects/${projectId}/tasks`,

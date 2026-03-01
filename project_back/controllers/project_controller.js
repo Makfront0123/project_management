@@ -2,6 +2,7 @@ import projectService from "../services/project_service.js";
 import notificationService from "../services/notification_service.js";
 import teamMemberService from "../services/team_member_service.js";
 import mongoose from "mongoose";
+import Activity from "../models/ActivityLog.js";
 export const createProject = async (req, res) => {
     try {
         const owner_id = req.user.id;
@@ -45,6 +46,13 @@ export const createProject = async (req, res) => {
         );
         notifications.forEach((notif, index) => {
             req.io.to(`user_${recipients[index]}`).emit("newNotification", notif);
+        });
+
+        await Activity.create({
+            taskId: task._id,
+            user: req.user.id,
+            type: "project-created",
+            message: "Project created",
         });
 
         res.status(201).json({
@@ -124,6 +132,12 @@ export const updateProject = async (req, res) => {
             status: req.body.status
         }
         const updatedProject = await projectService.updateProject(teamId, projectId, data);
+        await Activity.create({
+            taskId: task._id,
+            user: req.user.id,
+            type: "project-updated",
+            message: "Project updated",
+        });
         res.status(200).json({
             message: "Project updated successfully",
             updatedProject,
@@ -146,6 +160,13 @@ export const deleteProject = async (req, res) => {
         if (!deletedProject) {
             return res.status(404).json({ message: "Project not found" });
         }
+
+        await Activity.create({
+            taskId: task._id,
+            user: req.user.id,
+            type: "project-deleted",
+            message: "Project deleted",
+        });
 
         res.status(200).json({
             message: "Project and related data deleted successfully",

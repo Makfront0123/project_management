@@ -1,4 +1,4 @@
-import TaskAssignment from "../models/TaksAssignment.js";
+import TaskAssignment from "../models/TaskAssignment.js";
 import Task from "../models/Task.js";
 
 import mongoose from "mongoose";
@@ -85,7 +85,7 @@ class TaskRepository {
 
 
     async getTasksByUser(userId) {
-        const assignments = await TaksAssignment.find({ userId });
+        const assignments = await TaskAssignment.find({ userId });
 
         const taskIds = assignments.map(a => a.taskId);
 

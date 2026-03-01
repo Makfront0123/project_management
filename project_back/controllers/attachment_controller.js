@@ -1,14 +1,18 @@
 import attachmentService from "../services/attachment_service.js";
-
+import Activity from "../models/ActivityLog.js";
 export const uploadAttachment = async (req, res) => {
     try {
-        const { taskId } = req.params;
-        const { teamId } = req.params;
+        const { taskId, teamId } = req.params;
         const file = req.file;
 
         if (!file) {
             return res.status(400).json({ message: "Missing file" });
         }
+
+        const existingAttachment = await attachmentService.getByTaskAndUser(
+            taskId,
+            req.user.id
+        );
 
         const data = {
             taskId,
@@ -18,11 +22,30 @@ export const uploadAttachment = async (req, res) => {
             uploadedBy: req.user.id,
         };
 
-        const attachment = await attachmentService.createAttachment(data);
-        res.status(201).json({
-            message: "Attachment created successfully",
+        let attachment;
+
+        if (existingAttachment) {
+            attachment = await attachmentService.updateAttachment(
+                existingAttachment._id,
+                teamId,
+                data
+            );
+        } else {
+            attachment = await attachmentService.createAttachment(data);
+        }
+
+        await Activity.create({
+            taskId,
+            user: req.user.id,
+            type: "attachment-uploaded",
+            message: "Attachment uploaded",
+        });
+
+        res.status(200).json({
+            message: "Attachment uploaded successfully",
             attachment,
         });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -54,38 +77,84 @@ export const getAttachment = async (req, res) => {
 
 export const updateAttachment = async (req, res) => {
     try {
+
         const { attachmentId, teamId } = req.params;
         const file = req.file;
+
+        const attachment = await attachmentService.getAttachmentById(
+            attachmentId,
+            teamId
+        );
+
         const data = {
             fileName: file.originalname,
-            fileUrl: `/uploads/${file.filename}`,
-        }
-        const updatedAttachment = await attachmentService.updateAttachment(attachmentId, teamId, data);
+            fileUrl: file.path
+        };
+
+        const updatedAttachment = await attachmentService.updateAttachment(
+            attachmentId,
+            teamId,
+            data
+        );
+
+        await Activity.create({
+            taskId: attachment.taskId,
+            user: req.user.id,
+            type: "attachment-updated",
+            message: "Attachment updated"
+        });
+
         res.status(200).json({
             message: "Attachment updated successfully",
-            updatedAttachment,
+            updatedAttachment
         });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
-
+};
 
 export const deleteAttachment = async (req, res) => {
     try {
+
         const { attachmentId, teamId } = req.params;
-        await attachmentService.deleteAttachment(attachmentId, teamId);
-        res.status(200).json({ message: "Attachment deleted successfully" });
+
+        const attachment = await attachmentService.getAttachmentById(
+            attachmentId,
+            teamId
+        );
+
+        await attachmentService.deleteAttachment(
+            attachmentId,
+            teamId
+        );
+
+        await Activity.create({
+            taskId: attachment.taskId,
+            user: req.user.id,
+            type: "attachment-deleted",
+            message: "Attachment deleted"
+        });
+
+        res.status(200).json({
+            message: "Attachment deleted successfully"
+        });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-
-}
+};
 
 export const deleteByTaskId = async (req, res) => {
     try {
         const { taskId } = req.params;
         await attachmentService.deleteByTaskId(taskId);
+        await Activity.create({
+            taskId: taskId,
+            user: req.user.id,
+            type: "attachment-deleted",
+            message: "Attachments deleted",
+        });
         res.status(200).json({ message: "Attachments deleted successfully" });
     } catch (error) {
         res.status(500).json({ message: error.message });

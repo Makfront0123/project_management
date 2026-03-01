@@ -7,6 +7,10 @@ class AttachmentRepository {
     async getAllAttachments(taskId, teamId) {
         return await Attachment.find({ taskId, teamId });
     }
+
+    async getByTaskAndUser(taskId, userId) {
+        return await Attachment.findOne({ taskId, userId });
+    }
     async getAttachmentById(attachmentId, teamId) {
         return await Attachment.findOne({ _id: attachmentId, teamId });
     }

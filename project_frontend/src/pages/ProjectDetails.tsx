@@ -53,6 +53,8 @@ const ProjectDetails = () => {
       <AdminProjectView
         currentProject={data.currentProject}
         tasks={filteredTasks}
+        filter={filter}
+        setFilter={setFilter}
         acceptedMembers={permissions.acceptedMembers}
         taskForm={taskForm}
         setEditingTask={ui.setEditingTask}
@@ -68,7 +70,9 @@ const ProjectDetails = () => {
     <>
       <MemberProjectView
         currentProject={data.currentProject}
-        tasks={data.userTasks}
+        tasks={filteredTasks}
+        filter={filter}
+        setFilter={setFilter}
         isLoading={data.isLoadingProject}
         updateTaskStatus={() => { }}
         openComments={(taskId) => {

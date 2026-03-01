@@ -50,6 +50,8 @@ export interface AdminProjectViewProp {
   setEditingTask: (task: Task | null) => void;
   editingTask: Task | null;
   setIsModalOpen: (open: boolean) => void;
+  filter: "all" | "open" | "completed";
+  setFilter: (value: "all" | "open" | "completed") => void;
   isModalOpen: boolean;
   taskForm: ReturnType<typeof useTaskForm>;
 }

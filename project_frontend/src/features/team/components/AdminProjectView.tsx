@@ -11,6 +11,7 @@ import type { AdminProjectViewProp } from "@/features/project/types/projects";
 import { useState } from "react";
 import Modal from "@/shared/components/Modal";
 import { Button } from "@/shared/components/ui/button";
+import TaskFilter from "@/features/task/components/TaskFilter";
 
 const AdminProjectView = ({
   currentProject,
@@ -19,6 +20,8 @@ const AdminProjectView = ({
   setEditingTask,
   editingTask,
   setIsModalOpen,
+  filter,
+  setFilter,
   isModalOpen,
   acceptedMembers,
   taskForm
@@ -57,16 +60,22 @@ const AdminProjectView = ({
       <div className="mt-4">
 
         {tabs.isTasks && (
-          <ProjectTasks
-            tasks={tasks}
-            onEdit={(task) => {
-              setEditingTask(task);
-              setIsModalOpen(true);
-            }}
-            onDelete={(taskId) => {
-              setTaskToDelete(taskId);
-            }}
-          />
+          <>
+            <div className="mb-4">
+              <TaskFilter value={filter} onChange={setFilter} />
+            </div>
+
+            <ProjectTasks
+              tasks={tasks}
+              onEdit={(task) => {
+                setEditingTask(task);
+                setIsModalOpen(true);
+              }}
+              onDelete={(taskId) => {
+                setTaskToDelete(taskId);
+              }}
+            />
+          </>
         )}
         <Modal
           isOpen={!!taskToDelete}
