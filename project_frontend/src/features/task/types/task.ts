@@ -1,5 +1,10 @@
-import type { TeamMember } from "@/features/team/types/teamMember";
+import type { User } from "@/features/auth/types/auth";
 import type { Tag } from "../../tag/types/tag";
+export type AssignedUser = {
+    _id: string
+    name: string
+    email: string
+}
 
 export interface Task {
     _id: string;
@@ -9,7 +14,7 @@ export interface Task {
     status: string;
     priority: TaskPriority;
     dueDate: string;
-    assignedUsers?: TeamMember[];
+    assignedUsers: User[]
     tags?: Tag[];
     createdAt: string;
 }

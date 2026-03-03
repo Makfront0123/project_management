@@ -1,11 +1,13 @@
 import { create } from "zustand";
-import { getTaskActivities } from "../services/activity_services";
-import type { Activity } from "../types/Activity"; // ✅ importar el tipo correcto
+import { getTaskActivities, getTeamActivities } from "../services/activity_services";
+import type { Activity } from "../types/Activity";
 
 interface ActivityStore {
     activities: Activity[];
     isLoading: boolean;
     fetchTaskActivities: (taskId: string) => Promise<void>;
+    fetchTeamActivities: (teamId: string) => Promise<void>;
+    clearActivities: () => void;
 }
 
 export const useActivityStore = create<ActivityStore>((set) => ({
@@ -22,4 +24,17 @@ export const useActivityStore = create<ActivityStore>((set) => ({
             isLoading: false,
         });
     },
+
+    fetchTeamActivities: async (teamId) => {
+        set({ isLoading: true });
+
+        const response = await getTeamActivities(teamId);
+        
+        set({
+            activities: response.activities ?? [],
+            isLoading: false,
+        });
+    },
+
+    clearActivities: () => set({ activities: [] }),
 }));

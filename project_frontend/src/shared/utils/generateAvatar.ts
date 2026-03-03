@@ -16,7 +16,10 @@ export const generateAvatar = (name: string) => {
 
     const background = colors[hash % colors.length]
 
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(
-        name
-    )}&background=${background}&color=fff&size=256`
+    return {
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(
+            name
+        )}&background=${background}&color=fff&size=256`,
+        color: `#${background}`,
+    }
 }

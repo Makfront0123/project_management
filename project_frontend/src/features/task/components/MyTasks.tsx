@@ -7,7 +7,7 @@ interface Props {
     loading: boolean
 }
 const MyTasks = ({ tasks, loading }: Props) => {
-    if (!loading) {
+    if (loading) {
         return (
             <Card className="p-6 w-full flex flex-col items-center justify-center text-gray-400">
                 <TaskCardSkeleton />

@@ -10,6 +10,7 @@ import { useTaskWorkflows } from "@/features/task/hooks/useTaskWorkflows";
 import TaskComments from "@/features/task/components/TaskComment";
 import { TaskCardSkeleton } from "@/features/task/components/TaskCardSkeleton";
 import { useFilteredTasks } from "@/features/task/hooks/useFilteredTasks";
+import { useActiveTeamRole } from "@/features/team/hooks/useActiveTeamRole";
 
 const ProjectDetails = () => {
   const data = useProjectData();
@@ -24,6 +25,7 @@ const ProjectDetails = () => {
       ui.setEditingTask(null);
     }
   );
+  const { isAdmin } = useActiveTeamRole()
 
   const { deleteTask } = useTaskWorkflows();
 
@@ -35,11 +37,11 @@ const ProjectDetails = () => {
     await deleteTask(taskId, data.currentProject._id);
   };
 
-  const tasksToShow = data.isAdmin
+  const tasksToShow = isAdmin
     ? data.tasks
     : data.userTasks;
 
-  const filteredTasks = useFilteredTasks(tasksToShow, filter);
+  const filteredTasks = useFilteredTasks(tasksToShow, filter)
   if (data.isLoadingProject || !data.currentProject || !data.tasksLoaded) {
     return (
       <div className="p-10">
@@ -47,8 +49,7 @@ const ProjectDetails = () => {
       </div>
     );
   }
-
-  if (data.isAdmin) {
+  if (isAdmin) {
     return (
       <AdminProjectView
         currentProject={data.currentProject}

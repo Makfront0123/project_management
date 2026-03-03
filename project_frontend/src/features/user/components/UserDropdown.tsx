@@ -1,9 +1,10 @@
 import { Button } from "@/shared/components/ui/button"
 import { AppDropdown } from "@/shared/components/AppDropdown"
 import { useAuthStore } from "@/features/auth/store/auth_store"
+import { useNavigate } from "react-router"
 export function UserDropdown() {
   const { user, logout } = useAuthStore()
-
+  const navigate = useNavigate()
   return (
     <AppDropdown
       label="My Account"
@@ -17,9 +18,7 @@ export function UserDropdown() {
         </Button>
       }
       items={[
-        { label: "Profile", },
-        { label: "Billing", },
-        { label: "Settings" },
+        { label: "Profile", onClick: () => navigate("/settings/profile") },
         {
           label: "Log out",
           onClick: logout,

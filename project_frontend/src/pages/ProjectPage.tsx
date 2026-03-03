@@ -13,6 +13,7 @@ import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
 import CreateTeamForm from "@/features/team/components/CreateTeamForm"
 import Modal from "@/shared/components/Modal"
 import { useActiveTeamRole } from "@/features/team/hooks/useActiveTeamRole"
+import { ProjectCardSkeleton } from "@/features/project/components/ProjectCardSkeleton"
 
 
 const ProjectPage = () => {
@@ -43,7 +44,7 @@ const ProjectPage = () => {
   if (projectsLoading) {
     return (
       <div className="p-10 text-center">
-        Loading projects...
+        <ProjectCardSkeleton/>
       </div>
     )
   }

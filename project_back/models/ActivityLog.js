@@ -19,19 +19,33 @@ const activityLogSchema = new mongoose.Schema(
         "attachment-updated",
         "attachment-uploaded",
         "attachment-created",
+        "member-added",
+        "member-removed",
+        "task-assigned",
+        "task-unassigned",
       ],
       required: true,
     },
 
     message: {
       type: String,
-      required: true,
     },
-
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+    },
+    targetUser: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    metadata: {
+      projectName: String,
+      taskName: String,
+      teamName: String,
+      targetUserName: String,
+      attachmentName: String,
+      role: String,
     },
 
     taskId: {
@@ -51,4 +65,9 @@ const activityLogSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+activityLogSchema.index({ teamId: 1, createdAt: -1 });
+activityLogSchema.index({ projectId: 1, createdAt: -1 });
+activityLogSchema.index({ taskId: 1, createdAt: -1 });
+activityLogSchema.index({ user: 1, createdAt: -1 });
 export default mongoose.model('ActivityLog', activityLogSchema);

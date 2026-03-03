@@ -15,12 +15,11 @@ class TaskAssignmentRepository {
     }
 
     async getAllUsersAssignedToTask(taskId) {
-        return await TaskAssignment.find({ taskId })
-            .populate("userId", "name email")
-            .populate("assignedBy", "name")
-            .populate("taskId", "name");
-    }
+        const assignments = await TaskAssignment.find({ taskId })
+            .populate("userId", "name email");
 
+        return assignments.map(a => a.userId);
+    }
     async getTasksAssignedToUser(userId) {
         return await TaskAssignment.find({ userId });
     }

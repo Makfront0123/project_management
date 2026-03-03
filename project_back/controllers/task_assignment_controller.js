@@ -3,6 +3,7 @@ import taskService from "../services/task_service.js";
 import teamMemberRepo from "../repositories/team_member_repository.js";
 import notificationService from "../services/notification_service.js";
 import projectService from "../services/project_service.js";
+import Activity from "../models/ActivityLog.js";
 export const assignUserToTask = async (req, res) => {
     try {
         const { taskId } = req.params;
@@ -41,6 +42,21 @@ export const assignUserToTask = async (req, res) => {
         const data = { taskId, userId, assignedBy };
         const taskAssignment = await taskAssignmentService.createTaskAssignment(data);
 
+        await Activity.create({
+            type: "task-assigned",
+            user: assignedBy,
+            targetUser: userId,
+            teamId,
+            projectId: task.projectId,
+            taskId: task._id,
+            message: `${req.user.name} assigned ${member.userName} to task ${task.name}`,
+            metadata: {
+                taskName: task.name,
+                projectName: task.projectName,
+                targetUserName: member.userName,
+                role: member.role
+            }
+        });
         const notificationMessage = `${req.user.name} has assigned you the task ${task.name}`;
         const notification = await notificationService.createNotification({
             recipient: userId,
@@ -80,12 +96,24 @@ export const removeUserFromTask = async (req, res) => {
             return res.status(404).json({ message: "Task not found" });
         }
 
-        const deleted = await taskAssignmentService.removeUserFromTask(taskId, userId);
-        console.log("deleted:", deleted);
+        const deleted = await taskAssignmentService.removeUserFromTask(taskId, userId)
         if (!deleted) {
             return res.status(404).json({ message: "User is not assigned to task" });
         }
 
+        await Activity.create({
+            type: "task-unassigned",
+            user: req.user.id,
+            targetUser: userId,
+            teamId: task.teamId,
+            projectId: task.projectId,
+            taskId: task._id,
+            message: `${req.user.name} removed ${deleted.userName} from task ${task.name}`,
+            metadata: {
+                taskName: task.name,
+                targetUserName: deleted.userName
+            }
+        });
         const notificationMessage = `${req.user.name} has removed your assignment to the task ${task.name}`;
         const notification = await notificationService.createNotification({
             recipient: userId,
@@ -160,6 +188,19 @@ export const completeAssignedTask = async (req, res) => {
         const project = await projectService.findProjectById(task.projectId);
         const admin = project.ownerId
 
+        await Activity.create({
+            type: "task-completed",
+            user: userId,
+            teamId: task.teamId,
+            projectId: task.projectId,
+            taskId: task._id,
+            message: `${req.user.name} marked task ${task.name} as completed`,
+            metadata: {
+                taskName: task.name,
+                projectName: project.name
+            }
+        });
+
         const notificationMessage = `${req.user.name} has marked the task ${task.name} as completed`;
         const notification = await notificationService.createNotification({
             recipient: admin,
@@ -172,8 +213,7 @@ export const completeAssignedTask = async (req, res) => {
                 redirectTo: `/team/${task.teamId}/projects/${task.projectId}/tasks/${task._id}`
             }
         });
-
-        req.io.to(`user_${userId}`).emit("newNotification", notification);
+        req.io.to(`user_${admin}`).emit("newNotification", notification);
 
         res.status(200).json({ message: "Task marked as completed and assignment removed", notification });
     } catch (error) {

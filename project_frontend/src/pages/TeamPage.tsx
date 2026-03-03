@@ -46,6 +46,8 @@ const TeamPage = () => {
         navigate("/dashboard")
     }
 
+    console.log(teamMemberships)
+
     return (
         <>
             {teamMemberships.length === 0 ? (
@@ -64,18 +66,19 @@ const TeamPage = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {teamMemberships.map((team) => (
+                        {teamMemberships.map((membership) => (
                             <TeamCard
-                                key={team.teamId}
-                                name={team.team.name}
-                                role={team.role}
-                                createdAt={team.createdAt}
-                                members={team.members}
-                                onClick={() => handleSelectTeam(team.teamId)}
-                                onEdit={() => openEdit(team)}
-                                onDelete={() => openDelete(team)}
-                                onLeave={() => openLeave(team)}
-                                isAdmin={team.role === "admin"}
+                                key={membership.team._id}
+                                name={membership.team.name}
+                                image={membership.team.image}
+                                role={membership.role}
+                                createdAt={membership.createdAt}
+                                members={membership.members}
+                                onClick={() => handleSelectTeam(membership.team._id)}
+                                onEdit={() => openEdit(membership)}
+                                onDelete={() => openDelete(membership)}
+                                onLeave={() => openLeave(membership)}
+                                isAdmin={membership.role === "admin"}
                             />
                         ))}
                     </div>

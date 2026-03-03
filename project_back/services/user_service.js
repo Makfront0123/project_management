@@ -28,8 +28,7 @@ class UserService {
                     const membersCount = await userRepo.countTeamMembers(tm.teamId._id);
 
                     return {
-                        teamId: tm.teamId._id,
-                        team: tm.teamId, // 👈 AGREGA ESTO
+                        team: tm.teamId,
                         role: tm.role,
                         createdAt: tm.teamId.createdAt,
                         members: membersCount

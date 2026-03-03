@@ -10,7 +10,7 @@ import { useCreateTeamForm } from "@/features/team/hooks/useCreateTeamForm"
 import { generateAvatar } from "../utils/generateAvatar"
 
 export function SelectGroups() {
-    const { teamMemberships, isLoading, refetch } = useUserTeams()
+    const { teamMemberships, refetch } = useUserTeams()
     const { activeTeamId, setActiveTeam } = useTeamWorkflow()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -20,12 +20,10 @@ export function SelectGroups() {
         setIsModalOpen(false)
     })
     useEffect(() => {
-        if (!activeTeamId && teamMemberships.length) {
+        if (!activeTeamId && teamMemberships.length > 0) {
             setActiveTeam(teamMemberships[0].teamId)
         }
-    }, [activeTeamId, teamMemberships, setActiveTeam])
-
-    if (isLoading) return null
+    }, [activeTeamId, setActiveTeam, teamMemberships])
 
     const handleChange = (value: string) => {
         if (value === "create") {
@@ -51,21 +49,25 @@ export function SelectGroups() {
                             Teams
                         </SelectLabel>
 
-                        {teamMemberships.map((team) => (
+                        {teamMemberships.map((membership) => (
                             <SelectItem
-                                key={team.teamId}
-                                value={team.teamId}
+                                key={membership.team._id}
+                                value={membership.team._id}
                                 className="cursor-pointer flex items-center gap-x-4"
                             >
                                 <img
-                                    src={team?.team?.image || generateAvatar(team.team.name)}
-                                    alt={team.name}
+                                    src={
+                                        membership.team.image ??
+                                        generateAvatar(membership.team.name).avatar
+                                    }
+                                    alt={membership.team.name}
                                     className="w-10 h-10 rounded-md"
                                 />
-                                <span className="dark:text-white text-black">{team.team.name}</span>
+                                <span className="dark:text-white text-black">
+                                    {membership.team.name}
+                                </span>
                             </SelectItem>
                         ))}
-
                         <SelectItem
                             value="create"
                             className="cursor-pointer flex items-center opacity-50 text-gray-400"

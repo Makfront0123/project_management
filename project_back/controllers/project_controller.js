@@ -49,10 +49,14 @@ export const createProject = async (req, res) => {
         });
 
         await Activity.create({
-            taskId: task._id,
+            teamId,
+            projectId: project._id,
             user: req.user.id,
             type: "project-created",
-            message: "Project created",
+            message: "project created",
+            metadata: {
+                projectName: project.name
+            }
         });
 
         res.status(201).json({
@@ -133,10 +137,14 @@ export const updateProject = async (req, res) => {
         }
         const updatedProject = await projectService.updateProject(teamId, projectId, data);
         await Activity.create({
-            taskId: task._id,
+            teamId,
+            projectId,
             user: req.user.id,
             type: "project-updated",
-            message: "Project updated",
+            message: "project updated",
+            metadata: {
+                projectName: updatedProject.name
+            }
         });
         res.status(200).json({
             message: "Project updated successfully",
@@ -162,12 +170,15 @@ export const deleteProject = async (req, res) => {
         }
 
         await Activity.create({
-            taskId: task._id,
+            teamId,
+            projectId,
             user: req.user.id,
             type: "project-deleted",
-            message: "Project deleted",
+            message: "project deleted",
+            metadata: {
+                projectName: deletedProject.name
+            }
         });
-
         res.status(200).json({
             message: "Project and related data deleted successfully",
             deletedProject,

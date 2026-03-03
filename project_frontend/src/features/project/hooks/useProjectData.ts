@@ -27,10 +27,12 @@ export const useProjectData = () => {
 
   const [tasksLoaded, setTasksLoaded] = useState(false);
 
-  const team = useMemo(
-    () => teamMemberships.find((t) => t.teamId === teamId),
-    [teamId, teamMemberships]
-  );
+  const team = useMemo(() => {
+    return teamMemberships.find(
+      (t) =>
+        String(t.teamId || t.teamId) === String(teamId)
+    );
+  }, [teamId, teamMemberships]);
 
   const isAdmin = team?.role === "admin";
 

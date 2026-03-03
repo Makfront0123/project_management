@@ -1,7 +1,8 @@
 import taskService from "../services/task_service.js";
 import TaskAssignment from "../models/TaskAssignment.js";
 import Activity from "../models/ActivityLog.js";
-
+import Project from "../models/Project.js";
+import teamMemberRepo from "../repositories/team_member_repository.js";
 export const createTask = async (req, res) => {
     try {
 
@@ -24,19 +25,42 @@ export const createTask = async (req, res) => {
             dueDate,
         });
 
-        await TaskAssignment.create({
-            taskId: task._id,
-            userId: assignedUserId,
-            assignedBy: req.user.id,
-        });
+        const project = await Project.findById(projectId);
 
         await Activity.create({
+            teamId: project.teamId,
+            projectId,
             taskId: task._id,
             user: req.user.id,
             type: "task-created",
-            message: "Task created",
+            message: "task created",
+            metadata: {
+                taskName: task.name,
+                projectName: project.name
+            }
         });
 
+        if (assignedUserId) {
+            await TaskAssignment.create({
+                taskId: task._id,
+                userId: assignedUserId,
+                assignedBy: req.user.id,
+            });
+
+            await Activity.create({
+                teamId: project.teamId,
+                projectId,
+                taskId: task._id,
+                user: req.user.id,
+                targetUser: assignedUserId,
+                type: "task-assigned",
+                message: "Task assigned to user",
+                metadata: {
+                    taskName: task.name,
+                    projectName: project.name,
+                },
+            });
+        }
         res.status(201).json({
             message: "Task created",
             task,
@@ -65,8 +89,6 @@ export const getAllTasksByProject = async (req, res) => {
 
 export const getTaskByUser = async (req, res) => {
     try {
-
-        console.log("REQ USER:", req.user);
 
         const userId = req.user.id;
 
@@ -114,42 +136,71 @@ export const getTask = async (req, res) => {
     }
 };
 
-
 export const updateTask = async (req, res) => {
     try {
-
         const { projectId, taskId } = req.params;
+        const { name, description, priority, assignedUserId } = req.body;
 
-        const { name, description } = req.body;
+        const data = { name, description, priority };
+        const updatedTask = await taskService.updateTask(taskId, projectId, data);
 
-        const data = {
-            name,
-            description,
-        };
+        const project = await Project.findById(projectId);
 
-        const updatedTask = await taskService.updateTask(
-            taskId,
-            projectId,
-            data
-        );
+        // ---- Manejo de asignación ----
+        const currentAssignments = await TaskAssignment.find({ taskId });
+        const currentUserId = currentAssignments[0]?.userId?.toString();
 
-        await Activity.create({
-            taskId: taskId,
-            user: req.user.id,
-            type: "task-updated",
-            message: "Task updated",
-        });
+        if (assignedUserId && assignedUserId !== currentUserId) {
+            // eliminar asignación anterior
+            if (currentAssignments.length) {
+                await TaskAssignment.deleteMany({ taskId });
+                for (const a of currentAssignments) {
+                    await Activity.create({
+                        type: "task-unassigned",
+                        user: req.user.id,
+                        targetUser: a.userId,
+                        teamId: project.teamId,
+                        projectId,
+                        taskId,
+                        metadata: { taskName: updatedTask.name, targetUserName: a.userName }
+                    });
+                }
+            }
+
+            // asignar nuevo usuario
+            const member = await teamMemberRepo.getMemberOfTeam(project.teamId, assignedUserId);
+            if (member) {
+                await TaskAssignment.create({
+                    taskId,
+                    userId: assignedUserId,
+                    assignedBy: req.user.id,
+                });
+
+                await Activity.create({
+                    type: "task-assigned",
+                    user: req.user.id,
+                    targetUser: assignedUserId,
+                    teamId: project.teamId,
+                    projectId,
+                    taskId,
+                    metadata: {
+                        taskName: updatedTask.name,
+                        projectName: project.name,
+                        targetUserName: member.userName,
+                        role: member.role,
+                    },
+                });
+            }
+        }
 
         res.status(200).json({
             message: "Task updated successfully",
             updatedTask,
         });
-
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
-
 
 export const getTasksWithAssignments = async (req, res) => {
     try {
@@ -174,15 +225,24 @@ export const deleteTask = async (req, res) => {
 
         const { projectId, taskId } = req.params;
 
+        const task = await taskService.getTaskById(projectId, taskId);
+
         await taskService.deleteTask(projectId, taskId);
 
+        const project = await Project.findById(projectId);
+
         await Activity.create({
-            taskId: taskId,
+            teamId: project.teamId,
+            projectId,
+            taskId,
             user: req.user.id,
             type: "task-deleted",
-            message: "Task deleted",
+            message: "task deleted",
+            metadata: {
+                taskName: task.name,
+                projectName: project.name
+            }
         });
-
         res.status(200).json({
             message: "Task deleted successfully",
         });

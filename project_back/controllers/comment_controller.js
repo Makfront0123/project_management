@@ -52,6 +52,8 @@ export const createComment = async (req, res) => {
     });
 
     await Activity.create({
+      teamId: project.teamId,
+      projectId: project._id,
       taskId: task._id,
       user: req.user.id,
       type: "comment-created",
@@ -130,7 +132,13 @@ export const deleteComment = async (req, res) => {
   try {
     const { taskId, commentId } = req.params;
     await commentService.deleteComment(commentId, taskId);
+
+    const task = await taskService.findTaskById(taskId);
+    const project = await projectService.findProjectById(task.projectId);
+
     await Activity.create({
+      teamId: project.teamId,
+      projectId: project._id,
       taskId: task._id,
       user: req.user.id,
       type: "comment-deleted",

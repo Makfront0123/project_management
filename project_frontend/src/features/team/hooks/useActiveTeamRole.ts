@@ -6,7 +6,7 @@ export const useActiveTeamRole = () => {
     const { activeTeamId } = useTeamWorkflow()
 
     const activeMembership = teamMemberships.find(
-        (team) => team.teamId === activeTeamId
+        (membership) => membership.team._id === activeTeamId
     )
 
     return {

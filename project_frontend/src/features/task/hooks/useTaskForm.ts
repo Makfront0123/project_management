@@ -32,16 +32,28 @@ export const useTaskForm = (
         onSubmit: async (values) => {
             if (!projectId) return;
 
+            const data: Partial<TaskFormValues> = {};
+
+            if (!editingTask || values.name !== editingTask.name) data.name = values.name;
+            if (!editingTask || values.description !== editingTask.description) data.description = values.description;
+            if (!editingTask || values.priority !== editingTask.priority) data.priority = values.priority;
+            if (!editingTask || values.dueDate !== editingTask.dueDate) data.dueDate = values.dueDate;
+            const currentAssignedUserId = editingTask?.assignedUsers?.[0]?.id ?? null;
+            if (!editingTask || values.assignedUserId !== currentAssignedUserId) {
+                data.assignedUserId = values.assignedUserId;
+            }
+
             if (editingTask) {
-                await updateTask(editingTask._id, values, projectId);
+                await updateTask(editingTask._id, data, projectId);
             } else {
-                await createTask(projectId, values);
+                await createTask(projectId, data);
             }
 
             form.reset();
             onSuccess?.();
         },
     });
+
     useEffect(() => {
         if (!editingTask) return;
 
@@ -52,10 +64,11 @@ export const useTaskForm = (
             dueDate: editingTask.dueDate
                 ? new Date(editingTask.dueDate).toISOString().split("T")[0]
                 : "",
-            assignedUserId: editingTask.assignedUsers?.[0]?._id ?? null,
+            assignedUserId: editingTask.assignedUsers?.[0]?.id ?? null,
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editingTask]);
+
     return form;
 };

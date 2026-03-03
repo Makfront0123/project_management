@@ -1,5 +1,7 @@
 import attachmentService from "../services/attachment_service.js";
 import Activity from "../models/ActivityLog.js";
+import projectService from "../services/project_service.js";
+import taskService from "../services/task_service.js";
 export const uploadAttachment = async (req, res) => {
     try {
         const { taskId, teamId } = req.params;
@@ -34,11 +36,16 @@ export const uploadAttachment = async (req, res) => {
             attachment = await attachmentService.createAttachment(data);
         }
 
+        const task = await taskService.findTaskById(taskId);
+        const project = await projectService.findProjectById(task.projectId);
+
         await Activity.create({
-            taskId,
+            teamId: project.teamId,
+            projectId: project._id,
+            taskId: task._id,
             user: req.user.id,
             type: "attachment-uploaded",
-            message: "Attachment uploaded",
+            message: `uploaded attachment "${file.originalname}"`,
         });
 
         res.status(200).json({
@@ -97,11 +104,16 @@ export const updateAttachment = async (req, res) => {
             data
         );
 
+        const task = await taskService.findTaskById(attachment.taskId);
+        const project = await projectService.findProjectById(task.projectId);
+
         await Activity.create({
-            taskId: attachment.taskId,
+            teamId: project.teamId,
+            projectId: project._id,
+            taskId: task._id,
             user: req.user.id,
             type: "attachment-updated",
-            message: "Attachment updated"
+            message: "Attachment updated",
         });
 
         res.status(200).json({
@@ -129,11 +141,16 @@ export const deleteAttachment = async (req, res) => {
             teamId
         );
 
+        const task = await taskService.findTaskById(attachment.taskId);
+        const project = await projectService.findProjectById(task.projectId);
+
         await Activity.create({
-            taskId: attachment.taskId,
+            teamId: project.teamId,
+            projectId: project._id,
+            taskId: task._id,
             user: req.user.id,
             type: "attachment-deleted",
-            message: "Attachment deleted"
+            message: "Attachment deleted",
         });
 
         res.status(200).json({

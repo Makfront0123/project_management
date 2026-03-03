@@ -26,11 +26,12 @@ const AdminProjectView = ({
   acceptedMembers,
   taskForm
 }: AdminProjectViewProp) => {
+  console.log("tasks", tasks);
   const tabs = useProjectTabs();
   const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
 
   return (
-    <div className="w-full h-full flex flex-col gap-6 p-4">
+    <div className="w-full min-h-screen flex flex-col gap-6 p-4">
 
       <AdminHeader
         project={currentProject}

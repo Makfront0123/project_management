@@ -86,3 +86,27 @@ export const resendForgotPasswordOtp = async (email: string) => {
     })
     return response.data
 }
+
+export const changePassword = async (
+    currentPassword: string,
+    newPassword: string,
+    confirmPassword: string
+) => {
+    const token = useAuthStore.getState().token;
+
+    const response = await axios.post(
+        `${baseUrl}/change-password`,
+        {
+            currentPassword,
+            newPassword,
+            confirmPassword,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    return response.data;
+};

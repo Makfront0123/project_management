@@ -16,10 +16,10 @@ const MainLayout = () => {
                         <SelectGroups />
                         <div className="flex items-center gap-x-3">
                             <img src={icons.notifications} alt="Logo" className="size-10 p-2 border-2 cursor-pointer hover:opacity-70 rounded-sm" />
-                           <div className="flex items-center">
-                             <UserDropdown />
-                            <ModeToggle />
-                           </div>
+                            <div className="flex items-center">
+                                <UserDropdown />
+                                <ModeToggle />
+                            </div>
                         </div>
 
                     </header>

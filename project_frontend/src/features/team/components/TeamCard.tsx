@@ -7,10 +7,12 @@ import {
 } from "@/shared/components/ui/card"
 import { Badge } from "@/shared/components/ui/badge"
 import { AppDropdown, type DropdownItem } from "@/shared/components/AppDropdown"
+import { generateAvatar } from "@/shared/utils/generateAvatar"
 
 interface TeamCardProps {
     name: string
     role: string
+    image?: string
     createdAt?: string
     members?: number
     onClick?: () => void
@@ -22,6 +24,7 @@ interface TeamCardProps {
 
 export function TeamCard({
     name,
+    image,
     role,
     createdAt,
     members,
@@ -31,6 +34,7 @@ export function TeamCard({
     onLeave,
     isAdmin
 }: TeamCardProps) {
+    const { color } = generateAvatar(name)
     const dropdownItems: DropdownItem[] =
         isAdmin
             ? [
@@ -59,14 +63,25 @@ export function TeamCard({
                     },
                 },
             ]
+
+    const avatar = image ?? generateAvatar(name).avatar
+
     return (
         <Card
             onClick={onClick}
             className="hover:shadow-md transition cursor-pointer relative"
+            style={{ borderTop: `4px solid ${color}` }}
         >
             <CardHeader>
                 <div className="flex justify-between items-center">
-                    <CardTitle>{name}</CardTitle>
+                    <div className="flex items-center gap-x-5">
+                        <img
+                            src={avatar}
+                            alt={name}
+                            className="w-12 h-12 rounded-lg"
+                        />
+                        <CardTitle>{name}</CardTitle>
+                    </div>
 
                     <div className="flex items-center gap-2">
                         <Badge variant={role === "admin" ? "default" : "secondary"}>

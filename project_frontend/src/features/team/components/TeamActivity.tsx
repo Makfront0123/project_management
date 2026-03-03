@@ -1,9 +1,21 @@
-const TeamActivity = ({ teamId }: { teamId: string }) => {
-    return (
-        <div className="w-full flex items-center justify-center border-2 border-b p-2 rounded-lg border-gray-200">
-            <h1 className="text-xl text-gray-200">Team Activity</h1>
-        </div>
-    )
-}
+import { ActivityFeed } from "@/features/activity/components/ActivityFeed";
+import { useTeamActivity } from "@/features/activity/hooks/useTeamActivity";
 
-export default TeamActivity
+
+
+const TeamActivity = ({ teamId }: { teamId: string }) => {
+    const { activities, isLoading } = useTeamActivity(teamId);
+if (!teamId) return null;
+    if (isLoading) {
+        return <div className="p-4">Loading activity...</div>;
+    }
+
+    return (
+        <div className="w-full border rounded-lg border-gray-200">
+            <h1 className="text-xl p-4 border-b">Team Activity</h1>
+            <ActivityFeed activities={activities} />
+        </div>
+    );
+};
+
+export default TeamActivity;

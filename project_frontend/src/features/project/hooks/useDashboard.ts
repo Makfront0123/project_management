@@ -85,11 +85,15 @@ export const useDashboard = () => {
 
         if (firstTeam.role !== "member") return
 
-        const key = `shown_code_${firstTeam.teamId}`
+        const teamId = firstTeam.teamId ?? firstTeam.team?._id
+
+        if (!teamId) return
+
+        const key = `shown_code_${teamId}`
 
         if (localStorage.getItem(key)) return
 
-        getTeamCode(firstTeam.teamId)
+        getTeamCode(teamId)
             .then((code: any) => {
                 setTeamCode(code)
                 setShowWelcomeModal(true)
@@ -98,7 +102,6 @@ export const useDashboard = () => {
             .catch(console.error)
 
     }, [teamMemberships, getTeamCode])
-
     useEffect(() => {
         const keys = Object.keys(localStorage).filter(k =>
             k.startsWith("shown_code_")

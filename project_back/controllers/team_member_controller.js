@@ -5,6 +5,7 @@ import userService from "../services/user_service.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateInviteToken } from "../utils/GenerateInviteToken.js";
 import jwt from "jsonwebtoken";
+import Activity from "../models/ActivityLog.js";
 export const addMemberToTeam = async (req, res) => {
     try {
         const { teamId } = req.params;
@@ -25,6 +26,9 @@ export const addMemberToTeam = async (req, res) => {
             }
         }
 
+        const userToAdd = await userService.getUserById(userId);
+        const team = await teamService.getTeamById(teamId);
+
         const teamMember = await teamMemberService.addMember({
             teamId,
             userId,
@@ -32,6 +36,18 @@ export const addMemberToTeam = async (req, res) => {
             status: "accepted",
         });
 
+        await Activity.create({
+            type: "member-added",
+            user: req.user.id,
+            targetUser: userId,
+            teamId,
+            message: "member added",
+            metadata: {
+                teamName: team.name,
+                targetUserName: userToAdd.name,
+                role: "member"
+            }
+        });
         res.status(201).json({ message: "Member Added", member: teamMember });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -233,7 +249,23 @@ export const deleteMemberOfTeam = async (req, res) => {
             return res.status(403).json({ message: "You cannot delete yourself if you are an administrator" });
         }
 
+        const userToRemove = await userService.getUserById(userId);
+        const team = await teamService.getTeamById(teamId);
+
         await teamMemberService.removeMember({ teamId, userId });
+
+        await Activity.create({
+            type: "member-removed",
+            user: req.user.id,
+            targetUser: userId,
+            teamId,
+            message: "member removed",
+            metadata: {
+                teamName: team.name,
+                targetUserName: userToRemove.name,
+                role: member.role
+            }
+        });
 
         res.status(200).json({ message: "Member deleted successfully" });
     } catch (error) {

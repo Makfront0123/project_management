@@ -7,6 +7,7 @@ type TextInputProps = {
   error?: string
   labelColor?: string
   textColor?: string
+  isDisabled?: boolean
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -19,7 +20,8 @@ export const TextInput = ({
   error,
   onChange,
   labelColor,
-  textColor
+  textColor,
+  isDisabled,
 }: TextInputProps) => {
   return (
     <div className="flex flex-col gap-y-1 w-full">
@@ -37,7 +39,9 @@ export const TextInput = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        disabled={isDisabled}
         className={`
+          ${isDisabled ? "bg-gray-100 text-gray-500" : ""}
           w-full
           border
           border-gray-300

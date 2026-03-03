@@ -20,6 +20,7 @@ interface Props {
 }
 
 const ProjectTasks = ({ tasks = [], onEdit, onDelete }: Props) => {
+
     if (!tasks.length) {
         return (
             <p className="text-gray-400 text-sm">
@@ -77,17 +78,12 @@ const ProjectTasks = ({ tasks = [], onEdit, onDelete }: Props) => {
                             </TableCell>
 
                             <TableCell>
-                                {task.assignedUsers && task.assignedUsers.length > 0 ? (
-                                    <div className="flex flex-col gap-1">
-                                        {task.assignedUsers.map((user) => (
-                                            <span
-                                                key={user?.id}
-                                                className="text-sm text-gray-700"
-                                            >
-                                                {user.name}
-                                            </span>
-                                        ))}
-                                    </div>
+                                {task.assignedUsers?.length > 0 ? (
+                                    task.assignedUsers.map(user => (
+                                        <span key={user.id}>
+                                            {user.name}
+                                        </span>
+                                    ))
                                 ) : (
                                     <span className="text-gray-400">
                                         Sin asignar

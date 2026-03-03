@@ -36,6 +36,7 @@ const TaskDetailsPage = () => {
     } = useAttachments(activeTeamId ?? "", task?._id)
 
     const { activities } = useActivity(task?._id);
+    console.log("activities", activities);
     const { items, page, totalPages, nextPage, prevPage } =
         usePagination(activities, 10);
 
@@ -92,7 +93,8 @@ const TaskDetailsPage = () => {
                         <TaskComments taskId={task._id} />
                     </section>
                 </div>
-                <div className="flex flex-col w-full py-10 rounded-lg bg-black border-1 border-gray-600">
+                <div className="flex flex-col w-full py-6 rounded-lg bg-black border-1 border-gray-600">
+                    <h1 className="font-bold text-2xl ml-5 mb-2">Activities</h1>
                     <ActivityFeed activities={items} />
                     <div className="flex justify-between px-4 pt-36">
                         <button onClick={prevPage} disabled={page === 1}>

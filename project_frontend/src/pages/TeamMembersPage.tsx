@@ -75,7 +75,7 @@ const TeamMembersPage = () => {
               <button
                 onClick={prevPage}
                 disabled={page === 1}
-                className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+                className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 text-black"
               >
                 Prev
               </button>
@@ -86,7 +86,7 @@ const TeamMembersPage = () => {
                   onClick={() => setPage(idx + 1)}
                   className={`px-3 py-1 rounded ${page === idx + 1
                     ? "bg-blue-600 text-white"
-                    : "bg-gray-200"
+                    : "bg-gray-200 text-black"
                     }`}
                 >
                   {idx + 1}
@@ -96,7 +96,7 @@ const TeamMembersPage = () => {
               <button
                 onClick={nextPage}
                 disabled={page === totalPages}
-                className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+                className="px-3 py-1 bg-gray-200 text-black rounded disabled:opacity-50"
               >
                 Next
               </button>
