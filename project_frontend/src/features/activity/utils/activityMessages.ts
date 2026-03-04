@@ -19,10 +19,10 @@ export const activityMessages: Record<string, (activity: Activity) => string> = 
         `deleted task "${activity.metadata?.taskName}"`,
 
     "task-assigned": (activity) =>
-        `assigned "${activity.metadata?.taskName}" to ${activity.metadata?.targetUserName}`,
+        `assigned "${activity.metadata?.taskName}" to ${activity.targetUser?.name}`,
 
     "task-unassigned": (activity) =>
-        `removed ${activity.metadata?.targetUserName} from "${activity.metadata?.taskName}"`,
+        `removed ${activity.metadata?.taskName} from "${activity.targetUser?.name}"`,
 
     "attachment-created": (activity) =>
         `added attachment to "${activity.taskId?.name}"`,

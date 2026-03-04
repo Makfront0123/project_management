@@ -6,6 +6,7 @@ export const getTaskActivities = async (req, res) => {
         .populate("user", "name")
         .populate("taskId", "name")
         .populate("projectId", "name")
+        .populate("targetUser", "name")
         .populate("teamId", "name")
         .sort({ createdAt: -1 });
 
@@ -19,6 +20,7 @@ export const getTeamActivities = async (req, res) => {
         .populate("user", "name")
         .populate("taskId", "name")
         .populate("projectId", "name")
+        .populate("targetUser", "name")
         .populate("teamId", "name")
         .sort({ createdAt: -1 })
         .limit(20);
@@ -30,6 +32,7 @@ export const getUserActivities = async (req, res) => {
 
     const activities = await Activity.find({ user: userId })
         .populate("user", "name")
+        .populate("targetUser", "name")
         .sort({ createdAt: -1 });
 
     res.json({ activities });

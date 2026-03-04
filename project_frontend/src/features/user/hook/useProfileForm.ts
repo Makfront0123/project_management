@@ -1,11 +1,13 @@
 import { useEffect } from "react"
 import { useForm } from "@/shared/hooks/useForm"
 import { useUserWorkflow } from "./userWorkflow"
-
+import toast from "react-hot-toast"
+import { useNavigate } from "react-router"
 
 export const useProfileForm = () => {
     const { user, updateProfile } = useUserWorkflow()
-   console.log("store", user)
+    const navigate = useNavigate()
+
     const form = useForm({
         initialValues: {
             name: "",
@@ -19,11 +21,21 @@ export const useProfileForm = () => {
             if (!values.name) {
                 errors.name = "Name is required"
             }
+
             return errors
         },
 
         onSubmit: async (values) => {
-            await updateProfile(values)
+            try {
+                await updateProfile(values)
+
+                toast.success("Profile updated successfully ✅")
+
+                navigate("/dashboard")
+
+            } catch (error: any) {
+                toast.error(error?.response?.data?.message || "Something went wrong")
+            }
         },
     })
 

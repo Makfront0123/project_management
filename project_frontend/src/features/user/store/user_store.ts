@@ -41,18 +41,19 @@ export const useUserStore = create<UserStore>()(
                 set({ loading: true })
 
                 try {
-                    const data = await updateUser(values)
+                    await updateUser(values)
+                    const freshUser = await getProfile()
 
                     set({
-                        user: data,
+                        user: freshUser,
                         loading: false
                     })
+
                 } catch (error) {
                     set({ loading: false })
                     throw error
                 }
             },
-
             deleteUser: async () => {
                 set({ loading: true })
 

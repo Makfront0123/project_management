@@ -3,6 +3,7 @@ import TaskAssignment from "../models/TaskAssignment.js";
 import Activity from "../models/ActivityLog.js";
 import Project from "../models/Project.js";
 import teamMemberRepo from "../repositories/team_member_repository.js";
+import User from "../models/User.js";
 export const createTask = async (req, res) => {
     try {
 
@@ -40,7 +41,14 @@ export const createTask = async (req, res) => {
             }
         });
 
+
         if (assignedUserId) {
+
+            const member = await teamMemberRepo.getMemberOfTeam(
+                project.teamId,
+                assignedUserId
+            );
+
             await TaskAssignment.create({
                 taskId: task._id,
                 userId: assignedUserId,
@@ -54,10 +62,10 @@ export const createTask = async (req, res) => {
                 user: req.user.id,
                 targetUser: assignedUserId,
                 type: "task-assigned",
-                message: "Task assigned to user",
                 metadata: {
                     taskName: task.name,
                     projectName: project.name,
+                    targetUserName: member?.userName,
                 },
             });
         }
@@ -146,12 +154,10 @@ export const updateTask = async (req, res) => {
 
         const project = await Project.findById(projectId);
 
-        // ---- Manejo de asignación ----
         const currentAssignments = await TaskAssignment.find({ taskId });
         const currentUserId = currentAssignments[0]?.userId?.toString();
 
         if (assignedUserId && assignedUserId !== currentUserId) {
-            // eliminar asignación anterior
             if (currentAssignments.length) {
                 await TaskAssignment.deleteMany({ taskId });
                 for (const a of currentAssignments) {
@@ -166,8 +172,6 @@ export const updateTask = async (req, res) => {
                     });
                 }
             }
-
-            // asignar nuevo usuario
             const member = await teamMemberRepo.getMemberOfTeam(project.teamId, assignedUserId);
             if (member) {
                 await TaskAssignment.create({

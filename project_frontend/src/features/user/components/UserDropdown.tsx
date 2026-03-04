@@ -2,12 +2,16 @@ import { Button } from "@/shared/components/ui/button"
 import { AppDropdown } from "@/shared/components/AppDropdown"
 import { useAuthStore } from "@/features/auth/store/auth_store"
 import { useNavigate } from "react-router"
+import { useUserStore } from "../store/user_store"
 export function UserDropdown() {
-  const { user, logout } = useAuthStore()
+  const { user } = useUserStore()
+  const logout = useAuthStore((state) => state.logout)
   const navigate = useNavigate()
+
+  console.log("user", user)
   return (
     <AppDropdown
-      label="My Account"
+      label={user?.name}
       trigger={
         <Button variant="ghost">
           <img

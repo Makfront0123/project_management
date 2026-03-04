@@ -1,8 +1,9 @@
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { useForm } from "@/shared/hooks/useForm";
-import type { FormValues } from "./ProjectModal";
+
 import { Button } from "@/shared/components/ui/button";
+import { useEffect } from "react";
 
 
 interface ProjectFormProps {
@@ -15,6 +16,18 @@ interface ProjectFormProps {
     submitLabel?: string;
 }
 
+
+export interface FormValues {
+    name: string;
+    description: string;
+}
+
+interface ProjectFormProps {
+    initialValues: FormValues;
+    onSubmit: (values: FormValues) => Promise<void>;
+    submitLabel?: string;
+}
+
 export const ProjectForm = ({
     initialValues,
     onSubmit,
@@ -24,20 +37,25 @@ export const ProjectForm = ({
         initialValues,
         validate: (values) => {
             const errors: Partial<Record<keyof FormValues, string>> = {};
-
-            if (!values.name.trim()) {
-                errors.name = "Name is required";
-            }
-
+            if (!values.name.trim()) errors.name = "Name is required";
             return errors;
         },
-
         onSubmit,
     });
 
+    // 🔹 reinicializa valores si cambian los initialValues
+    useEffect(() => {
+        form.setValues(initialValues);
+        form.setErrors({});
+    }, [initialValues]);
+
     return (
-        <form onSubmit={form.handleSubmit} className="space-y-4 border min-w-[70vh] border-gray-200 rounded-lg p-6">
+        <form
+            onSubmit={form.handleSubmit}
+            className="space-y-4 border min-w-[70vh] border-gray-200 rounded-lg p-6"
+        >
             <h1 className="font-bold">Project Details</h1>
+
             <div>
                 <label className="block text-sm font-medium">Project name</label>
                 <Input
@@ -47,9 +65,7 @@ export const ProjectForm = ({
                     placeholder="Project name"
                 />
                 {form.errors.name && (
-                    <p className="text-sm text-red-500">
-                        {form.errors.name}
-                    </p>
+                    <p className="text-sm text-red-500">{form.errors.name}</p>
                 )}
             </div>
 
@@ -66,7 +82,6 @@ export const ProjectForm = ({
             <Button type="submit" disabled={form.isSubmitting} className="mx-auto flex container">
                 {form.isSubmitting ? "Saving..." : submitLabel}
             </Button>
-
         </form>
     );
 };

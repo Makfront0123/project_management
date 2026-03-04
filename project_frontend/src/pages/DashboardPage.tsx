@@ -32,7 +32,8 @@ const DashboardPage = () => {
   )
 
   const { isAdmin } = useActiveTeamRole()
-  console.log(isAdmin)
+
+  
   return (
     <div className="flex flex-col w-full min-h-screen bg-white dark:bg-black">
       <div className="flex items-center justify-between w-full p-10">

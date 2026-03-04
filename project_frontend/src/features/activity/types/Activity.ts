@@ -1,3 +1,4 @@
+
 export type ActivityType =
     | "task-created"
     | "task-updated"
@@ -16,27 +17,38 @@ export type ActivityType =
 export interface Activity {
     _id: string;
     type: ActivityType;
+
     user: {
         _id: string;
         name: string;
     };
+
+    targetUser?: {
+        _id: string;
+        name: string;
+    };
+
     taskId?: {
         _id: string;
         name: string;
     };
+
     projectId?: {
         _id: string;
         name: string;
     };
+
     metadata?: {
         projectName?: string;
         taskName?: string;
         attachmentName?: string;
         targetUserName?: string;
     };
+
     teamId?: {
         _id: string;
         name: string;
     };
+
     createdAt: string;
 }

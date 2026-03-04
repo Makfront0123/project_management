@@ -60,9 +60,7 @@ type ProjectStore = {
     teamId: string
   ) => Promise<void>;
 };
-
 export const useProjectStore = create<ProjectStore>((set) => ({
-
   projects: [],
   currentProject: null,
   analytics: null,
@@ -75,151 +73,106 @@ export const useProjectStore = create<ProjectStore>((set) => ({
   limit: 10,
   totalPages: 1,
   totalProjects: 0,
+
   getProjects: async (teamId, page = 1, limit = 10) => {
-    set({
-      isLoadingProjects: true,
-      projects: [],
-    });
-
+    set({ isLoadingProjects: true, projects: [] });
     try {
-      const {
-        projects,
-        totalPages,
-        totalProjects,
-      } = await getProjects(teamId, page, limit);
-
-      set({
-        projects,
-        totalPages,
-        totalProjects,
-        page,
-        isLoadingProjects: false,
-      });
-
+      const { projects, totalPages, totalProjects } = await getProjects(teamId, page, limit);
+      set({ projects, totalPages, totalProjects, page, isLoadingProjects: false });
     } catch (error) {
       console.error("Error fetching projects:", error);
-
       set({ isLoadingProjects: false });
     }
   },
 
   getProject: async (projectId, teamId) => {
-    set({
-      isLoadingProject: true,
-    });
-
+    set({ isLoadingProject: true });
     try {
-      const data = await getProject(projectId, teamId);
-      set({
-        currentProject: data,
-        isLoadingProject: false,
-      });
-
+      const project = await getProject(projectId, teamId);
+      set({ currentProject: project, isLoadingProject: false });
+      return project; // 🔹 retornamos para poder usar después
     } catch (error) {
       console.error("Error fetching project:", error);
-
       set({ isLoadingProject: false });
+      throw error;
     }
   },
 
   getProjectAnalytics: async (teamId, projectId) => {
     set({ isLoadingAnalytics: true });
-
     try {
       const data = await getProjectAnalytics(teamId, projectId);
-      set({
-        analytics: data,
-        isLoadingAnalytics: false,
-      });
-
+      set({ analytics: data, isLoadingAnalytics: false });
     } catch (error) {
       console.error("Error fetching analytics:", error);
-
       set({ isLoadingAnalytics: false });
     }
   },
 
-
   getProjectsByTeam: async (teamId: string) => {
     set({ isLoadingProjects: true });
-
     try {
       const projects = await getProjectsByTeam(teamId);
-
-      set({
-        projects,
-        isLoadingProjects: false,
-      });
-
+      set({ projects, isLoadingProjects: false });
     } catch (error) {
       console.error("Error fetching projects:", error);
-
       set({ isLoadingProjects: false });
     }
   },
 
   createProject: async (teamId, data) => {
     set({ isLoadingProject: true });
-
     try {
       const { message, project } = await createProject(teamId, data);
-
       set((state) => ({
         projects: [...state.projects, project],
+        currentProject: project,
         totalProjects: state.totalProjects + 1,
         isLoadingProject: false,
       }));
-
       toast.success(message);
-
     } catch (error) {
       console.error("Error creando proyecto:", error);
-
       set({ isLoadingProject: false });
     }
   },
 
   updateProject: async (id, data, teamId) => {
     set({ isLoadingProject: true });
-
     try {
       const { message } = await updateProject(id, data, teamId);
-
       const updatedProject = await getProject(id, teamId);
 
       set((state) => ({
         projects: state.projects.map((project) =>
           project._id === id ? updatedProject : project
         ),
+        currentProject:
+          state.currentProject?._id === id ? updatedProject : state.currentProject,
         isLoadingProject: false,
       }));
 
       toast.success(message);
-
     } catch (error) {
       console.error("Error actualizando proyecto:", error);
-
       set({ isLoadingProject: false });
     }
   },
 
   deleteProject: async (id, teamId) => {
     set({ isLoadingProject: true });
-
     try {
       const { message } = await deleteProject(id, teamId);
-
       set((state) => ({
         projects: state.projects.filter((p) => p._id !== id),
+        currentProject:
+          state.currentProject?._id === id ? null : state.currentProject,
         totalProjects: state.totalProjects - 1,
         isLoadingProject: false,
       }));
-
       toast.success(message);
-
     } catch (error) {
       console.error("Error eliminando proyecto:", error);
-
       set({ isLoadingProject: false });
     }
   },

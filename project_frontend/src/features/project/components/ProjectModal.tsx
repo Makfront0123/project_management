@@ -12,64 +12,33 @@ import { Textarea } from "@/shared/components/ui/textarea";
 
 import { useForm } from "@/shared/hooks/useForm";
 import { useProjectWorkflows } from "@/features/project/hooks/useProjectWorkflows";
-import type { Project } from "../types/projects";
-
-
+ 
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   teamId: string | null;
-  project?: Project;
 }
+
 export interface FormValues {
   name: string;
   description: string;
 }
 
-export const ProjectModal = ({
-  open,
-  onOpenChange,
-  teamId,
-  project,
-}: Props) => {
+export const ProjectModal = ({ open, onOpenChange, teamId }: Props) => {
   const { createProject } = useProjectWorkflows();
 
-  const isEditing = !!project;
-
   const form = useForm<FormValues>({
-    initialValues: {
-      name: project?.name ?? "",
-      description: project?.description ?? "",
-    },
-
-
+    initialValues: { name: "", description: "" },
     validate: (values) => {
       const errors: Partial<Record<keyof FormValues, string>> = {};
-
-      if (!values.name.trim()) {
-        errors.name = "Name is required";
-      }
-
+      if (!values.name.trim()) errors.name = "Name is required";
       return errors;
     },
-
     onSubmit: async (values) => {
-      if (isEditing && project) {
-        /*
-        
-         await updateProject(project._id, {
-           name: values.name,
-           description: values.description,
-         });*/
-      } else {
-        await createProject({
-          name: values.name,
-          description: values.description,
-          teamId: teamId ?? "",
-        });
-      }
-
+      if (!teamId) return;
+      await createProject({ name: values.name, description: values.description, teamId });
+      form.reset(); // limpiamos el formulario
       onOpenChange(false);
     },
   });
@@ -77,29 +46,18 @@ export const ProjectModal = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-
         <DialogHeader>
-          <DialogTitle>
-            {isEditing ? "Edit Project" : "Create Project"}
-          </DialogTitle>
+          <DialogTitle>Create Project</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit} className="space-y-4">
-
-          <div>
-            <Input
-              name="name"
-              placeholder="Project name"
-              value={form.values.name}
-              onChange={form.handleChange}
-            />
-
-            {form.errors.name && (
-              <p className="text-sm text-red-500">
-                {form.errors.name}
-              </p>
-            )}
-          </div>
+          <Input
+            name="name"
+            placeholder="Project name"
+            value={form.values.name}
+            onChange={form.handleChange}
+          />
+          {form.errors.name && <p className="text-sm text-red-500">{form.errors.name}</p>}
 
           <Textarea
             name="description"
@@ -110,16 +68,9 @@ export const ProjectModal = ({
 
           <DialogFooter>
             <Button type="submit" disabled={form.isSubmitting}>
-              {form.isSubmitting
-                ? isEditing
-                  ? "Updating..."
-                  : "Creating..."
-                : isEditing
-                  ? "Update"
-                  : "Create"}
+              {form.isSubmitting ? "Creating..." : "Create"}
             </Button>
           </DialogFooter>
-
         </form>
       </DialogContent>
     </Dialog>

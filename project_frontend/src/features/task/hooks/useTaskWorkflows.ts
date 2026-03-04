@@ -96,26 +96,13 @@ export const useTaskWorkflows = (): TaskWorkflows => {
         [updateTask]
     );
 
-    const handleCreateTask = useCallback(
-        async ({
-            name,
-            description,
-            projectId,
-            priority,
-            assignedUserId,
-        }: CreateTaskParams): Promise<void> => {
+   const handleCreateTask = useCallback(
+    async ({ name, description, projectId, priority, assignedUserId }: CreateTaskParams) => {
+        await createTask(projectId, { name, description, priority, assignedUserId });
 
-            await createTask(projectId, {
-                name,
-                description,
-                priority,
-                assignedUserId,
-            });
-
-        },
-        [createTask]
-    );
-
+    },
+    [createTask]
+);
     return {
         completeTask,
         deleteTask: handleDeleteTask,

@@ -9,7 +9,6 @@ type ProfileFormProps = {
 }
 
 const ProfileForm = ({ form }: ProfileFormProps) => {
-    console.log(form.values)
     return (
         <form onSubmit={form.handleSubmit} className="space-y-6">
 

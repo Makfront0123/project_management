@@ -111,7 +111,7 @@ const AdminProjectView = ({
         </Modal>
 
         {tabs.isAnalytics && <ProjectAnalytics />}
-        {tabs.isSettings && <ProjectSettings project={currentProject} />}
+        {tabs.isSettings && <ProjectSettings project={currentProject} teamId={currentProject.teamId} />}
         {tabs.isCalendar && <ProjectCalendar tasks={tasks} />}
 
       </div>

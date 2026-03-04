@@ -17,21 +17,18 @@ export const getProfile = async () => {
 export const updateUser = async (data: {
     name?: string
     email?: string
-    image?: File | null
 }) => {
     const token = useAuthStore.getState().token;
 
-    const formData = new FormData()
-
-    if (data.name) formData.append("name", data.name)
-    if (data.email) formData.append("email", data.email)
-    if (data.image) formData.append("image", data.image)
-
-    const response = await axios.put(`${baseUrl}/users`, formData, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    })
+    const response = await axios.put(
+        `${baseUrl}/users`,
+        data,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    )
 
     return response.data
 }

@@ -29,13 +29,17 @@ const useTaskStore = create<TaskStore>((set) => ({
 
         const response = await createTask(projectId, data);
 
-        set({ isLoading: false });
+        const updatedTasks = await getTasks(projectId);
+
+        set({
+            tasks: updatedTasks,
+            isLoading: false,
+        });
 
         toast.success(response.message);
 
         return response;
     },
-
     getTask: async (projectId: string, taskId: string) => {
         set({ isLoading: true });
 
