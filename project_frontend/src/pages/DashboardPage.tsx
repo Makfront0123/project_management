@@ -33,7 +33,7 @@ const DashboardPage = () => {
 
   const { isAdmin } = useActiveTeamRole()
 
-  
+
   return (
     <div className="flex flex-col w-full min-h-screen bg-white dark:bg-black">
       <div className="flex items-center justify-between w-full p-10">
@@ -67,7 +67,7 @@ const DashboardPage = () => {
         ))}
       </div>
       {
-        activeTeamId ? <div className="flex p-8 w-full min-h-[58vh] gap-x-5">
+        activeTeamId ? <div className="flex p-8 gap-x-5  max-h-[80vh]">
 
           <ProjectOverview
             projects={projects}

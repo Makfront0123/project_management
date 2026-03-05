@@ -7,8 +7,10 @@ import type { useCreateTeamForm } from "../hooks/useCreateTeamForm"
 type TeamFormProps = {
     form: ReturnType<typeof useCreateTeamForm>
     isEditing?: boolean
+    onRemoveImage?: () => void
 }
-const CreateTeamForm = ({ form, isEditing }: TeamFormProps) => {
+
+const CreateTeamForm = ({ form, isEditing, onRemoveImage }: TeamFormProps) => {
     return (
         <form
             onSubmit={form.handleSubmit}
@@ -23,6 +25,13 @@ const CreateTeamForm = ({ form, isEditing }: TeamFormProps) => {
                         image: file,
                     }))
                 }
+                onRemove={() => {
+                    form.setValues((prev) => ({
+                        ...prev,
+                        image: null,
+                    }))
+                    onRemoveImage?.()
+                }}
             />
 
             <div className="flex flex-col gap-4">

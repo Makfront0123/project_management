@@ -39,7 +39,7 @@ const ProjectOverview = ({ projects, loading }: Props) => {
   }
 
   return (
-    <Card className="p-6 min-w-3xl max-h-[130vh] -space-y-2">
+    <Card className="p-6 min-w-3xl -space-y-2">
 
       <h3 className="font-semibold text-lg">Project Overview</h3>
       <div className="flex flex-col gap-5 overflow-y-auto">

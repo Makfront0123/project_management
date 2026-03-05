@@ -3,7 +3,7 @@ import { useForm } from "@/shared/hooks/useForm"
 import { useTeamWorkflow } from "../hooks/useTeamWorkflows"
 import CreateTeamForm from "./CreateTeamForm"
 import type { UserTeamStatus } from "@/shared/types/userTeamStatus"
-
+import { useEffect, useState } from "react"
 type EditTeamModalProps = {
     isOpen: boolean
     onClose: () => void
@@ -15,19 +15,25 @@ export const EditTeamModal = ({
     onClose,
     team,
 }: EditTeamModalProps) => {
+    const [removeImage, setRemoveImage] = useState(false)
     const { updateTeam } = useTeamWorkflow()
 
     const form = useForm({
         initialValues: {
-            name: team?.name ?? "",
-            description: team?.description ?? "",
+            name: "",
+            description: "",
+            image: null as File | string | null,
         },
 
         validate: (values) => {
             const errors: Record<string, string> = {}
 
-            if (!values.name.trim()) {
-                errors.name = "Name is required"
+            if (
+                !values.name.trim() &&
+                !values.description.trim() &&
+                !values.image
+            ) {
+                errors.name = "You must update at least one field"
             }
 
             return errors
@@ -36,21 +42,52 @@ export const EditTeamModal = ({
         onSubmit: async (values) => {
             if (!team) return
 
-            await updateTeam(
-                {
-                    name: values.name,
-                    description: values.description,
-                },
-                team.teamId
-            )
+            if (
+                !values.name.trim() &&
+                !values.description.trim() &&
+                !values.image &&
+                !removeImage
+            ) {
+                return
+            }
+
+            const formData = new FormData()
+
+            if (values.name.trim()) {
+                formData.append("name", values.name)
+            }
+
+            if (values.description.trim()) {
+                formData.append("description", values.description)
+            }
+
+            if (values.image instanceof File) {
+                formData.append("image", values.image)
+            }
+
+            if (removeImage) {
+                formData.append("removeImage", "true")
+            }
+
+            await updateTeam(formData, team.team._id)
 
             onClose()
         }
     })
 
+    useEffect(() => {
+        if (!team || !isOpen) return
+
+        form.setValues({
+            name: team.team.name ?? "",
+            description: team.team.description ?? "",
+            image: team.team.image ?? null,
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [team, isOpen])
+
     return (
         <Modal
-            key={team?.teamId ?? "edit"}
             isOpen={isOpen}
             onClose={onClose}
             title="Edit Workspace"
@@ -58,6 +95,7 @@ export const EditTeamModal = ({
             <CreateTeamForm
                 form={form}
                 isEditing
+                onRemoveImage={() => setRemoveImage(true)}
             />
         </Modal>
     )

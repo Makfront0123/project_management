@@ -11,7 +11,7 @@ if (!teamId) return null;
     }
 
     return (
-        <div className="w-full border rounded-lg border-gray-200">
+        <div className="w-full border rounded-lg border-gray-200 overflow-hidden">
             <h1 className="text-xl p-4 border-b">Team Activity</h1>
             <ActivityFeed activities={activities} />
         </div>

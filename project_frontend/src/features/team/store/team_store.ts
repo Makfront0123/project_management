@@ -21,7 +21,7 @@ type TeamStore = {
   fetchTeams: () => Promise<void>
   createTeam: (name: string, description: string, image: File | null) => Promise<string>
   getAllTeams: (page?: number, limit?: number) => Promise<void>
-  updateTeam: (data: Partial<Team>, teamId: string) => Promise<string>
+  updateTeam: (data: FormData, teamId: string) => Promise<string>
   deleteTeam: (id: string) => Promise<string>
   getTeamDashboard: (teamId: string) => Promise<void>
   leaveTeam: (teamId: string) => Promise<void>
@@ -80,14 +80,19 @@ export const useTeamStore = create<TeamStore>()(
       },
       updateTeam: async (data, teamId) => {
         set({ isLoading: true })
+
         try {
           const { team, message } = await updateTeam(teamId, data)
-          useTeamMemberStore.getState().updateMembershipTeamName(team._id, team.name, team.description)
+
           set((state) => ({
-            teams: state.teams.map((t) => (t._id === team._id ? team : t)),
-            isLoading: false,
+            teams: state.teams.map((t) =>
+              t._id === team._id ? team : t
+            ),
+            isLoading: false
           }))
-          toast.success(message)
+
+          await useTeamMemberStore.getState().getUserTeamStatus()
+
           return message
         } catch (error) {
           set({ isLoading: false })
@@ -126,7 +131,7 @@ export const useTeamStore = create<TeamStore>()(
             }
           })
           useTeamMemberStore.setState((state) => ({
-            teamMemberships: state.teamMemberships.filter(m => m.teamId !== teamId)
+            teamMemberships: state.teamMemberships.filter(m => m.team._id !== teamId)
           }))
           toast.success(message)
         } catch (error) {

@@ -2,22 +2,20 @@ import { Button } from "@/shared/components/ui/button"
 import { AppDropdown } from "@/shared/components/AppDropdown"
 import { useAuthStore } from "@/features/auth/store/auth_store"
 import { useNavigate } from "react-router"
-import { useUserStore } from "../store/user_store"
+import { icons } from "@/shared/constants/icons"
 export function UserDropdown() {
-  const { user } = useUserStore()
+  const { user } = useAuthStore()
   const logout = useAuthStore((state) => state.logout)
   const navigate = useNavigate()
-
-  console.log("user", user)
   return (
     <AppDropdown
       label={user?.name}
       trigger={
         <Button variant="ghost">
           <img
-            src={user?.image}
+            src={user?.image || icons.user}
             alt={`${user?.name} avatar`}
-            className="size-10 rounded-full object-cover"
+            className={`size-10 rounded-full object-cover ${user?.image ? "" : "opacity-40 p-1 bg-gray-600"}`}
           />
         </Button>
       }

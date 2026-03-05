@@ -46,8 +46,6 @@ const TeamPage = () => {
         navigate("/dashboard")
     }
 
-    console.log(teamMemberships)
-
     return (
         <>
             {teamMemberships.length === 0 ? (
@@ -98,15 +96,15 @@ const TeamPage = () => {
             <TeamDeleteModal
                 isOpen={isDeleteOpen}
                 onClose={closeDelete}
-                teamId={selectedTeam?.teamId ?? null}
-                teamName={selectedTeam?.name}
+                teamId={selectedTeam?.team._id ?? null}
+                teamName={selectedTeam?.team.name}
                 onConfirm={deleteTeam}
             />
             <TeamLeaveModal
                 isOpen={isLeaveOpen}
                 onClose={closeLeave}
-                teamId={selectedTeam?.teamId ?? null}
-                teamName={selectedTeam?.name}
+                teamId={selectedTeam?.team._id ?? null}
+                teamName={selectedTeam?.team.name}
                 onConfirm={leaveTeam}
             />
             <EditTeamModal

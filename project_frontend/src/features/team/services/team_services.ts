@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/features/auth/store/auth_store';
 import axios from 'axios';
-import type { TeamResponse, PagedTeamsResponse, TeamDashboardResponse, Team } from '../types/team';
+import type { TeamResponse, PagedTeamsResponse, TeamDashboardResponse } from '../types/team';
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
@@ -56,7 +56,7 @@ export const getTeamDashboard = async (teamId: string) => {
 
   return response.data
 }
-export const updateTeam = async (id: string, data: Partial<Team>) => {
+export const updateTeam = async (id: string, data: FormData) => {
   const token = useAuthStore.getState().token;
 
   const response = await axios.put<TeamResponse>(
@@ -65,6 +65,7 @@ export const updateTeam = async (id: string, data: Partial<Team>) => {
     {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     }
   );

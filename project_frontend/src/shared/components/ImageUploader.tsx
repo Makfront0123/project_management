@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react"
 import { Upload, X } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
-
 type ImageUploaderProps = {
-    value: File | null
+    value: File | string | null
     onChange: (file: File | null) => void
+    onRemove?: () => void
     error?: string
-    label?: string
+    label?: string,
     className?: string
 }
-
 const ImageUploader = ({
     value,
     onChange,
     error,
+    onRemove,
     label = "Upload image",
     className,
 }: ImageUploaderProps) => {
@@ -22,6 +22,11 @@ const ImageUploader = ({
     useEffect(() => {
         if (!value) {
             setPreview(null)
+            return
+        }
+
+        if (typeof value === "string") {
+            setPreview(value)
             return
         }
 
@@ -53,6 +58,7 @@ const ImageUploader = ({
                             onClick={(e) => {
                                 e.preventDefault()
                                 onChange(null)
+                                onRemove?.()
                             }}
                             className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 hover:bg-black"
                         >
@@ -75,6 +81,7 @@ const ImageUploader = ({
                         onChange(file)
                     }}
                 />
+
             </label>
 
             {error && (

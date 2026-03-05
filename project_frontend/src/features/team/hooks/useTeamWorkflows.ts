@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { useTeamStore } from "../store/team_store"
-import type { Team } from "../types/team"
- 
+import toast from "react-hot-toast"
+
 
 export const useTeamWorkflow = () => {
   const teams = useTeamStore(s => s.teams)
@@ -24,18 +24,48 @@ export const useTeamWorkflow = () => {
     await fetchTeamsStore()
   }, [fetchTeamsStore])
 
-  const createTeam = useCallback(async (name: string, description: string, image: File | null) => {
-    return await createTeamStore(name, description, image)
-  }, [createTeamStore])
 
-  const updateTeam = useCallback(async (data: Partial<Team>, teamId: string) => {
-    return await updateTeamStore(data, teamId)
-  }, [updateTeamStore])
+  const createTeam = useCallback(
+    async (name: string, description: string, image: File | null) => {
+      try {
+        const message = await createTeamStore(name, description, image)
+        toast.success(message)
+        return message
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : "Error")
+        throw error
+      }
+    },
+    [createTeamStore]
+  )
 
-  const deleteTeam = useCallback(async (teamId: string) => {
-    return await deleteTeamStore(teamId)
-  }, [deleteTeamStore])
+  const updateTeam = useCallback(
+    async (data: FormData, teamId: string) => {
+      try {
+        const message = await updateTeamStore(data, teamId)
+        toast.success(message)
+        return message
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : "Error")
+        throw error
+      }
+    },
+    [updateTeamStore]
+  )
 
+  const deleteTeam = useCallback(
+    async (teamId: string) => {
+      try {
+        const message = await deleteTeamStore(teamId)
+        toast.success(message)
+        return message
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : "Error")
+        throw error
+      }
+    },
+    [deleteTeamStore]
+  )
   const getTeamDashboard = useCallback(async (teamId: string) => {
     try {
       setDashboardLoading(true)

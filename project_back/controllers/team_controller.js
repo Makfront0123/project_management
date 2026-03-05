@@ -83,18 +83,30 @@ export const getTeam = async (req, res) => {
 
 export const updateTeam = async (req, res) => {
     try {
-        const teamId = req.params?.teamId
-        const updatedTeam = await teamService.updateTeam(teamId, req.body);
+        const teamId = req.params.teamId
+
+        const data = {
+            ...req.body
+        }
+
+        if (req.file) {
+            data.image = req.file.path
+        }
+
+        if (req.body.removeImage === "true") {
+            data.image = null
+        }
+
+        const updatedTeam = await teamService.updateTeam(teamId, data)
+
         res.json({
             message: "Team updated successfully",
             team: updatedTeam
         })
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message })
     }
-};
-
-
+}
 export const deleteTeam = async (req, res) => {
     try {
         const teamId = req.params.teamId;
