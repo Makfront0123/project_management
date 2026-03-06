@@ -10,7 +10,6 @@ import CreateTeamPage from "../../pages/CreateTeamPage";
 import JoinTeamPage from "../../pages/JoinTeamPage";
 import TeamMembersPage from "../../pages/TeamMembersPage";
 import TeamRequestPage from "../../pages/TeamRequestPage";
-import TeamChatPage from "../../pages/TeamChatPage";
 import ProjectDetails from "../../pages/ProjectDetails";
 import TasksPage from "../../pages/TasksPage";
 import ForgotPage from "../../pages/ForgotPage";
@@ -23,6 +22,10 @@ import AcceptInvitePage from "@/pages/AcceptInvitePage";
 import TaskDetailsPage from "@/pages/TaskDetailsPage";
 import { PageTransitionProvider } from "@/shared/providers/page-transition-provider";
 import ProfilePage from "@/pages/ProfilePage";
+import PrivateChatPage from "@/pages/PrivateChatPage";
+import ChatLayout from "@/shared/layout/ChatLayout";
+import ChatGlobalPage from "@/pages/ChatGlobalPage";
+import EmptyChatState from "@/features/chat/components/EmptyChatState";
 
 export function AppRoutes() {
   const { token, loadingApp } = useAuthStore();
@@ -55,7 +58,7 @@ export function AppRoutes() {
               <Route path="team" element={<TeamPage />} />
               <Route path="team-members" element={<TeamMembersPage />} />
               <Route path="team/:teamId/requests" element={<TeamRequestPage />} />
-              <Route path="team/:teamId/chat" element={<TeamChatPage />} />
+
               <Route path="tasks" element={<TasksPage />} />
               <Route
                 path="projects/:projectId/tasks/:taskId"
@@ -68,6 +71,14 @@ export function AppRoutes() {
             <Route path="settings">
               <Route path="profile" element={<ProfilePage />} />
             </Route>
+            <Route path="team/:teamId/chat" element={<ChatLayout />}>
+              <Route path="contacts">
+                <Route index element={<EmptyChatState />} />
+                <Route path=":memberId" element={<PrivateChatPage />} />
+              </Route>
+              <Route index element={<ChatGlobalPage />} />
+            </Route>
+
           </>
         )}
       </Routes>

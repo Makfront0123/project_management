@@ -55,7 +55,7 @@ export const useDashboard = () => {
     }, [getUserTeamStatus])
     useEffect(() => {
         if (!activeTeamId && teamMemberships.length) {
-            setActiveTeam(teamMemberships[0].teamId)
+            setActiveTeam(teamMemberships[0].team._id)
         }
     }, [activeTeamId, teamMemberships, setActiveTeam])
 
@@ -85,7 +85,7 @@ export const useDashboard = () => {
 
         if (firstTeam.role !== "member") return
 
-        const teamId = firstTeam.teamId ?? firstTeam.team?._id
+        const teamId = firstTeam.team._id ?? firstTeam.team?._id
 
         if (!teamId) return
 
@@ -160,10 +160,7 @@ export const useDashboard = () => {
 
         const totalProjects = dashboard.projects.length
 
-        const completedProjects = dashboard.projects.filter(
-            p => p.status === "completed"
-        ).length
-
+        
         const totalTasks = dashboard.projects.reduce(
             (sum, p) => sum + p.totalTasks,
             0

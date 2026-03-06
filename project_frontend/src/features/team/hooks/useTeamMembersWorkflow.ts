@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react"
 import { useTeamMemberStore } from "../store/team_member_store"
+import { useTeamStore } from "../store/team_store"
 
 
 export const useTeamMembersWorkflow = (teamId: string) => {
@@ -9,7 +10,7 @@ export const useTeamMembersWorkflow = (teamId: string) => {
     const acceptRequestStore = useTeamMemberStore(s => s.acceptRequest)
     const rejectRequestStore = useTeamMemberStore(s => s.rejectRequest)
     const deleteMemberStore = useTeamMemberStore(s => s.deleteMember)
-    const leaveTeamStore = useTeamMemberStore(s => s.leaveTeam)
+    const leaveTeamStore = useTeamStore(s => s.leaveTeam)
 
     const [membersLoading, setMembersLoading] = useState(false)
 

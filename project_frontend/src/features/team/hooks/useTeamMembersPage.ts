@@ -31,16 +31,12 @@ export const useTeamMembersPage = () => {
     isAdmin,
     search,
     setSearch,
-
-    // pagination
     paginatedMembers,
     page,
     totalPages,
     nextPage,
     prevPage,
     setPage,
-
-    // modal
     isInviteOpen,
     openInvite: () => setIsInviteOpen(true),
     closeInvite: () => setIsInviteOpen(false),

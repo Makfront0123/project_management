@@ -1,19 +1,15 @@
-import { useParams } from "react-router";
-import { useAuthStore } from "../features/auth/store/auth_store";
-import { useState, useEffect } from "react";
-import { useForm } from "../shared/hooks/useForm";
-import useMessageStore from "../features/chat/store/message_store";
-import { useTeamMemberStore } from "../features/team/store/team_member_store";
-import type { User } from "../features/auth/types/auth";
-import type { MessageFormValues } from "../features/chat/types/message";
-import { formatDateNumeric } from "../shared/utils/formatDate";
-import useMessageSound from "@/features/chat/hooks/useMessageSound";
-import usePrivateChat from "@/features/chat/hooks/usePrivateChat";
-import useTeamChat from "@/features/chat/hooks/useTeamChat";
-import { deletePrivateMessages } from "@/features/chat/services/message_services";
+import React from 'react'
+
+const TeamChatPage = () => {
+  return (
+    <div>TeamChatPage</div>
+  )
+}
+
+export default TeamChatPage
 
 
-
+/*
 const TeamChatPage = () => {
     const { teamId } = useParams<{ teamId: string }>();
     const { user } = useAuthStore();
@@ -48,7 +44,7 @@ const TeamChatPage = () => {
         }
     }, [teamId, fetchTeamMembers]);
 
-
+    console.log("teamMembers", teamMembers);
 
     const {
         values,
@@ -84,121 +80,46 @@ const TeamChatPage = () => {
     });
 
     if (!user) return <div className="p-10 text-center">Loading user...</div>;
-
-    const membersToDisplay = teamMembers.filter(
-        (member) => member.userId._id !== user.id
-    );
-
     return (
         <div className="h-screen w-full flex p-0">
-            <div className="bg-white rounded-xl min-w-[30vh] max-h-[77.5vh] flex flex-col">
-                <div className="flex-shrink-0 p-10">
-                    <button
-                        onClick={() => {
-                            setSelectedMember(null);
-                            if (teamId) {
-                                getGlobalMessages(teamId);
-                            }
-                        }}
-                        className={`p-2 w-full rounded-xl font-semibold ${!selectedMember ? "bg-blue-600 text-white" : "bg-gray-400 text-white"}`}
-                    >
-                        Chat General
-                    </button>
-                </div>
 
-                <div className="flex-1 overflow-y-auto px-10 pb-10 space-y-2">
-                    {membersToDisplay.map((member) => (
-                        <button
-                            key={member._id}
-                            onClick={() => {
-                                const selected = {
-                                    id: member.userId._id,
-                                    name: member.userId.name,
-                                    email: member.userId.email
-                                };
-                                setSelectedMember(selected);
-                                getPrivateMessages(user.id, selected.id);
-                            }}
-                            className={`p-2 w-full rounded-xl hover:opacity-70 duration-300 ${selectedMember?.id === member.userId._id
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-600 text-white"
-                                }`}
-                        >
-                            {member.userId.name ?? member.userId.email}
-                        </button>
-                    ))}
-                </div>
-            </div>
+            <ChatSidebar
+                teamMembers={teamMembers}
+                userId={user.id}
+                selectedMember={selectedMember}
+                setSelectedMember={setSelectedMember}
+                getGlobalMessages={() => getGlobalMessages(teamId ?? '')}
+                getPrivateMessages={getPrivateMessages}
+            />
 
             <div className="flex flex-col w-full">
+
                 <div className="flex-1 max-h-[72vh] overflow-y-scroll bg-gray-900 p-4 rounded">
-                    <div>
-                        {isLoading ? (
-                            <p>Loading messages...</p>
-                        ) : (
-                            <div>
-                                {
-                                    isAdmin && (
-                                        <button className="p-2 mb-5 rounded bg-blue-600 text-white"
-                                            onClick={() => {
-                                                if (selectedMember) {
-                                                    deletePrivateMessages(teamId ?? '', selectedMember.id, user?.id ?? '');
-                                                } else {
-                                                    deleteGlobalMessages(teamId ?? '');
-                                                }
-                                            }}>
-                                            Clean Chat
-                                        </button>
-                                    )
-                                }
-                                <div className="flex flex-col gap-5">
-                                    {
-                                        messages.map((msg) => (
-                                            <div key={msg._id} className="p-2 rounded bg-gray-100">
-                                                <p className="text-sm text-gray-600">
-                                                    <strong>
-                                                        {msg.sender?.name || 'Usuario desconocido'}
-                                                        <span className="text-[12px] text-gray-400 font-light ml-2">
-                                                            {formatDateNumeric(msg.createdAt)}
-                                                        </span>
-                                                    </strong>
-                                                    <span>{msg.text}</span>
-                                                </p>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    <ChatMessages
+                        messages={messages}
+                        isLoading={isLoading}
+                        isAdmin={isAdmin}
+                        selectedMemberId={selectedMember?.id}
+                        teamId={teamId}
+                        userId={user.id}
+                        deleteGlobalMessages={deleteGlobalMessages}
+                        deletePrivateMessages={deletePrivateMessages}
+                    />
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-                    <div className="flex">
-                        <input
-                            name="message"
-                            value={values.message}
-                            onChange={handleChange}
-                            className="flex-1 border p-2 rounded-l bg-gray-900 text-white"
-                            placeholder="Mensaje para el equipo..."
-                            disabled={isSubmitting}
-                        />
-                        <button
-                            type="submit"
-                            className="bg-red-600 text-white px-4 rounded-r"
-                            disabled={isSubmitting}
-                        >
-                            Send
-                        </button>
-                    </div>
-                    {errors.message && (
-                        <span className="text-red-500 text-sm">{errors.message}</span>
-                    )}
-                </form>
+                <ChatInput
+                    value={values.message}
+                    error={errors.message}
+                    isSubmitting={isSubmitting}
+                    onChange={handleChange}
+                    onSubmit={handleSubmit}
+                />
+
             </div>
 
         </div>
-    );
+    )
 };
 
 export default TeamChatPage;
+*/

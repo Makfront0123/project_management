@@ -26,3 +26,17 @@ export const navLinks = [
         badge: null,
     },
 ];
+
+export const chatNavLinks = [
+    {
+        name: "Contacts",
+        icon: "mingcute:contacts-4-fill",
+        path: "contacts",
+    },
+    {
+        name: "Chat",
+        icon: "mingcute:chat-4-ai-fill",
+        path: "",
+    },
+
+];

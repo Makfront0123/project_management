@@ -16,7 +16,7 @@ class TeamMemberRepository {
 
 
   async getAllMembersOfTeam(teamId) {
-    return await TeamMember.find({ teamId }).populate('userId', 'name email');
+    return await TeamMember.find({ teamId }).populate('userId', 'name email image');
   }
 
   async getMemberOfTeam(teamId, userId) {

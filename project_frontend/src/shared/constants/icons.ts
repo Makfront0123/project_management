@@ -12,4 +12,6 @@ export const icons = {
     sidebar04: "/icons/mdi-light--settings.svg",
     calendar: "/icons/mdi--calendar-outline.svg",
     add: "/icons/gridicons--add.svg",
+    chatSidebar01: "/icons/chat/mingcute--chat-4-ai-fill.svg",
+    chatSidebar02: "/icons/chat/mingcute--contacts-4-fill.svg",
 }

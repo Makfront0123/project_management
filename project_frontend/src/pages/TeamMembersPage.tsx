@@ -6,8 +6,10 @@ import InviteMemberForm from "@/features/team/components/InviteMemberForm"
 import { TeamNotFound } from "@/features/team/components/TeamNotFound"
 import { useTeamMembersPage } from "@/features/team/hooks/useTeamMembersPage"
 import { Button } from "@/shared/components/ui/button"
+import { useNavigate } from "react-router"
 
 const TeamMembersPage = () => {
+  const navigate = useNavigate()
   const {
     activeTeamId,
     isAdmin,
@@ -43,11 +45,19 @@ const TeamMembersPage = () => {
             </p>
           </div>
 
-          {isAdmin && (
-            <Button onClick={openInvite}>
-              Invite new member
+          <div className="flex items-center gap-x-4">
+            <Button
+              onClick={() => navigate(`/team/${activeTeamId}/chat/contacts`)}
+              variant={'ghost'} className="border-2 border-gray-800">
+              Chat
             </Button>
-          )}
+
+            {isAdmin && (
+              <Button onClick={openInvite}>
+                Invite new member
+              </Button>
+            )}
+          </div>
         </div>
 
         <Input
