@@ -101,8 +101,7 @@ io.on("connection", (socket) => {
 
 
 
-
-  socket.on("sendMessage", async ({ text, teamId, sender }) => {
+  socket.on("sendMessage", async ({ text, teamId, sender, attachments }) => {
 
     if (!sender || !sender._id) {
       console.error("Usuario inválido en sendMessage");
@@ -113,21 +112,23 @@ io.on("connection", (socket) => {
       text,
       teamId,
       sender: sender._id,
+      attachments
     });
 
     await newMessage.save();
 
-    await newMessage.populate("sender", "name email");
+    await newMessage.populate("sender", "name email image");
 
     io.to(`team_${teamId}`).emit("newMessage", {
       _id: newMessage._id,
       text: newMessage.text,
+      attachments: newMessage.attachments,
       sender: newMessage.sender,
       teamId: newMessage.teamId,
       createdAt: newMessage.createdAt,
     });
-  });
 
+  });
 
   socket.on("joinPrivateChat", ({ fromUserId, toUserId }) => {
     const privateRoomId = [fromUserId, toUserId].sort().join("_");
@@ -138,13 +139,16 @@ io.on("connection", (socket) => {
 
 
 
-  socket.on("sendPrivateMessage", async ({ fromUserId, toUserId, text }) => {
+  socket.on("sendPrivateMessage", async ({ teamId, fromUserId, toUserId, text, attachments }) => {
     const privateRoomId = [fromUserId, toUserId].sort().join("_");
+    console.log("ROOM:", privateRoomId)
 
     const newMessage = new MessageModel({
+      teamId,
       sender: fromUserId,
       receiver: toUserId,
       text,
+      attachments
     });
 
     await newMessage.save();

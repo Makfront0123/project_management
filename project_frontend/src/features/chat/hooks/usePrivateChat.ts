@@ -1,90 +1,127 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
-import useMessageStore from '../store/message_store';
-import type { Message } from '../types/message';
-import useMessageSound from './useMessageSound';
-const usePrivateChat = (fromUserId: string, toUserId: string) => {
+import { useEffect, useRef, useState, useCallback } from "react";
+import { io, Socket } from "socket.io-client";
+import useMessageStore from "../store/message_store";
+import useMessageSound from "./useMessageSound";
+import type { Message } from "../types/message";
+import { uploadMessageAttachment } from "@/features/attachment/services/attachment_services";
+const usePrivateChat = (
+    teamId: string,
+    fromUserId: string,
+    toUserId: string
+) => {
 
     const { messages, isLoading, getPrivateMessages, addMessage } = useMessageStore();
-    const { playReceivedSound } = useMessageSound();
+    const { playReceivedSound, playSentSound } = useMessageSound();
 
     const socketRef = useRef<Socket | null>(null);
 
+    const [file, setFile] = useState<File | null>(null);
     const [text, setText] = useState("");
     const [error, setError] = useState<string | undefined>();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // cargar historial
     useEffect(() => {
-        if (fromUserId && toUserId) {
-            getPrivateMessages(fromUserId, toUserId);
+
+        if (teamId && fromUserId && toUserId) {
+            getPrivateMessages(teamId, fromUserId, toUserId);
         }
-    }, [fromUserId, toUserId, getPrivateMessages]);
+
+    }, [teamId, fromUserId, toUserId, getPrivateMessages]);
 
     // socket
     useEffect(() => {
 
-        if (!socketRef.current) {
+        socketRef.current = io(import.meta.env.VITE_API_SOCKET_URL, {
+            withCredentials: true,
+            transports: ["websocket"],
+        });
 
-            socketRef.current = io(import.meta.env.VITE_API_SOCKET_URL, {
-                withCredentials: true,
-                transports: ["websocket"],
-            });
+        const socket = socketRef.current;
 
-            socketRef.current.on("newPrivateMessage", (message: Message) => {
-                addMessage(message);
-                playReceivedSound();
-            });
-        }
+        socket.on("connect", () => {
 
-        return () => {
-            socketRef.current?.off("newPrivateMessage");
-        };
+            console.log("✅ Socket conectado:", socket.id);
 
-    }, [addMessage, playReceivedSound]);
+            if (fromUserId && toUserId) {
+                socket.emit("joinPrivateChat", {
+                    fromUserId,
+                    toUserId
+                });
+            }
 
-    // join room
-    useEffect(() => {
+        });
 
-        if (!socketRef.current) return;
-        if (!fromUserId || !toUserId) return;
+        socket.on("newPrivateMessage", (message: Message) => {
 
-        socketRef.current.emit("joinPrivateChat", {
-            fromUserId,
-            toUserId,
+            addMessage(message);
+            playReceivedSound();
+
         });
 
         return () => {
-            socketRef.current?.emit("leavePrivateChat", {
-                fromUserId,
-                toUserId,
-            });
+            socket.off("newPrivateMessage");
+            socket.disconnect();
         };
 
-    }, [fromUserId, toUserId]);
+    }, [addMessage, fromUserId, toUserId, playReceivedSound]);
+
+
 
     const sendMessage = useCallback(async (e: React.FormEvent) => {
 
         e.preventDefault();
 
-        if (!text.trim()) {
-            setError("Message required");
+        if (!text.trim() && !file) {
+            setError("Message or attachment required");
             return;
         }
 
-        setIsSubmitting(true);
+        try {
 
-        socketRef.current?.emit("sendPrivateMessage", {
-            fromUserId,
-            toUserId,
-            text,
-        });
+            setIsSubmitting(true);
 
-        setText("");
-        setError(undefined);
-        setIsSubmitting(false);
+            let attachmentUrl: string | undefined;
 
-    }, [text, fromUserId, toUserId]);
+            if (file) {
+
+                const upload = await uploadMessageAttachment(
+                    teamId,
+                    file
+                );
+
+                attachmentUrl = upload.url;
+
+            }
+
+            socketRef.current?.emit("sendPrivateMessage", {
+                teamId,
+                fromUserId,
+                toUserId,
+                text,
+                attachments: attachmentUrl
+            });
+
+            playSentSound();
+
+            setText("");
+            setFile(null);
+            setError(undefined);
+
+        } catch (err) {
+
+            console.error(err);
+            setError("Failed to send message");
+
+        } finally {
+
+            setIsSubmitting(false);
+
+        }
+
+    }, [text, file, teamId, fromUserId, toUserId, playSentSound]);
+
+
 
     return {
         messages,
@@ -93,8 +130,11 @@ const usePrivateChat = (fromUserId: string, toUserId: string) => {
         error,
         isLoading,
         isSubmitting,
-        sendMessage
+        sendMessage,
+        file,
+        setFile
     };
+
 };
 
 export default usePrivateChat;

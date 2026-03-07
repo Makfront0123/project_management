@@ -1,41 +1,73 @@
+import ImageUploader from "@/shared/components/ImageUploader";
 import { Icon } from "@iconify/react";
+import { useEmojiPicker } from "../hooks/useEmojiPicker";
+import EmojiPickerComponent from "./EmojiPickerComponent";
 
 type Props = {
     value: string
     error?: string
     isSubmitting: boolean
+    file: File | null
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     onSubmit: (e: React.FormEvent) => void
+    onFileChange: (file: File | null) => void
 }
 
 const ChatInput = ({
     value,
+    file,
     error,
     isSubmitting,
     onChange,
+    onFileChange,
     onSubmit
 }: Props) => {
+    const { open, toggle, addEmoji } = useEmojiPicker(
+        value,
+        (val) => onChange({ target: { value: val } } as React.ChangeEvent<HTMLInputElement>)
+    )
 
     return (
         <form onSubmit={onSubmit} className="flex flex-col gap-2">
 
-            <div className="flex items-center justify-between p-2 rounded-l bg-gray-100 text-gray-800">
-                <input
-                    value={value}
-                    onChange={onChange}
-                    className="w-full border-none"
-                    placeholder="Mensaje para el equipo..."
-                    disabled={isSubmitting}
+            <div className="flex items-center gap-2">
+                {open && (
+                    <EmojiPickerComponent
+                        onSelect={addEmoji}
+                    />
+                )}
+                <div className="flex items-center flex-1 p-2 rounded bg-gray-100 dark:bg-[#171717]">
+                    <input
+                        value={value}
+                        onChange={onChange}
+                        className="w-full border-none dark:text-gray-200 text-black bg-transparent"
+                        placeholder="Mensaje para el equipo..."
+                        disabled={isSubmitting}
+                    />
+                    <button
+                        type="button"
+                        onClick={toggle}
+                        className="px-1"
+                    >
+                        😊
+                    </button>
+                    <ImageUploader
+                        value={file}
+                        onChange={onFileChange}
+                        icon="mdi:paperclip"
+                        className="size-10 border-none"
+                    />
 
-                />
-                <button
-                    type="submit"
-                    className="bg-blue-500 text-white  mx-3 rounded-md overflow-hidden"
-                    disabled={isSubmitting}
-                >
-                    <Icon icon="ic:round-send" className="size-10 p-2 hover:bg-blue-600" />
-                </button>
+                    <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="bg-blue-500 text-white mx-2 rounded-md"
+                    >
+                        <Icon icon="ic:round-send" className="size-8 p-1" />
+                    </button>
 
+
+                </div>
             </div>
 
             {error && (
@@ -47,5 +79,4 @@ const ChatInput = ({
         </form>
     )
 }
-
 export default ChatInput

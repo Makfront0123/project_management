@@ -4,8 +4,8 @@ import axios from "axios";
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
-export const getPrivateMessages = async (fromId: string, toId: string) => {
-    const response = await axios.get(`${baseUrl}/private-messages/${fromId}/${toId}`);
+export const getPrivateMessages = async (teamId: string, fromId: string, toId: string) => {
+    const response = await axios.get(`${baseUrl}/private-messages/${teamId}/${fromId}/${toId}`);
     return response.data;
 };
 

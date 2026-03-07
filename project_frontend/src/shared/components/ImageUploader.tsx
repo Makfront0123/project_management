@@ -1,25 +1,32 @@
 import { useEffect, useState } from "react"
-import { Upload, X } from "lucide-react"
+import { X } from "lucide-react"
+import { Icon } from "@iconify/react"
 import { cn } from "@/shared/lib/utils"
+
 type ImageUploaderProps = {
     value: File | string | null
     onChange: (file: File | null) => void
     onRemove?: () => void
     error?: string
-    label?: string,
+    label?: string
+    icon?: string
     className?: string
 }
+
 const ImageUploader = ({
     value,
     onChange,
-    error,
     onRemove,
-    label = "Upload image",
+    error,
+    label,
+    icon = "mdi:upload",
     className,
 }: ImageUploaderProps) => {
+
     const [preview, setPreview] = useState<string | null>(null)
 
     useEffect(() => {
+
         if (!value) {
             setPreview(null)
             return
@@ -34,10 +41,12 @@ const ImageUploader = ({
         setPreview(objectUrl)
 
         return () => URL.revokeObjectURL(objectUrl)
+
     }, [value])
 
     return (
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-2">
+
             <label
                 className={cn(
                     "relative size-24 rounded-xl border-2 border-dashed border-muted-foreground/30 flex items-center justify-center cursor-pointer transition hover:border-primary overflow-hidden",
@@ -45,6 +54,7 @@ const ImageUploader = ({
                     className
                 )}
             >
+
                 {preview ? (
                     <>
                         <img
@@ -67,8 +77,13 @@ const ImageUploader = ({
                     </>
                 ) : (
                     <div className="flex flex-col items-center gap-1 text-muted-foreground">
-                        <Upload size={20} />
-                        <span className="text-xs">{label}</span>
+
+                        <Icon icon={icon} className="size-5" />
+
+                        {label && (
+                            <span className="text-xs">{label}</span>
+                        )}
+
                     </div>
                 )}
 
@@ -87,6 +102,7 @@ const ImageUploader = ({
             {error && (
                 <p className="text-xs text-red-500">{error}</p>
             )}
+
         </div>
     )
 }

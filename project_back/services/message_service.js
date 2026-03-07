@@ -1,9 +1,8 @@
 import messageRepository from "../repositories/message_repository.js";
 
-export const getPrivateMessages = (fromId, toId) => {
-  return messageRepository.getPrivateMessages(fromId, toId);
+export const getPrivateMessages = (teamId, fromId, toId) => {
+  return messageRepository.getPrivateMessages(teamId, fromId, toId);
 };
-
 export const getGlobalMessages = (teamId) => {
   return messageRepository.getGlobalMessages(teamId);
 };
@@ -18,4 +17,8 @@ export const deletePrivateMessages = (fromId, toId) => {
 
 export const deleteAllMessages = (teamId) => {
   return messageRepository.deleteAllMessages(teamId);
+};
+
+export const uploadMessageAttachment = (teamId, file) => {
+  return messageRepository.uploadMessageAttachment(teamId, file);
 };

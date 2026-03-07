@@ -1,3 +1,4 @@
+
 import { create } from "zustand";
 import { deleteGlobalMessages, deletePrivateMessages, getGlobalMessages, getPrivateMessages } from "../services/message_services";
 import type { Message } from "../types/message";
@@ -6,7 +7,7 @@ import toast from "react-hot-toast";
 interface MessageStore {
     messages: Message[];
     isLoading: boolean;
-    getPrivateMessages: (fromId: string, toId: string) => Promise<void>;
+    getPrivateMessages: (teamId: string, fromId: string, toId: string) => Promise<void>;
     getGlobalMessages: (teamId: string) => Promise<void>;
     addMessage: (message: Message) => void;
     deleteGlobalMessages: (teamId: string) => Promise<void>;
@@ -22,9 +23,10 @@ const useMessageStore = create<MessageStore>((set) => ({
     }),
 
 
-    getPrivateMessages: async (fromId: string, toId: string) => {
+    getPrivateMessages: async (teamId: string, fromId: string, toId: string) => {
+        console.log("GET PRIVATE MESSAGES", teamId, fromId, toId);
         set({ isLoading: true });
-        const response = await getPrivateMessages(fromId, toId);
+        const response = await getPrivateMessages(teamId, fromId, toId);
 
         set({ messages: response.data, isLoading: false });
     },
@@ -46,7 +48,7 @@ const useMessageStore = create<MessageStore>((set) => ({
     deletePrivateMessages: async (teamId: string, fromId: string, toId: string) => {
         set({ isLoading: true });
         const response = await deletePrivateMessages(teamId, fromId, toId);
-        const update = await getPrivateMessages(fromId, toId);
+        const update = await getPrivateMessages(teamId, fromId, toId);
         set({ messages: update.data, isLoading: false });
         toast.success(response.message);
     }

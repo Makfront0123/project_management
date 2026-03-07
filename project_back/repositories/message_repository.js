@@ -1,21 +1,41 @@
 import Message from "../models/Message.js";
 import Team from "../models/Team.js";
+import mongoose from "mongoose";
 export const MessageRepository = {
-  getPrivateMessages: async (fromId, toId) => {
-    return await Message.find({
+  getPrivateMessages: async (teamId, fromId, toId) => {
+    console.log("GET PRIVATE MESSAGES", teamId, fromId, toId);
+    const messages = await Message.find({
+      teamId: new mongoose.Types.ObjectId(teamId),
       $or: [
-        { sender: fromId, receiver: toId },
-        { sender: toId, receiver: fromId },
-      ],
-    }).sort({ createdAt: 1 }).populate("sender", "name email");
-  },
-
-  getGlobalMessages: async (teamId) => {
-    return await Message.find({ teamId })
+        {
+          sender: new mongoose.Types.ObjectId(fromId),
+          receiver: new mongoose.Types.ObjectId(toId)
+        },
+        {
+          sender: new mongoose.Types.ObjectId(toId),
+          receiver: new mongoose.Types.ObjectId(fromId)
+        }
+      ]
+    })
       .sort({ createdAt: 1 })
-      .populate("sender", "name email");
-  },
+      .populate("sender", "_id name email image")
+      .populate("receiver", "_id name email image");
 
+    return messages;
+  },
+  getGlobalMessages: async (teamId) => {
+
+    return await Message.find({
+      teamId: new mongoose.Types.ObjectId(teamId),
+      $or: [
+        { receiver: null },
+        { receiver: { $exists: false } }
+      ]
+    })
+      .sort({ createdAt: 1 })
+      .populate("sender", "name email image");
+
+  },
   deletePrivateMessages: async (fromId, toId) => {
     return await Message.deleteMany({
       $or: [
@@ -50,6 +70,14 @@ export const MessageRepository = {
           }))
       ),
     });
+  },
+  uploadMessageAttachment: async (teamId, file) => {
+    const message = await Message.create({
+      teamId,
+      attachments: file.filename,
+    });
+    await message.populate("sender", "name email image");
+    return message;
   },
 };
 

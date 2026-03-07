@@ -76,3 +76,26 @@ export const deleteByTaskId = async (taskId: string) => {
 
     return response.data;
 };
+
+export const uploadMessageAttachment = async (
+    teamId: string,
+    file: File
+) => {
+
+    const token = useAuthStore.getState().token;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await axios.post(
+        `${baseUrl}/teams/${teamId}/messages/attachments`,
+        formData,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data.data;
+};

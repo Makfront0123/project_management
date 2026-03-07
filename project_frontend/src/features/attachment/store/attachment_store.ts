@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 import type { Attachment } from "../../../shared/types/attachment";
-import { createAttachment, deleteAttachment, getAllAttachments, updateAttachment } from "../services/attachment_services";
+import { createAttachment, deleteAttachment, getAllAttachments, updateAttachment, uploadMessageAttachment } from "../services/attachment_services";
 import toast from "react-hot-toast";
 
 
@@ -9,6 +9,7 @@ interface AttachmentStore {
     attachmentsByTask: Record<string, Attachment[]>;
     isLoading: boolean;
     createAttachment: (taskId: string, teamId: string, file: File) => Promise<void>;
+    uploadMessageAttachment: (teamId: string, file: File) => Promise<void>;
     getAllAttachmentsForTasks: (taskIds: string[], teamId: string) => Promise<void>;
     updateAttachment: (attachmentId: string, teamId: string, file: File) => Promise<void>;
     deleteAttachment: (attachmentId: string, teamId: string) => Promise<void>;
@@ -21,7 +22,7 @@ const useAttachmentStore = create<AttachmentStore>((set) => ({
     createAttachment: async (taskId, teamId, file) => {
         set({ isLoading: true });
         try {
-            const response=await createAttachment(taskId, teamId, file);
+            const response = await createAttachment(taskId, teamId, file);
             const updatedAttachments = await getAllAttachments(taskId, teamId);
 
             set((state) => ({
@@ -32,6 +33,24 @@ const useAttachmentStore = create<AttachmentStore>((set) => ({
                 isLoading: false,
             }));
 
+            toast.success(response.message);
+        } catch (err) {
+            console.error(err);
+            set({ isLoading: false });
+        }
+    },
+
+    uploadMessageAttachment: async (teamId, file) => {
+        set({ isLoading: true });
+        try {
+            const response = await uploadMessageAttachment(teamId, file);
+            set((state) => ({
+                attachmentsByTask: {
+                    ...state.attachmentsByTask,
+                    [response.data.taskId]: [response.data],
+                },
+                isLoading: false,
+            }));
             toast.success(response.message);
         } catch (err) {
             console.error(err);

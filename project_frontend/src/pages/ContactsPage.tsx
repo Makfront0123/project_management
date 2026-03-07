@@ -13,8 +13,8 @@ const ContactsPage = () => {
   const { search, setSearch, filteredContacts } =
     useContactsFilter(members)
   return (
-    <div className='min-w-[48vh] p-5 bg-gray-100'>
-      <span className='text-2xl font-medium text-black'>All Chats</span>
+    <div className='min-w-[48vh] p-5 bg-gray-100 dark:bg-[#171717]'>
+      <span className='text-2xl font-medium text-black dark:text-white'>All Chats</span>
       <Input
         placeholder="Search contacts..."
         value={search}
@@ -23,8 +23,8 @@ const ContactsPage = () => {
       />
 
       <div className="flex flex-col gap-4 mt-6">
-        {filteredContacts.map((member) =>{
-          if(member.userId._id === user?.id) return null
+        {filteredContacts.map((member) => {
+          if (member.userId._id === user?.id) return null
           return <ContactCard key={member._id} member={member} />
         })}
       </div>

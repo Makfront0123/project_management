@@ -1,4 +1,3 @@
-import ChatBackground from "@/features/chat/components/ChatBackground";
 import ChatSidebar from "@/features/chat/components/ChatSidebar";
 import ContactsPage from "@/pages/ContactsPage";
 import { Outlet, useMatch } from "react-router";

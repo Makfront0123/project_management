@@ -1,5 +1,6 @@
 import { formatDateNumeric } from "@/shared/utils/formatDate"
 import type { Message } from "../types/message"
+import { useAuthStore } from "@/features/auth/store/auth_store"
 
 
 
@@ -13,10 +14,8 @@ type Props = {
     deleteGlobalMessages: (teamId: string) => void
     deletePrivateMessages: (teamId: string, memberId: string, userId: string) => void
 }
-
 const ChatMessages = ({
     messages,
-    isLoading,
     isAdmin,
     selectedMemberId,
     teamId,
@@ -24,11 +23,7 @@ const ChatMessages = ({
     deleteGlobalMessages,
     deletePrivateMessages
 }: Props) => {
-
-    if (isLoading) {
-        return <p>Loading messages...</p>
-    }
-
+    const { user } = useAuthStore()
     return (
         <div>
 
@@ -47,21 +42,52 @@ const ChatMessages = ({
                 </button>
             )}
 
-            <div className="flex flex-col gap-5">
-                {messages.map((msg) => (
-                    <div key={msg._id} className="p-2 rounded bg-gray-100">
-                        <p className="text-sm text-gray-600">
-                            <strong>
-                                {msg.sender?.name || "Usuario desconocido"}
-                                <span className="text-[12px] text-gray-400 font-light ml-2">
-                                    {formatDateNumeric(msg.createdAt)}
-                                </span>
-                            </strong>
+            <div className="flex flex-col gap-8">
+                {messages.map((msg: Message) => {
+                    const isMine = msg.sender?._id === user?.id
+                    const onlyImage = !msg.text && msg.attachments
+                    return (
+                        <div
+                            key={msg._id}
+                            className={`flex ${isMine ? "justify-end" : "justify-start"} relative mt-6`}
+                        >
+                            {isMine && (
+                                <div className="absolute -top-6 right-0">You</div>
+                            )}
+                            <div
+                                className={`
+                                    ${onlyImage ? "min-w-[20%] " : "min-w-[60%] "} p-3 rounded-lg
+                                    ${isMine
+                                        ? "bg-blue-600 dark:bg-gray-700 text-white"
+                                        : "bg-gray-200 text-gray-900"
+                                    }
+                                `}
+                            >
+                                {!isMine && (
+                                    <p className="text-xs font-semibold">
+                                        {msg.sender?.name || "Usuario desconocido"}
+                                    </p>
+                                )}
 
-                            <span>{msg.text}</span>
-                        </p>
-                    </div>
-                ))}
+                                {msg.text && (
+                                    <p className="text-sm">{msg.text}</p>
+                                )}
+
+                                {msg.attachments && (
+                                    <img
+                                        src={msg.attachments}
+                                        className="max-w-[220px] w-full h-auto object-cover rounded-lg mt-2"
+                                        alt="attachment"
+                                    />
+                                )}
+
+                                <p className="text-[11px] opacity-70 mt-1">
+                                    {formatDateNumeric(msg.createdAt)}
+                                </p>
+                            </div>
+                        </div>
+                    )
+                })}
             </div>
 
         </div>

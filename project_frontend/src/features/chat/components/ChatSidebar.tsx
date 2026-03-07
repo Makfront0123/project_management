@@ -1,20 +1,21 @@
-
 import { Icon } from "@iconify/react";
 import { chatNavLinks } from "@/shared/constants/navLinks";
 import { NavLink, useNavigate, useParams } from "react-router";
+import { ModeToggle } from "@/shared/components/ModeToggle";
 
 const ChatSidebar = () => {
     const { teamId } = useParams<{ teamId: string }>();
     const navigate = useNavigate();
 
     return (
-        <div className="bg-white flex flex-col min-w-[12vh] gap-3 p-2 shadow-lg border-r border-gray-200">
+        <div className="bg-white dark:bg-black flex flex-col min-w-[12vh] gap-3 p-2 shadow-lg border-r border-gray-200">
             <button
                 onClick={() => navigate(`/dashboard`)}
                 className="flex items-center justify-center h-14 rounded-lg text-gray-500 hover:bg-gray-100 transition"
             >
                 <Icon icon="mdi:arrow-left" className="size-6" />
             </button>
+
             <div className="h-px bg-gray-200 my-1" />
 
             {chatNavLinks.map((link) => {
@@ -28,7 +29,7 @@ const ChatSidebar = () => {
                         className={({ isActive }) =>
                             `flex items-center justify-center h-14 rounded-lg transition
               ${isActive
-                                ? "bg-blue-500 text-white"
+                                ? "bg-blue-500 dark:bg-gray-700 text-white"
                                 : "text-gray-500 hover:bg-gray-100"
                             }`
                         }
@@ -37,6 +38,9 @@ const ChatSidebar = () => {
                     </NavLink>
                 );
             })}
+            <div className="mt-auto flex justify-center mb-5">
+                <ModeToggle />
+            </div>
         </div>
     );
 };
