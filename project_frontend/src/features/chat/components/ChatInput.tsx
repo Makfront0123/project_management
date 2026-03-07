@@ -49,7 +49,7 @@ const ChatInput = ({
                         onClick={toggle}
                         className="px-1"
                     >
-                        😊
+                        <Icon icon="mdi:emoji-outline" className="size-8 p-1 text-gray-700 hover:opacity-70 duration-400" />
                     </button>
                     <ImageUploader
                         value={file}
@@ -61,7 +61,7 @@ const ChatInput = ({
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="bg-blue-500 text-white mx-2 rounded-md"
+                        className="bg-blue-500 dark:bg-gray-700 hover:opacity-70 duration-400 text-white mx-2 rounded-md"
                     >
                         <Icon icon="ic:round-send" className="size-8 p-1" />
                     </button>

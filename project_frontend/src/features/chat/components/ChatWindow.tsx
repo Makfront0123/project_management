@@ -47,56 +47,38 @@ const ChatWindow = ({
             </div>
         )
     }
-
     return (
-
-        <div className="flex flex-col w-full h-full">
-
-            <div className="h-16 border-b flex items-center px-4 bg-white dark:bg-black">
-
+        <div className="flex flex-col w-full h-full z-40 overflow-hidden bg-[url('/images/bg-light.png')] dark:bg-[url('/images/bg-dark.jpg')] bg-cover bg-center relative">
+            <div className="absolute inset-0 h-full w-full bg-black/86 z-10" />
+            <div className="h-16 border-b flex items-center px-4 bg-white dark:bg-black z-60">
                 {type === "private" && member ? (
-
                     <div className="flex items-center gap-3">
-
                         <img
                             src={member.userId.image}
                             className="w-8 h-8 rounded-full object-cover"
                         />
-
-                        <span className="font-medium">
-                            {member.userId.name}
-                        </span>
-
+                        <span className="font-medium">{member.userId.name}</span>
                     </div>
-
                 ) : (
-
-                    <span className="font-medium">
-                        Global Chat
-                    </span>
-
+                    <span className="font-medium">Global Chat</span>
                 )}
-
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 z-60">
+                <div className="relative">
+                    <ChatMessages
+                        messages={messages}
+                        isLoading={isLoading}
+                        isAdmin={false}
+                        teamId={teamId}
+                        userId={currentUserId}
+                        deleteGlobalMessages={() => { }}
+                        deletePrivateMessages={() => { }}
+                    />
+                    <div ref={messagesEndRef} />
+                </div>
             </div>
 
-
-            <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-black">
-
-                <ChatMessages
-                    messages={messages}
-                    isLoading={isLoading}
-                    isAdmin={false}
-                    teamId={teamId}
-                    userId={currentUserId}
-                    deleteGlobalMessages={() => { }}
-                    deletePrivateMessages={() => { }}
-                />
-                <div ref={messagesEndRef} />
-            </div>
-
-
-            <div className="p-4 border-t bg-white dark:bg-black">
-
+            <div className="p-4 border-t bg-white dark:bg-black z-60">
                 <ChatInput
                     value={text}
                     file={file}
@@ -106,11 +88,8 @@ const ChatWindow = ({
                     onFileChange={onFileChange}
                     onSubmit={onSubmit}
                 />
-
             </div>
-
         </div>
-
     )
 }
 

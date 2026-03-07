@@ -16,7 +16,7 @@ export const ContactCard = ({ member }: Props) => {
             onClick={() =>
                 navigate(`/team/${member.teamId}/chat/contacts/${member._id}`)
             }
-            className="max-w-[40vh] max-h-[14vh] rounded-sm shadow-sm cursor-pointer hover:shadow-md transition"
+            className="max-w-[40vh] min-h-[13vh] rounded-sm shadow-md cursor-pointer hover:border-3 hover:border-gray-400 duration-700"
         >
             <CardHeader className="flex gap-3">
                 <img

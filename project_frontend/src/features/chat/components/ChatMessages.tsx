@@ -25,7 +25,7 @@ const ChatMessages = ({
 }: Props) => {
     const { user } = useAuthStore()
     return (
-        <div>
+        <div className="">
 
             {isAdmin && (
                 <button
