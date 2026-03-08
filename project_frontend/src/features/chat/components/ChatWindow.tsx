@@ -48,7 +48,7 @@ const ChatWindow = ({
         )
     }
     return (
-        <div className="flex flex-col w-full h-full z-40 overflow-hidden bg-[url('/images/bg-light.png')] dark:bg-[url('/images/bg-dark.jpg')] bg-cover bg-center relative">
+        <div className="flex flex-col w-full h-full z-40 overflow-hidden bg-[url('/images/bg-light.webp')] dark:bg-[url('/images/bg-dark.webp')] bg-cover bg-center relative">
             <div className="absolute inset-0 h-full w-full bg-black/86 z-10" />
             <div className="h-16 border-b flex items-center px-4 bg-white dark:bg-black z-60">
                 {type === "private" && member ? (

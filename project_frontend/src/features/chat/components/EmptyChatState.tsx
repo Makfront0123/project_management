@@ -1,7 +1,7 @@
 const EmptyChatState = () => {
   return (
     <div className="flex-1 flex items-center justify-center w-full h-full z-40 overflow-hidden
-  bg-[url('/images/bg-light.png')] dark:bg-[url('/images/bg-dark.jpg')]
+  bg-[url('/images/bg-light.webp')] dark:bg-[url('/images/bg-dark.webp')]
   bg-cover bg-center relative"
     >
       <div className="absolute inset-0 h-full w-full bg-black/86 z-10">

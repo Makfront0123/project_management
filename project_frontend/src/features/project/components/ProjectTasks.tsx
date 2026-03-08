@@ -41,7 +41,6 @@ const ProjectTasks = ({ tasks = [], onEdit, onDelete }: Props) => {
                         <TableHead>Status</TableHead>
                         <TableHead>Priority</TableHead>
                         <TableHead>Created</TableHead>
-                        <TableHead>Actions</TableHead>
                         <TableHead>Assigned</TableHead>
 
                     </TableRow>
@@ -67,16 +66,6 @@ const ProjectTasks = ({ tasks = [], onEdit, onDelete }: Props) => {
                             <TableCell>
                                 {new Date(task.createdAt).toLocaleDateString()}
                             </TableCell>
-
-
-                            <TableCell>
-                                <button
-                                    className="text-purple-600 hover:underline"
-                                >
-                                    Ver
-                                </button>
-                            </TableCell>
-
                             <TableCell>
                                 {task.assignedUsers?.length > 0 ? (
                                     task.assignedUsers.map(user => (

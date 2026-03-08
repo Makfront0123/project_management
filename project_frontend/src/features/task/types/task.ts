@@ -10,7 +10,14 @@ export interface Task {
     _id: string;
     name: string;
     description: string;
-    projectId: string;
+    projectId: {
+        _id: string;
+        name: string;
+        teamId: {
+            _id: string;
+            name: string;
+        }
+    };
     status: string;
     priority: TaskPriority;
     dueDate: string;

@@ -65,7 +65,7 @@ const ChatMessages = ({
                             >
                                 {!isMine && (
                                     <p className="text-xs font-semibold">
-                                        {msg.sender?.name || "Usuario desconocido"}
+                                        {msg.receiver?.name || "Usuario desconocido"}
                                     </p>
                                 )}
 

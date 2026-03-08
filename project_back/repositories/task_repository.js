@@ -100,10 +100,12 @@ class TaskRepository {
         const taskIds = assignments.map(a => a.taskId);
 
         if (!taskIds.length) return [];
-        return await Task.find({
-            _id: { $in: taskIds }
-        })
-            .populate("projectId")
+        return await Task.find({ _id: { $in: taskIds } })
+            .populate({
+                path: "projectId",
+                select: "name teamId", // trae solo lo que necesitas
+                populate: { path: "teamId", select: "_id name" } // si teamId es referencia a Team
+            })
             .lean();
     }
 

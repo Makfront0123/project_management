@@ -75,6 +75,8 @@ const useTaskStore = create<TaskStore>((set) => ({
             isLoading: false
         });
 
+        console.log("store", response);
+
         return response;
     },
 

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router"
 import { icons } from "@/shared/constants/icons"
 import type { Team } from "@/features/team/types/team"
 import { useTeamMemberStore } from "@/features/team/store/team_member_store"
+import type { Task } from "@/features/task/types/task"
 
 export const useDashboard = () => {
     const navigate = useNavigate()
@@ -45,7 +46,7 @@ export const useDashboard = () => {
     const [pendingTeamId, setPendingTeamId] = useState<string | null>(null)
     const [inputCode, setInputCode] = useState("")
     const [codeError, setCodeError] = useState("")
-
+    const [userTasksForTeam, setUserTasksForTeam] = useState<Task[]>([]);
     useEffect(() => {
         fetchTeams()
     }, [fetchTeams])
@@ -73,10 +74,15 @@ export const useDashboard = () => {
     }, [activeTeamId, getTeamDashboard])
 
     useEffect(() => {
-        if (!teamMemberships.length) return
+        if (!activeTeamId) return;
 
-        getTaskByUser()
-    }, [teamMemberships, getTaskByUser])
+        getTaskByUser().then((tasks) => {
+            const filtered = tasks.filter(
+                (t) => t.projectId?.teamId?._id === activeTeamId
+            );
+            setUserTasksForTeam(filtered);
+        });
+    }, [activeTeamId, getTaskByUser]);
 
     useEffect(() => {
         if (!teamMemberships.length) return
@@ -160,7 +166,7 @@ export const useDashboard = () => {
 
         const totalProjects = dashboard.projects.length
 
-        
+
         const totalTasks = dashboard.projects.reduce(
             (sum, p) => sum + p.totalTasks,
             0
@@ -208,6 +214,7 @@ export const useDashboard = () => {
 
         tasks,
         tasksLoading,
+        userTasksForTeam,
 
         isCreateOpen,
         activeTeamId,
