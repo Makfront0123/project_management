@@ -96,6 +96,5 @@ export const uploadMessageAttachment = async (
             }
         }
     );
-
     return response.data.data;
 };

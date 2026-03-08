@@ -193,6 +193,13 @@ class TaskRepository {
             }
         ]);
     }
+
+    async isTaskAssignedToUser(taskId, userId) {
+        return await TaskAssignment.exists({
+            taskId: new mongoose.Types.ObjectId(taskId),
+            userId: new mongoose.Types.ObjectId(userId)
+        });
+    }
 }
 
 

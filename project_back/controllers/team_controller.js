@@ -56,6 +56,25 @@ export const leaveTeam = async (req, res) => {
 
         await teamMemberService.removeMember({ teamId, userId });
 
+        const admins = await teamMemberService.getAdminsOfTeam(teamId);
+        const leavingMemberName = req.user.name;
+
+        const notifications = await Promise.all(
+            admins
+                .filter(admin => admin.userId.toString() !== userId)
+                .map(admin =>
+                    notificationService.createNotification({
+                        recipient: admin._id,
+                        message: `${leavingMemberName} has left the team`,
+                        type: "member_left_team",
+                        read: false,
+                        metadata: { teamId, userId }
+                    })
+                )
+        );
+
+        req.io.to(`user_${admin}`).emit("newNotification", notifications);
+
         res.status(200).json({ message: "You left the team successfully" });
 
     } catch (error) {

@@ -3,7 +3,7 @@ import TaskAssignment from "../models/TaskAssignment.js";
 import Activity from "../models/ActivityLog.js";
 import Project from "../models/Project.js";
 import teamMemberRepo from "../repositories/team_member_repository.js";
-import User from "../models/User.js";
+import notificationService from "../services/notification_service.js";
 export const createTask = async (req, res) => {
     try {
 
@@ -43,11 +43,7 @@ export const createTask = async (req, res) => {
 
 
         if (assignedUserId) {
-
-            const member = await teamMemberRepo.getMemberOfTeam(
-                project.teamId,
-                assignedUserId
-            );
+            const member = await teamMemberRepo.getMemberOfTeam(project.teamId, assignedUserId);
 
             await TaskAssignment.create({
                 taskId: task._id,
@@ -55,19 +51,19 @@ export const createTask = async (req, res) => {
                 assignedBy: req.user.id,
             });
 
-            await Activity.create({
-                teamId: project.teamId,
-                projectId,
-                taskId: task._id,
-                user: req.user.id,
-                targetUser: assignedUserId,
-                type: "task-assigned",
+            const notificationMessage = `${req.user.name} has assigned you the task ${task.name}`;
+            const notification = await notificationService.createNotification({
+                recipient: assignedUserId,
+                message: notificationMessage,
+                type: "new_task_assignment",
+                read: false,
                 metadata: {
-                    taskName: task.name,
-                    projectName: project.name,
-                    targetUserName: member?.userName,
-                },
+                    taskId: task._id,
+                    teamId: project.teamId,
+                    redirectTo: `/projects/${project._id}/tasks/${task._id}`
+                }
             });
+            req.io.to(`user_${assignedUserId}`).emit("newNotification", notification);
         }
         res.status(201).json({
             message: "Task created",
@@ -129,55 +125,91 @@ export const getTaskByUserByProject = async (req, res) => {
     }
 };
 
-
 export const getTask = async (req, res) => {
     try {
 
         const { projectId, taskId } = req.params;
+        const userId = req.user.id;
 
-        const task = await taskService.getTaskById(projectId, taskId);
+        const result = await taskService.findTaskWithTeam(taskId);
 
-        res.status(200).json(task);
+        if (!result) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+
+        const { task, teamId } = result;
+
+        const member = await teamMemberRepo.getMemberOfTeam(teamId, userId);
+
+        const isAdmin = member?.role === "admin";
+        const isAssigned = await taskService.isTaskAssignedToUser(taskId, userId);
+
+        if (!isAdmin && !isAssigned) {
+            return res.status(403).json({ message: "Not authorized to access this task" });
+        }
+
+        const taskData = await taskService.getTaskById(projectId, taskId);
+
+        res.status(200).json(taskData);
 
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
-
-export const updateTask = async (req, res) => {
+}; export const updateTask = async (req, res) => {
     try {
+
         const { projectId, taskId } = req.params;
         const { name, description, priority, assignedUserId } = req.body;
 
         const data = { name, description, priority };
+
         const updatedTask = await taskService.updateTask(taskId, projectId, data);
 
         const project = await Project.findById(projectId);
 
-        const currentAssignments = await TaskAssignment.find({ taskId });
-        const currentUserId = currentAssignments[0]?.userId?.toString();
+        const currentAssignment = await TaskAssignment.findOne({ taskId });
 
+        const currentUserId = currentAssignment?.userId?.toString();
         if (assignedUserId && assignedUserId !== currentUserId) {
-            if (currentAssignments.length) {
-                await TaskAssignment.deleteMany({ taskId });
-                for (const a of currentAssignments) {
-                    await Activity.create({
-                        type: "task-unassigned",
-                        user: req.user.id,
-                        targetUser: a.userId,
-                        teamId: project.teamId,
-                        projectId,
+            if (currentAssignment) {
+
+                await TaskAssignment.deleteOne({ taskId });
+
+                await Activity.create({
+                    type: "task-unassigned",
+                    user: req.user.id,
+                    targetUser: currentAssignment.userId,
+                    teamId: project.teamId,
+                    projectId,
+                    taskId,
+                    metadata: {
+                        taskName: updatedTask.name,
+                        targetUserName: currentAssignment.userName
+                    }
+                });
+
+                const notification = await notificationService.createNotification({
+                    recipient: currentAssignment.userId,
+                    message: `${req.user.name} unassigned you from task ${updatedTask.name}`,
+                    type: "task_unassigned",
+                    metadata: {
                         taskId,
-                        metadata: { taskName: updatedTask.name, targetUserName: a.userName }
-                    });
-                }
+                        projectId,
+                        redirectTo: "/dashboard"
+                    }
+                });
+
+                req.io.to(`user_${currentAssignment.userId}`).emit("newNotification", notification);
             }
+
             const member = await teamMemberRepo.getMemberOfTeam(project.teamId, assignedUserId);
+
             if (member) {
+
                 await TaskAssignment.create({
                     taskId,
                     userId: assignedUserId,
-                    assignedBy: req.user.id,
+                    assignedBy: req.user.id
                 });
 
                 await Activity.create({
@@ -191,21 +223,34 @@ export const updateTask = async (req, res) => {
                         taskName: updatedTask.name,
                         projectName: project.name,
                         targetUserName: member.userName,
-                        role: member.role,
-                    },
+                        role: member.role
+                    }
                 });
+
+                const notification = await notificationService.createNotification({
+                    recipient: assignedUserId,
+                    message: `${req.user.name} has assigned you the task ${updatedTask.name}`,
+                    type: "new_task_assignment",
+                    metadata: {
+                        taskId,
+                        projectId,
+                        redirectTo: `/projects/${projectId}/tasks/${taskId}`
+                    }
+                });
+
+                req.io.to(`user_${assignedUserId}`).emit("newNotification", notification);
             }
         }
 
         res.status(200).json({
             message: "Task updated successfully",
-            updatedTask,
+            updatedTask
         });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
-
 export const getTasksWithAssignments = async (req, res) => {
     try {
 

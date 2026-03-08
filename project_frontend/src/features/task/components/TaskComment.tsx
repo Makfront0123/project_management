@@ -29,19 +29,8 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
 
     return (
         <div
-            className="
-      w-full
-      border
-      rounded-xl
-      bg-white
-      dark:bg-gray-900
-      flex
-      flex-col
-      p-6
-      gap-6
-    "
+            className="w-full border rounded-xl bg-white dark:bg-transparent flex flex-col p-6 gap-6"
         >
-            {/* HEADER */}
             <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-lg">Comments</h3>
                 <span className="text-xs text-gray-400">
@@ -49,16 +38,8 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
                 </span>
             </div>
 
-            {/* COMMENTS LIST */}
             <div
-                className="
-        flex
-        flex-col
-        gap-4
-        max-h-[400px]
-        overflow-y-auto
-        pr-2
-      "
+                className="flexflex-colgap-4max-h-[400px]overflow-y-auto pr-2"
             >
                 {comments.length === 0 && (
                     <p className="text-sm text-gray-400">
@@ -83,7 +64,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
                         {/* USER */}
                         <div className="flex justify-between items-center text-xs text-gray-400">
                             <span className="font-medium text-gray-600">
-                                {c.userId?.name ?? "User"}
+                                {c.userId.name ?? "User"}
                             </span>
 
                             <span>

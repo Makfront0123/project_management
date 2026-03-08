@@ -48,6 +48,17 @@ export const addMemberToTeam = async (req, res) => {
                 role: "member"
             }
         });
+        const notification = await notificationService.createNotification({
+            recipient: userId,
+            message: `${req.user.name} added you to the team ${team.name}`,
+            type: "member_added",
+            metadata: {
+                teamId,
+                redirectTo: `/team/${teamId}`
+            }
+        });
+
+        req.io.to(`user_${userId}`).emit("newNotification", notification);
         res.status(201).json({ message: "Member Added", member: teamMember });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -179,7 +190,7 @@ export const rejectRequestToJoinTeam = async (req, res) => {
         const notification = await notificationService.createNotification({
             recipient: userId,
             message: notificationMessage,
-            type: "join_request",
+            type: "join_request_rejected",
             read: false,
         });
         req.io.to(`user_${userId}`).emit("newNotification", notification);
@@ -267,6 +278,17 @@ export const deleteMemberOfTeam = async (req, res) => {
             }
         });
 
+        const notification = await notificationService.createNotification({
+            recipient: userId,
+            message: `${req.user.name} removed you from the team ${team.name}`,
+            type: "member_removed",
+            metadata: {
+                teamId
+            }
+        });
+
+        req.io.to(`user_${userId}`).emit("newNotification", notification);
+
         res.status(200).json({ message: "Member deleted successfully" });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -336,6 +358,19 @@ export const acceptInviteByToken = async (req, res) => {
             status: "accepted"
         });
 
+        const admins = await teamMemberService.getAdminsOfTeam(teamId);
+
+        for (const admin of admins) {
+            const notification = await notificationService.createNotification({
+                recipient: admin.userId,
+                message: `${req.user.name} accepted the invitation to join the team`,
+                type: "invite_accepted",
+                metadata: { teamId }
+            });
+
+            req.io.to(`user_${admin.userId}`).emit("newNotification", notification);
+        }
+
         res.status(200).json({ message: "Invitation accepted", teamId });
 
     } catch (error) {
@@ -399,6 +434,15 @@ export const inviteMemberToTeam = async (req, res) => {
 
         await sendEmail({ to: user.email, subject: "You have been invited to a team", text: `You have been invited to join the team ${team.name}. Click the link below to accept the invitation ${inviteLink}` });
 
+        await notificationService.createNotification({
+            recipient: user.id,
+            message: `${req.user.name} invited you to join the team ${team.name}`,
+            type: "team_invitation",
+            metadata: {
+                teamId,
+                redirectTo: `/accept-invite/${token}`
+            }
+        });
         res.status(201).json({ message: "Invitation sent", member: teamMember });
 
     } catch (error) {

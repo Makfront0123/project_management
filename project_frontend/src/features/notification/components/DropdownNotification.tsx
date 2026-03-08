@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { icons } from "../../../shared/constants/icons";
+
 
 import { useNavigate } from "react-router";
 import type { NotificationType } from "../types/notification";
 import useNotificationStore from "@/features/notification/store/notification_store";
+import { Icon } from "@iconify/react";
+
 
 
 const NotificationDropdown = () => {
@@ -36,23 +38,18 @@ const NotificationDropdown = () => {
 
   return (
     <div className="relative">
-      {/* Botón principal */}
-      <button onClick={() => setOpen(!open)} className="relative flex items-center gap-x-2">
+      <button onClick={() => setOpen(!open)} className="relative flex items-center border-2 border-gray-200 dark:border-gray-600 p-2 rounded-lg gap-x-2">
         <div className="relative">
-          <img src={icons.notification} className="size-4" alt="Notificaciones" />
+          <Icon icon="mdi:bell" className="size-5 text-black dark:text-gray-500" />
           {unreadNotifications.length > 0 && (
             <span className="absolute -top-1 -right-2 bg-red-600 z-80 text-white text-xs font-bold px-1 rounded-full animate-bounce">
               {unreadNotifications.length}
             </span>
           )}
         </div>
-        <span className="text-white uppercase">Notifications</span>
       </button>
-
-      {/* Dropdown */}
       {open && (
-        <div className="absolute left-[110%] bottom-[10%] mt-2 w-64 z-90 bg-white shadow-lg rounded-lg max-h-80 flex flex-col">
-          {/* Controles de filtro */}
+        <div className="absolute right-[0%] top-[90%] mt-2 w-64 z-90 bg-white dark:bg-black border-2 dark:border-gray-700 shadow-lg rounded-lg min-h-80 flex flex-col">
           <div className="flex border-b border-gray-200">
             <button
               onClick={() => setFilter("unread")}
@@ -84,9 +81,9 @@ const NotificationDropdown = () => {
               filteredList.map((notif) => (
                 <div
                   key={notif._id}
-                  className={`p-3 border-b border-gray-200 text-sm cursor-pointer ${notif.read
+                  className={`p-3 border-b border-gray-200 dark:border-gray-400 text-sm cursor-pointer ${notif.read
                     ? "text-gray-500"
-                    : "font-semibold text-gray-800 bg-gray-50 hover:bg-gray-100"
+                    : "font-semibold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-700 hover:bg-gray-100"
                     }`}
                   onClick={() => handleNotificationClick(notif)}
                 >

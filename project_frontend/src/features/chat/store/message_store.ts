@@ -24,7 +24,6 @@ const useMessageStore = create<MessageStore>((set) => ({
 
 
     getPrivateMessages: async (teamId: string, fromId: string, toId: string) => {
-        console.log("GET PRIVATE MESSAGES", teamId, fromId, toId);
         set({ isLoading: true });
         const response = await getPrivateMessages(teamId, fromId, toId);
 

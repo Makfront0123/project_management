@@ -2,6 +2,7 @@ import attachmentService from "../services/attachment_service.js";
 import Activity from "../models/ActivityLog.js";
 import projectService from "../services/project_service.js";
 import taskService from "../services/task_service.js";
+import notificationService from "../services/notification_service.js";
 export const uploadAttachment = async (req, res) => {
     try {
         const { taskId, teamId } = req.params;
@@ -47,6 +48,27 @@ export const uploadAttachment = async (req, res) => {
             type: "attachment-uploaded",
             message: `uploaded attachment "${file.originalname}"`,
         });
+
+        const assignedUsers = await TaskAssignment.find({ taskId });
+
+        for (const assignment of assignedUsers) {
+
+            if (assignment.userId.toString() === req.user.id) continue;
+
+            const notification = await notificationService.createNotification({
+                recipient: assignment.userId,
+                message: `${req.user.name} uploaded "${file.originalname}" to task "${task.name}"`,
+                type: "task_attachment",
+                metadata: {
+                    teamId: project.teamId,
+                    projectId: project._id,
+                    taskId: task._id,
+                    redirectTo: `/team/${project.teamId}/projects/${project._id}/tasks/${task._id}`
+                }
+            });
+
+            req.io.to(`user_${assignment.userId}`).emit("newNotification", notification);
+        }
 
         res.status(200).json({
             message: "Attachment uploaded successfully",

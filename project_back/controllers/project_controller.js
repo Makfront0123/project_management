@@ -3,6 +3,7 @@ import notificationService from "../services/notification_service.js";
 import teamMemberService from "../services/team_member_service.js";
 import mongoose from "mongoose";
 import Activity from "../models/ActivityLog.js";
+import Notification from "../models/Notification.js";
 export const createProject = async (req, res) => {
     try {
         const owner_id = req.user.id;
@@ -29,22 +30,20 @@ export const createProject = async (req, res) => {
             .map(m => m.userId);
 
 
-        const notifications = await Promise.all(
-            recipients.map(recipientId =>
-                notificationService.createNotification({
-                    recipient: recipientId,
-                    message: `${req.user.name} ha creado el proyecto "${name}" en tu equipo.`,
-                    type: "new_project",
-                    read: false,
-                    metadata: {
-                        teamId,
-                        projectId: project._id,
-                        redirectTo: `/team/${teamId}/projects/${project._id}`
-                    }
-                })
-            )
-        );
-        notifications.forEach((notif, index) => {
+        const notifications = recipients.map(recipientId => ({
+            recipient: recipientId,
+            message: `${req.user.name} creó el proyecto "${name}"`,
+            type: "new_project",
+            read: false,
+            metadata: {
+                teamId,
+                projectId: project._id,
+                redirectTo: `/team/${teamId}/projects/${project._id}`
+            }
+        }));
+
+        const savedNotifications = await Notification.insertMany(notifications);
+        savedNotifications.forEach((notif, index) => {
             req.io.to(`user_${recipients[index]}`).emit("newNotification", notif);
         });
 

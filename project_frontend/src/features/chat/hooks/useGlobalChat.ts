@@ -21,7 +21,6 @@ const useGlobalChat = (
     const [error, setError] = useState<string | undefined>()
     const [isSubmitting, setIsSubmitting] = useState(false)
 
-    // cargar historial
     useEffect(() => {
 
         if (teamId) {
@@ -31,7 +30,6 @@ const useGlobalChat = (
     }, [teamId, getGlobalMessages])
 
 
-    // socket
     useEffect(() => {
 
         socketRef.current = io(import.meta.env.VITE_API_SOCKET_URL, {
@@ -42,16 +40,11 @@ const useGlobalChat = (
         const socket = socketRef.current
 
         socket.on("connect", () => {
-
-            console.log("✅ Socket conectado:", socket.id)
-
             socket.emit("joinTeamRoom", teamId)
 
         })
 
         socket.on("newMessage", (message: Message) => {
-
-            console.log("NEW MESSAGE", message)
 
             addMessage(message)
             playReceivedSound()

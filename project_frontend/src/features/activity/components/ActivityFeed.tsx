@@ -17,8 +17,8 @@ export const ActivityFeed = ({ activities }: Props) => {
     }
 
     return (
-        <ScrollArea className="h-[500px] px-4">
-            <div className="flex flex-col">
+        <ScrollArea className="h-[500px] p-2">
+            <div className="flex flex-col rounded-lg mt-2 px-2">
                 {activities.map((activity) => (
                     <ActivityItem
                         key={activity._id}

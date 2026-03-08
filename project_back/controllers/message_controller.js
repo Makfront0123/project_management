@@ -15,8 +15,11 @@ export const getPrivateMessages = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 export const uploadMessageAttachment = async (req, res) => {
   try {
+
+    console.log("FILE:", req.file);
 
     const file = req.file;
 
@@ -34,9 +37,14 @@ export const uploadMessageAttachment = async (req, res) => {
     });
 
   } catch (error) {
+
+    console.error("UPLOAD ERROR:", error);
+
     res.status(500).json({ message: error.message });
+
   }
 };
+
 export const getGlobalMessages = async (req, res) => {
   try {
     const { teamId } = req.params;

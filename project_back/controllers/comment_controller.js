@@ -5,6 +5,7 @@ import taskService from "../services/task_service.js";
 import projectService from "../services/project_service.js";
 import TaskAssignment from "../models/TaskAssignment.js";
 import Activity from "../models/ActivityLog.js";
+import notificationService from "../services/notification_service.js";
 export const createComment = async (req, res) => {
   try {
     const { taskId } = req.params;
@@ -59,6 +60,26 @@ export const createComment = async (req, res) => {
       type: "comment-created",
       message: "Comment created",
     });
+
+    const assignedUsers = await TaskAssignment.find({ taskId });
+
+    for (const assignment of assignedUsers) {
+      if (assignment.userId.toString() === userId) continue;
+
+      const notification = await notificationService.createNotification({
+        recipient: assignment.userId,
+        message: `${req.user.name} commented on task "${task.name}"`,
+        type: "task_comment",
+        metadata: {
+          taskId,
+          projectId: project._id,
+          teamId: project.teamId,
+          redirectTo: `/team/${project.teamId}/projects/${project._id}/tasks/${taskId}`
+        }
+      });
+
+      req.io.to(`user_${assignment.userId}`).emit("newNotification", notification);
+    }
 
     res.status(201).json({
       message: "Comment created successfully",

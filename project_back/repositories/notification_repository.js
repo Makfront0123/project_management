@@ -1,3 +1,4 @@
+import { get } from "mongoose";
 import Notification from "../models/Notification.js";
 
 export const NotificationRepository = {
@@ -16,11 +17,14 @@ export const NotificationRepository = {
     return await Notification.deleteMany({ team: teamId });
   },
 
- 
+
   deleteByProjectId: async (projectId) => {
     return await Notification.deleteMany({ project: projectId });
   },
 
+  getAllByMember: async (memberId) => {
+    return await Notification.find({ recipient: memberId }).sort({ createdAt: -1 });
+  },
 };
 
 export default NotificationRepository;

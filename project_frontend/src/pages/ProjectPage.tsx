@@ -14,6 +14,7 @@ import CreateTeamForm from "@/features/team/components/CreateTeamForm"
 import Modal from "@/shared/components/Modal"
 import { useActiveTeamRole } from "@/features/team/hooks/useActiveTeamRole"
 import { ProjectCardSkeleton } from "@/features/project/components/ProjectCardSkeleton"
+import { usePagination } from "@/shared/hooks/usePagination"
 
 
 const ProjectPage = () => {
@@ -32,6 +33,13 @@ const ProjectPage = () => {
     setStatus,
     filteredProjects,
   } = useProjectFilter(projects)
+  const {
+    page,
+    totalPages,
+    items: paginatedProjects,
+    nextPage,
+    prevPage,
+  } = usePagination(filteredProjects, 6)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -44,7 +52,7 @@ const ProjectPage = () => {
   if (projectsLoading) {
     return (
       <div className="p-10 text-center">
-        <ProjectCardSkeleton/>
+        <ProjectCardSkeleton />
       </div>
     )
   }
@@ -88,9 +96,9 @@ const ProjectPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 w-full">
-            {filteredProjects.length ? (
+            {paginatedProjects.length ? (
               <ProjectCard
-                projects={filteredProjects}
+                projects={paginatedProjects}
                 variant="grid"
               />
             ) : (
@@ -99,6 +107,30 @@ const ProjectPage = () => {
               </p>
             )}
           </div>
+
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-8">
+              <Button
+                variant="outline"
+                onClick={prevPage}
+                disabled={page === 1}
+              >
+                Previous
+              </Button>
+
+              <span className="text-sm">
+                Page {page} of {totalPages}
+              </span>
+
+              <Button
+                variant="outline"
+                onClick={nextPage}
+                disabled={page === totalPages}
+              >
+                Next
+              </Button>
+            </div>
+          )}
 
           <ProjectModal
             open={isCreateOpen}

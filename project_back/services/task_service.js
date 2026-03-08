@@ -71,6 +71,9 @@ class TaskService {
     async getTasksByUserAndProject(userId, projectId) {
         return await taskRepo.getTasksByUserAndProject(userId, projectId);
     }
+    async isTaskAssignedToUser(taskId, userId) {
+        return await taskRepo.isTaskAssignedToUser(taskId, userId);
+    }
 
 }
 

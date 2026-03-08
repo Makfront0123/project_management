@@ -16,6 +16,11 @@ export const getTaskActivities = async (req, res) => {
 export const getTeamActivities = async (req, res) => {
     const { teamId } = req.params;
 
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 20;
+
+    const skip = (page - 1) * limit;
+
     const activities = await Activity.find({ teamId })
         .populate("user", "name")
         .populate("taskId", "name")
@@ -23,9 +28,16 @@ export const getTeamActivities = async (req, res) => {
         .populate("targetUser", "name")
         .populate("teamId", "name")
         .sort({ createdAt: -1 })
-        .limit(20);
+        .skip(skip)
+        .limit(limit);
 
-    res.json({ activities });
+    const total = await Activity.countDocuments({ teamId });
+
+    res.json({
+        activities,
+        page,
+        totalPages: Math.ceil(total / limit),
+    });
 };
 export const getUserActivities = async (req, res) => {
     const { userId } = req.params;

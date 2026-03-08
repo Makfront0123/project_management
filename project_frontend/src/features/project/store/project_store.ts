@@ -60,7 +60,7 @@ type ProjectStore = {
     teamId: string
   ) => Promise<void>;
 };
-export const useProjectStore = create<ProjectStore>((set) => ({
+export const useProjectStore = create<ProjectStore>((set, get) => ({
   projects: [],
   currentProject: null,
   analytics: null,
@@ -122,21 +122,20 @@ export const useProjectStore = create<ProjectStore>((set) => ({
 
   createProject: async (teamId, data) => {
     set({ isLoadingProject: true });
+
     try {
-      const { message, project } = await createProject(teamId, data);
-      set((state) => ({
-        projects: [...state.projects, project],
-        currentProject: project,
-        totalProjects: state.totalProjects + 1,
-        isLoadingProject: false,
-      }));
+      const { message } = await createProject(teamId, data);
+
+      await get().getProjectsByTeam(teamId);
+
+      set({ isLoadingProject: false });
+
       toast.success(message);
     } catch (error) {
       console.error("Error creando proyecto:", error);
       set({ isLoadingProject: false });
     }
   },
-
   updateProject: async (id, data, teamId) => {
     set({ isLoadingProject: true });
     try {

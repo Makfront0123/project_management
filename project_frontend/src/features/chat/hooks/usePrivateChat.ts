@@ -20,7 +20,6 @@ const usePrivateChat = (
     const [error, setError] = useState<string | undefined>();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // cargar historial
     useEffect(() => {
 
         if (teamId && fromUserId && toUserId) {
@@ -29,7 +28,6 @@ const usePrivateChat = (
 
     }, [teamId, fromUserId, toUserId, getPrivateMessages]);
 
-    // socket
     useEffect(() => {
 
         socketRef.current = io(import.meta.env.VITE_API_SOCKET_URL, {
@@ -40,9 +38,6 @@ const usePrivateChat = (
         const socket = socketRef.current;
 
         socket.on("connect", () => {
-
-            console.log("✅ Socket conectado:", socket.id);
-
             if (fromUserId && toUserId) {
                 socket.emit("joinPrivateChat", {
                     fromUserId,
@@ -108,15 +103,11 @@ const usePrivateChat = (
             setFile(null);
             setError(undefined);
 
-        } catch (err) {
-
-            console.error(err);
+        } catch {
             setError("Failed to send message");
 
         } finally {
-
             setIsSubmitting(false);
-
         }
 
     }, [text, file, teamId, fromUserId, toUserId, playSentSound]);

@@ -8,6 +8,7 @@ import { icons } from "@/shared/constants/icons"
 import type { Team } from "@/features/team/types/team"
 import { useTeamMemberStore } from "@/features/team/store/team_member_store"
 import type { Task } from "@/features/task/types/task"
+import type { UserTeamStatus } from "@/shared/types/userTeamStatus"
 
 export const useDashboard = () => {
     const navigate = useNavigate()
@@ -114,7 +115,7 @@ export const useDashboard = () => {
         )
 
         const teamIds = teamMemberships.map(
-            (team: any) => team.teamId ?? ""
+            (team: UserTeamStatus) => team.team._id ?? ""
         )
 
         keys.forEach(key => {

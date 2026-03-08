@@ -1,5 +1,6 @@
-import type { Project } from "@/shared/types/projects"
+
 import { useMemo, useState } from "react"
+import type { Project } from "../types/projects"
 
 
 export type StatusFilter = "all" | "active" | "completed" | "pending"

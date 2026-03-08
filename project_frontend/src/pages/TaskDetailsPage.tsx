@@ -7,6 +7,7 @@ import TaskComments from "@/features/task/components/TaskComment";
 import { useTask } from "@/features/task/hooks/useTaks";
 import { useTaskWorkflows } from "@/features/task/hooks/useTaskWorkflows";
 import { useTeamWorkflow } from "@/features/team/hooks/useTeamWorkflows";
+import { Loading } from "@/shared/components/Loading";
 import { usePagination } from "@/shared/hooks/usePagination";
 
 import { Link, useParams } from "react-router";
@@ -14,8 +15,7 @@ import { Link, useParams } from "react-router";
 const TaskDetailsPage = () => {
     const { taskId, projectId } = useParams();
 
-    const task = useTask(projectId, taskId);
-
+    const { task, loading, error } = useTask(projectId, taskId);
     const { completeTask } = useTaskWorkflows();
     const { user } = useAuthStore();
     const { activeTeamId } = useTeamWorkflow();
@@ -41,9 +41,30 @@ const TaskDetailsPage = () => {
         usePagination(activities, 10);
 
 
-    if (!task) {
+    if (loading) {
+        return <Loading />;
+    }
+
+    if (error === 403) {
+        return (
+            <div className="flex flex-col items-center justify-center h-[60vh]">
+                <h1 className="text-xl font-bold">
+                    You don't have permission to view this task
+                </h1>
+                <Link to="/dashboard">
+                    <button className="mt-4 border px-4 py-2 rounded">
+                        Go to dashboard
+                    </button>
+                </Link>
+            </div>
+        );
+    }
+
+    if (error === 404) {
         return <p>Task not found</p>;
     }
+
+    if (!task) return null;
 
     return (
         <div className="flex flex-col items-start w-full my-10 px-10 gap-x-5">
@@ -93,7 +114,7 @@ const TaskDetailsPage = () => {
                         <TaskComments taskId={task._id} />
                     </section>
                 </div>
-                <div className="flex flex-col w-full py-6 rounded-lg bg-black border-1 border-gray-600">
+                <div className="flex flex-col w-full py-6 rounded-lg bg-white dark:bg-black border-1 border-gray-600">
                     <h1 className="font-bold text-2xl ml-5 mb-2">Activities</h1>
                     <ActivityFeed activities={items} />
                     <div className="flex justify-between px-4 pt-36">

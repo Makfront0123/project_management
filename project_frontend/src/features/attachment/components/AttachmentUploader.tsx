@@ -25,7 +25,7 @@ const AttachmentUploader = ({
     const { attachments } = useAttachments(activeTeamId ?? "", taskId);
 
     return (
-        <div className="bg-white dark:bg-gray-900 border rounded-xl p-6 flex flex-col gap-4">
+        <div className="bg-white dark:bg-transparent mt-7 border rounded-xl p-6 flex flex-col gap-4">
 
             <div className="flex justify-between items-center">
                 <h3 className="font-semibold text-lg">Attachments</h3>

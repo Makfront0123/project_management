@@ -1,26 +1,38 @@
 import { NotificationRepository } from "../repositories/notification_repository.js";
-
+import TeamMember from "../models/TeamMember.js";
 export const createNotification = async (req, res) => {
-    const { message, recipient } = req.body;
-    try {
-        if (!message || !recipient) {
-            return res.status(400).json({ message: "Missing parameters" });
-        }
+    const { message } = req.body;
+    const teamId = req.teamMember.teamId;
 
-        const notification = await NotificationRepository.create({ message, recipient });
-        res.status(201).json(notification);
+    try {
+        if (!message) return res.status(400).json({ message: "Missing parameters" });
+        const notification = await NotificationRepository.create({
+            message,
+            recipient: req.teamMember._id,
+            team: teamId
+        });
+
+        const admins = await TeamMember.find({ teamId, role: "admin", status: "accepted" });
+        await Promise.all(
+            admins.filter(a => !a._id.equals(req.teamMember._id)).map(admin =>
+                NotificationRepository.create({ message, recipient: admin._id, team: teamId })
+            )
+        );
+
+        res.status(201).json({ message: "Notifications sent", notification });
     } catch (err) {
         res.status(500).json({ error: "Error to create notification" });
     }
 };
-
 export const getNotificationsForUser = async (req, res) => {
     try {
-        const userId = req.user.id;  
+        const userId = req.user.id;
+
         const notifications = await NotificationRepository.getAllByUser(userId);
+
         res.json(notifications);
-    } catch (err) {
-        res.status(500).json({ error: "Error to get notifications" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
