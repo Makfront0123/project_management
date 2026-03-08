@@ -39,7 +39,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
             </div>
 
             <div
-                className="flexflex-colgap-4max-h-[400px]overflow-y-auto pr-2"
+                className="flex flex-col gap-4max-h-[400px]overflow-y-auto pr-2"
             >
                 {comments.length === 0 && (
                     <p className="text-sm text-gray-400">
@@ -50,16 +50,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({ taskId }) => {
                 {comments.map((c) => (
                     <div
                         key={c._id}
-                        className="
-            border
-            rounded-lg
-            p-3
-            bg-gray-50
-            dark:bg-gray-800
-            flex
-            flex-col
-            gap-1
-          "
+                        className="border rounded-lgp-3bg-gray-50 dark:bg-gray-800 flex flex-col gap-1"
                     >
                         {/* USER */}
                         <div className="flex justify-between items-center text-xs text-gray-400">
