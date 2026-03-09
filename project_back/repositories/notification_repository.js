@@ -17,6 +17,9 @@ export const NotificationRepository = {
     return await Notification.deleteMany({ team: teamId });
   },
 
+  deleteAllByTeamId: async (teamId) => {
+    return await Notification.deleteMany({ team: teamId });
+  },
 
   deleteByProjectId: async (projectId) => {
     return await Notification.deleteMany({ project: projectId });

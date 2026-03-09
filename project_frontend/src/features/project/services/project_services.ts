@@ -92,3 +92,13 @@ export const getProjectsByTeam = async (teamId: string) => {
     });
     return response.data;
 }
+
+export const deleteAllProjects = async (teamId: string) => {
+    const token = useAuthStore.getState().token;
+    const response = await axios.delete(`${baseUrl}/teams/${teamId}/projects`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return response.data;
+}

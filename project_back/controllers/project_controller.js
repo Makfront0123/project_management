@@ -1,5 +1,4 @@
 import projectService from "../services/project_service.js";
-import notificationService from "../services/notification_service.js";
 import teamMemberService from "../services/team_member_service.js";
 import mongoose from "mongoose";
 import Activity from "../models/ActivityLog.js";
@@ -184,6 +183,17 @@ export const deleteProject = async (req, res) => {
         });
     } catch (error) {
         console.error("Error deleting project:", error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const deleteAllProjects = async (req, res) => {
+    try {
+        const { teamId } = req.params;
+        const projects = await projectService.getProjectsByTeam(teamId);
+        await projectService.deleteAllProjects(teamId);
+        res.status(200).json({ message: "Projects deleted successfully", projects });
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };

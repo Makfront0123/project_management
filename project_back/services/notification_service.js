@@ -5,10 +5,14 @@ class NotificationService {
     return await notificationRepo.create(data);
   }
   async getNotifications(userId) {
-    return await notificationRepo.getAllByUser(userId); 
+    return await notificationRepo.getAllByUser(userId);
   }
   async markNotificationAsRead(notifId) {
     return await notificationRepo.markAsRead(notifId);
+  }
+
+  async deleteAllByTeamId(teamId) {
+    return await notificationRepo.deleteAllByTeamId(teamId);
   }
 }
 

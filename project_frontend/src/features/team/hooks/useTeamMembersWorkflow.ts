@@ -11,6 +11,7 @@ export const useTeamMembersWorkflow = (teamId: string) => {
     const rejectRequestStore = useTeamMemberStore(s => s.rejectRequest)
     const deleteMemberStore = useTeamMemberStore(s => s.deleteMember)
     const leaveTeamStore = useTeamStore(s => s.leaveTeam)
+    const deleteMembersStore = useTeamMemberStore(s => s.deleteMembers)
 
     const [membersLoading, setMembersLoading] = useState(false)
 
@@ -43,6 +44,11 @@ export const useTeamMembersWorkflow = (teamId: string) => {
         [leaveTeamStore, teamId]
     )
 
+    const deleteMembers = useCallback(
+        async (teamId: string) => await deleteMembersStore(teamId),
+        [deleteMembersStore]
+    )
+
     useEffect(() => {
         fetchTeamMembers()
     }, [fetchTeamMembers])
@@ -54,6 +60,7 @@ export const useTeamMembersWorkflow = (teamId: string) => {
         acceptRequest,
         rejectRequest,
         deleteMember,
+        deleteMembers,
         leaveTeam,
     }
 }

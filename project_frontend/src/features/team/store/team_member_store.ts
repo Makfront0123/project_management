@@ -1,6 +1,6 @@
 
 import { create } from 'zustand'
-import { acceptRequest, addMember, confirmJoinWithCode, deleteMember, getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, inviteMember, rejectRequest, requestToJoinTeam } from '../services/team_member'
+import { acceptRequest, addMember, confirmJoinWithCode, deleteMember, deleteMembers, getPendingMembersOfTeam, getPendingRequests, getTeamCode, getTeamMembers, inviteMember, rejectRequest, requestToJoinTeam } from '../services/team_member'
 import type { TeamMember } from '../types/teamMember'
 import type { UserTeamStatus } from '../../../shared/types/userTeamStatus'
 import { getErrorMessage } from '../../../shared/utils/getErrorMessage'
@@ -17,6 +17,7 @@ type TeamStore = {
     acceptRequest: (userId: string, teamId: string) => Promise<void>
     fetchTeamMembers: (teamId: string) => Promise<void>
     deleteMember: (memberId: string, teamId: string) => Promise<void>
+    deleteMembers: (teamId: string) => Promise<void>
     requestToJoinTeam: (teamId: string) => Promise<void>
     getPendingRequests: () => Promise<void>
     getPendingMembersOfTeam: (teamId: string) => Promise<void>
@@ -71,7 +72,7 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
     updateMembershipTeamName: (teamId, name, description) =>
         set((state) => ({
             teamMemberships: state.teamMemberships.map((m) =>
-                m.teamId === teamId
+                m.team._id === teamId
                     ? { ...m, name, description }
                     : m
             ),
@@ -92,6 +93,21 @@ export const useTeamMemberStore = create<TeamStore>((set) => ({
         set({ isLoading: true });
         try {
             const data = await deleteMember(memberId, teamId);
+            toast.success(data.message);
+            const updatedMembers = await getTeamMembers(teamId);
+            set({ teamMembers: updatedMembers, isLoading: false });
+        } catch (error) {
+            const errorMsg = getErrorMessage(error);
+            toast.error(errorMsg);
+            console.error("Error deleting member:", error);
+            set({ isLoading: false });
+        }
+    },
+
+    deleteMembers: async (teamId: string) => {
+        set({ isLoading: true });
+        try {
+            const data = await deleteMembers(teamId);
             toast.success(data.message);
             const updatedMembers = await getTeamMembers(teamId);
             set({ teamMembers: updatedMembers, isLoading: false });

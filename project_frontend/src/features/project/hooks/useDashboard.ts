@@ -48,6 +48,8 @@ export const useDashboard = () => {
     const [inputCode, setInputCode] = useState("")
     const [codeError, setCodeError] = useState("")
     const [userTasksForTeam, setUserTasksForTeam] = useState<Task[]>([]);
+
+    const [isDeleteProjectsOpen, setIsDeleteProjectsOpen] = useState(false);
     useEffect(() => {
         fetchTeams()
     }, [fetchTeams])
@@ -230,5 +232,7 @@ export const useDashboard = () => {
 
         goCreateTeam,
         goJoinTeam,
+        isDeleteProjectsOpen,
+        setIsDeleteProjectsOpen,
     }
 }

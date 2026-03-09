@@ -5,6 +5,10 @@ const taskAssignmentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Task"
     },
+    teamId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Team"
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
@@ -13,7 +17,7 @@ const taskAssignmentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-   
+
 }, { timestamps: true })
 
 export default mongoose.model("TaskAssignment", taskAssignmentSchema)

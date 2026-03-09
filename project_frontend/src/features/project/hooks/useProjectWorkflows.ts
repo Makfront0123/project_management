@@ -23,6 +23,7 @@ interface ProjectWorkflows {
   loadProjects: (teamId: string) => Promise<void>;
   updateProject: (params: EditProjectParams) => Promise<void>;
   deleteProject: (projectId: string, teamId: string) => Promise<void>;
+  deleteProjects: (teamId: string) => Promise<void>;
   createProject: (params: CreateProjectParams) => Promise<void>;
 }
 
@@ -88,10 +89,20 @@ export const useProjectWorkflows = (): ProjectWorkflows => {
     [projectStore, navigate]
   );
 
+  const deleteProjects = useCallback(
+    async (teamId: string) => {
+      await projectStore.deleteAllProjects(teamId);
+
+      navigate(`/team/${teamId}/projects`);
+    },
+    [projectStore, navigate]
+  );
+
   return {
     loadProject,
     updateProject,
     deleteProject,
+    deleteProjects,
     createProject,
     loadProjects,
 

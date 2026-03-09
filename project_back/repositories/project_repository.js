@@ -318,6 +318,10 @@ class ProjectRepository {
     async getProjectsByTeamId(teamId) {
         return await Project.find({ teamId });
     }
+
+    async deleteAllProjects(teamId) {
+        return await Project.deleteMany({ teamId });
+    }
 }
 
 export default new ProjectRepository();

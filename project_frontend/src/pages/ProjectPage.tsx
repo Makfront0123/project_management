@@ -15,6 +15,7 @@ import Modal from "@/shared/components/Modal"
 import { useActiveTeamRole } from "@/features/team/hooks/useActiveTeamRole"
 import { ProjectCardSkeleton } from "@/features/project/components/ProjectCardSkeleton"
 import { usePagination } from "@/shared/hooks/usePagination"
+import { useProjectWorkflows } from "@/features/project/hooks/useProjectWorkflows"
 
 
 const ProjectPage = () => {
@@ -24,6 +25,8 @@ const ProjectPage = () => {
     isCreateOpen,
     setIsCreateOpen,
     activeTeamId,
+    isDeleteProjectsOpen,
+    setIsDeleteProjectsOpen,
   } = useDashboard()
 
   const {
@@ -40,6 +43,7 @@ const ProjectPage = () => {
     nextPage,
     prevPage,
   } = usePagination(filteredProjects, 6)
+  const { deleteProjects } = useProjectWorkflows()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -74,9 +78,14 @@ const ProjectPage = () => {
             </div>
 
             {activeTeamId && isAdmin && (
-              <Button onClick={() => setIsCreateOpen(true)}>
-                New Project
-              </Button>
+              <div className="flex gap-x-5">
+                <Button onClick={() => setIsCreateOpen(true)}>
+                  New Project
+                </Button>
+                <Button variant="outline" onClick={() => setIsDeleteProjectsOpen(true)}>
+                  Delete Projects
+                </Button>
+              </div>
             )}
           </div>
 
@@ -145,6 +154,34 @@ const ProjectPage = () => {
         title="Create new workspace"
       >
         <CreateTeamForm form={createTeamForm} />
+      </Modal>
+      <Modal
+        isOpen={isDeleteProjectsOpen}
+        onClose={() => setIsDeleteProjectsOpen(false)}
+        title="Delete All Projects"
+        footer={
+          <div className="flex justify-end gap-3">
+            <Button variant="ghost" onClick={() => setIsDeleteProjectsOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                deleteProjects(activeTeamId??'');
+                setIsDeleteProjectsOpen(false);
+              }}
+            >
+              Delete Projects
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-gray-600 dark:text-gray-300">
+          This will remove <strong>all projects</strong> and their associated tasks in this team.
+        </p>
+        <p className="text-red-500 mt-2">
+          This action cannot be undone.
+        </p>
       </Modal>
     </>
   )

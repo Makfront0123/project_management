@@ -9,6 +9,7 @@ import {
   deleteProject,
   getProjectsByTeam,
   getProjectAnalytics,
+  deleteAllProjects,
 } from "../services/project_services";
 import type { NewProject, Project } from "../types/projects";
 
@@ -59,6 +60,8 @@ type ProjectStore = {
     id: string,
     teamId: string
   ) => Promise<void>;
+
+  deleteAllProjects: (teamId: string) => Promise<void>;
 };
 export const useProjectStore = create<ProjectStore>((set, get) => ({
   projects: [],
@@ -173,6 +176,18 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     } catch (error) {
       console.error("Error eliminando proyecto:", error);
       set({ isLoadingProject: false });
+    }
+  },
+
+  deleteAllProjects: async (teamId: string) => {
+    set({ isLoadingProjects: true });
+    try {
+      const { message } = await deleteAllProjects(teamId);
+      set({ projects: [], isLoadingProjects: false });
+      toast.success(message);
+    } catch (error) {
+      console.error("Error eliminando proyectos:", error);
+      set({ isLoadingProjects: false });
     }
   },
 }));

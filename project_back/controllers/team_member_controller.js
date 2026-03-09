@@ -5,6 +5,7 @@ import userService from "../services/user_service.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateInviteToken } from "../utils/GenerateInviteToken.js";
 import jwt from "jsonwebtoken";
+import taskAssignmentService from "../services/task_assignment_service.js";
 import Activity from "../models/ActivityLog.js";
 export const addMemberToTeam = async (req, res) => {
     try {
@@ -236,6 +237,11 @@ export const deleteMembersOfTeam = async (req, res) => {
     try {
         const { teamId } = req.params;
         await teamMemberService.deleteMembersByTeamId(teamId);
+        const members = await teamMemberService.getAllMembersOfTeam(teamId);
+        if (!members) return res.status(404).json({ message: "Not Members of the team" });
+        const usersToRemove = members.filter(m => m.role !== "admin").map(m => m.userId);
+
+        await taskAssignmentService.deleteAssignmentsByUsers(usersToRemove);
         res.status(200).json({ message: "Members deleted from the team" });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -264,6 +270,7 @@ export const deleteMemberOfTeam = async (req, res) => {
         const team = await teamService.getTeamById(teamId);
 
         await teamMemberService.removeMember({ teamId, userId });
+        await taskAssignmentService.deleteAssignmentsByUsers(userId);
 
         await Activity.create({
             type: "member-removed",
@@ -360,17 +367,18 @@ export const acceptInviteByToken = async (req, res) => {
 
         const admins = await teamMemberService.getAdminsOfTeam(teamId);
 
+        const user = await userService.getUserById(userId);
+
         for (const admin of admins) {
             const notification = await notificationService.createNotification({
                 recipient: admin.userId,
-                message: `${req.user.name} accepted the invitation to join the team`,
+                message: `${user.name} accepted the invitation to join the team`,
                 type: "invite_accepted",
                 metadata: { teamId }
             });
 
             req.io.to(`user_${admin.userId}`).emit("newNotification", notification);
         }
-
         res.status(200).json({ message: "Invitation accepted", teamId });
 
     } catch (error) {
@@ -381,21 +389,24 @@ export const acceptInviteByToken = async (req, res) => {
 export const getInviteDetailsByToken = async (req, res) => {
     try {
         const { token } = req.params;
-
         const decoded = jwt.verify(token, process.env.JWT_INVITE_SECRET);
-        const { teamId } = decoded;
+        const { teamId, userId } = decoded;
 
         const team = await teamService.getTeamById(teamId);
         if (!team) return res.status(404).json({ message: "Team not found" });
+        const member = await teamMemberService.getMemberOfTeam(teamId, userId);
+        const memberStatus = member ? member.status : null;
 
         res.status(200).json({
-            team
+            team: {
+                ...team.toObject(),
+                memberStatus,
+            },
         });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
-
 export const inviteMemberToTeam = async (req, res) => {
     try {
         const { teamId } = req.params;

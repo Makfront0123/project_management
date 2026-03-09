@@ -49,6 +49,17 @@ export const deleteMember = async (memberId: string, teamId: string) => {
     return response.data;
 };
 
+export const deleteMembers = async (teamId: string) => {
+    const token = useAuthStore.getState().token
+    const response = await axios.delete(`${baseUrl}/teams/${teamId}/members`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+    });
+
+    return response.data;
+};
+
 export const requestToJoinTeam = async (teamId: string) => {
     const token = useAuthStore.getState().token
     const response = await axios.post(`${baseUrl}/teams/${teamId}/join-requests`, {}, {

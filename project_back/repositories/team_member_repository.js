@@ -6,8 +6,10 @@ class TeamMemberRepository {
   }
 
   async deleteMembersByTeamId(teamId) {
-    console.log(teamId);
-    return await TeamMember.deleteMany({ teamId });
+    return await TeamMember.deleteMany({
+      teamId,
+      role: { $ne: 'admin' }
+    });
   }
 
   async removeMember(data) {

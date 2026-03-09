@@ -7,6 +7,8 @@ import { TeamNotFound } from "@/features/team/components/TeamNotFound"
 import { useTeamMembersPage } from "@/features/team/hooks/useTeamMembersPage"
 import { Button } from "@/shared/components/ui/button"
 import { useNavigate } from "react-router"
+import { useTeamMembersWorkflow } from "@/features/team/hooks/useTeamMembersWorkflow"
+import { useState } from "react"
 
 const TeamMembersPage = () => {
   const navigate = useNavigate()
@@ -25,6 +27,11 @@ const TeamMembersPage = () => {
     openInvite,
     closeInvite,
   } = useTeamMembersPage()
+  const [isDeleteMembersOpen, setIsDeleteMembersOpen] = useState(false)
+  const openDeleteMembers = () => setIsDeleteMembersOpen(true)
+  const closeDeleteMembers = () => setIsDeleteMembersOpen(false)
+
+  const { deleteMember, deleteMembers } = useTeamMembersWorkflow(activeTeamId ?? '')
 
   if (!activeTeamId) {
     return (
@@ -53,9 +60,17 @@ const TeamMembersPage = () => {
             </Button>
 
             {isAdmin && (
-              <Button onClick={openInvite}>
-                Invite new member
-              </Button>
+              <div className="flex gap-x-3">
+                <Button onClick={openInvite}>
+                  Invite new member
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={openDeleteMembers}
+                >
+                  Delete Members
+                </Button>
+              </div>
             )}
           </div>
         </div>
@@ -76,6 +91,7 @@ const TeamMembersPage = () => {
                 <TableMembers
                   key={member._id}
                   member={member}
+                  onDelete={deleteMember}
                 />
               ))}
             </ul>
@@ -124,6 +140,39 @@ const TeamMembersPage = () => {
           teamId={activeTeamId}
           onClose={closeInvite}
         />
+      </Modal>
+      <Modal
+        isOpen={isDeleteMembersOpen}
+        onClose={closeDeleteMembers}
+        title="Delete Team Members"
+        footer={
+          <div className="flex justify-end gap-3">
+            <Button
+              variant="ghost"
+              onClick={closeDeleteMembers}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                await deleteMembers(activeTeamId)
+                closeDeleteMembers()
+              }}
+            >
+              Delete Members
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-gray-600 dark:text-gray-300">
+          This will remove <strong>all team members</strong> except the admin.
+        </p>
+
+        <p className="text-red-500 mt-2">
+          This action cannot be undone.
+        </p>
       </Modal>
     </>
   )

@@ -14,6 +14,10 @@ class TaskAssignmentRepository {
         });
     }
 
+    async deleteAllAssignmentsByUserId(userId) {
+        return await TaskAssignment.deleteMany({ userId: new mongoose.Types.ObjectId(userId) });
+    }
+
     async getAllUsersAssignedToTask(taskId) {
         const assignments = await TaskAssignment.find({ taskId })
             .populate("userId", "name email");
@@ -56,6 +60,12 @@ class TaskAssignmentRepository {
     }
     async deleteByTaskId(taskId) {
         return await TaskAssignment.deleteMany({ taskId });
+    }
+
+    async deleteAllAssignmentsByTeamId(teamId) {
+        return await TaskAssignment.deleteMany({
+            teamId: new mongoose.Types.ObjectId(teamId),
+        });
     }
 
 }

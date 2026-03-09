@@ -68,9 +68,6 @@ class ProjectService {
         };
     }
 
-
-
-
     async findProjectById(projectId) {
         return await projectRepo.findProjectById(projectId);
     }
@@ -80,6 +77,10 @@ class ProjectService {
 
     async deleteProjectCascade(teamId, projectId) {
         return await projectRepo.deleteProjectCascade(teamId, projectId);
+    }
+
+    async deleteAllProjects(teamId) {
+        return await projectRepo.deleteAllProjects(teamId);
     }
 }
 export default new ProjectService();

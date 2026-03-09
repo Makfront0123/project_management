@@ -25,7 +25,7 @@ const DashboardPage = () => {
     activeTeamId,
   } = useDashboard()
 
- 
+
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const createTeamForm = useCreateTeamForm(() =>
@@ -68,7 +68,7 @@ const DashboardPage = () => {
         ))}
       </div>
       {
-        activeTeamId ? <div className="flex p-8 gap-x-5  max-h-[80vh]">
+        activeTeamId ? <div className="flex p-8 gap-x-5  min-h-[80vh]">
 
           <ProjectOverview
             projects={projects}
@@ -79,7 +79,7 @@ const DashboardPage = () => {
             <TeamActivity teamId={activeTeamId} />
           ) : (
             <MyTasks
-             tasks={userTasksForTeam}
+              tasks={userTasksForTeam}
               loading={tasksLoading}
             />
           )}

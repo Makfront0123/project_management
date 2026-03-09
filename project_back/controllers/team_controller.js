@@ -1,6 +1,10 @@
 import teamService from "../services/team_service.js";
 import teamMemberService from "../services/team_member_service.js";
 import generateUniqueCode from "../utils/generateUniqueCode.js";
+import projectService from "../services/project_service.js";
+import taskService from "../services/task_service.js";
+import taskAssignmentService from "../services/task_assignment_service.js";
+import messageService from "../services/message_service.js";
 
 export const createTeam = async (req, res) => {
     try {
@@ -126,13 +130,31 @@ export const updateTeam = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
 export const deleteTeam = async (req, res) => {
     try {
-        const teamId = req.params.teamId;
+        const { teamId } = req.params;
+
+        await teamMemberService.deleteMembersByTeamId(teamId);
+
+        await taskAssignmentService.deleteAllAssignmentsByTeamId(teamId);
+        const projects = await projectService.getProjectsByTeamId(teamId);
+        for (const project of projects) {
+            await taskService.deleteTasksByProjectId(project._id);
+        }
+
+        await projectService.deleteAllProjects(teamId);
+
+        await notificationService.deleteAllByTeamId(teamId);
+
+        await Activity.deleteMany({ teamId: new mongoose.Types.ObjectId(teamId) });
+
+        await messageService.deleteAllMessages(teamId);
+
         const team = await teamService.deleteTeam(teamId);
 
         res.status(200).json({
-            message: "Team deleted successfully",
+            message: "Team and all related data deleted successfully",
             team,
         });
 
